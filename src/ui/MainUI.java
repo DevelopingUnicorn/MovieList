@@ -1,44 +1,25 @@
 package ui;
 
+import bl.ConfigUtility;
 import bl.MovieListModel;
-import java.io.BufferedInputStream;
+import bl.MovieLoader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainUI extends javax.swing.JFrame {
 
     private MovieListModel mlm = new MovieListModel();
-    private String userdocs = System.getProperty("user.home")+"\\Documents\\MovieList";
+    private String userdocs, pathtomovies;
+    private ConfigUtility cu;   
     
-    
-    public MainUI() {
+    public MainUI(String ud) {
         initComponents();
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
         
         epInfos.setContentType("text/html");
-                
-        File movielistdir = new File(userdocs);
-        File movielist = new File(userdocs+"\\mvl.ml");
         
-        if(movielistdir.exists() && movielistdir.isDirectory())
-        {
-            if(!movielist.exists())
-            {
-                
-            }else
-            {
-                
-            }
-        }else
-        {
-            movielistdir.mkdir();
-        }
+        userdocs = ud;
+        cu = new ConfigUtility();
     }
 
     @SuppressWarnings("unchecked")
