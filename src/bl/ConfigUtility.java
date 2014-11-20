@@ -19,10 +19,6 @@ public class ConfigUtility {
         ptcf = pathtocffile;
     }
 
-    public ConfigUtility() {
-
-    }
-
     public void createConfigFile(String lang, String ptm) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(new File(ptcf)));

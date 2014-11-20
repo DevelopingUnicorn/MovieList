@@ -3,13 +3,15 @@ package ui;
 import bl.ConfigUtility;
 import bl.MovieListModel;
 import bl.MovieLoader;
-import java.io.File;
 
 public class MainUI extends javax.swing.JFrame {
 
     private MovieListModel mlm = new MovieListModel();
+    private MovieLoader ml;
     private String userdocs, pathtomovies;
-    private ConfigUtility cu;   
+    private ConfigUtility cu;
+    
+    private String pathtoconf;
     
     public MainUI(String ud) {
         initComponents();
@@ -19,7 +21,18 @@ public class MainUI extends javax.swing.JFrame {
         epInfos.setContentType("text/html");
         
         userdocs = ud;
-        cu = new ConfigUtility();
+        pathtoconf = userdocs + "\\movielist.conf";
+        
+        cu = new ConfigUtility(pathtoconf);
+        
+        liMovies.setModel(mlm);
+        
+        cu.getConfig();
+        pathtomovies = cu.getPath();
+        ml = new MovieLoader(pathtomovies);
+        
+        mlm.setList(ml.getMovies());
+        liMovies.updateUI();
     }
 
     @SuppressWarnings("unchecked")

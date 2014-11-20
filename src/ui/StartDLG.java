@@ -195,7 +195,7 @@ public class StartDLG extends javax.swing.JDialog {
         File movielist = new File(userdocs + "\\mvl.ml");
 
         if (movielistdir.exists() && movielistdir.isDirectory()) {
-            if (!movielist.exists() || !conf.exists()) {
+            if (!conf.exists()) { //!movielist.exists() ||
                 this.setVisible(true);
             } else {
                 MainUI mu = new MainUI(userdocs);
