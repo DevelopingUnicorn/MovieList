@@ -4,7 +4,12 @@ import beans.Movie;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import mediainfo.MediaInfo;
+import ui.ProgressbarDLG;
 
 public class MovieLoaderThread implements Runnable {
 
@@ -12,18 +17,23 @@ public class MovieLoaderThread implements Runnable {
     private LinkedList<Movie> liste = new LinkedList<Movie>();
     private Movie folderdummy = new Movie("Folders", "", "", "", "", "", "");
     private Movie filedummy = new Movie("Files", "", "", "", "", "", "");
-    
+    private JProgressBar loading;
+    private JLabel lb;
+    private ProgressbarDLG dlg;
 
     private static final String[] okFileExtensions
             = new String[]{"mkv", "avi", "mp4", "ogg", "flv", "3gp"};
 
-    public MovieLoaderThread(String path) {
+    public MovieLoaderThread(String path, ProgressbarDLG d) {
         this.path = path;
+        this.loading = d.getProgBar();
+        this.lb = d.getLabel();
+        this.dlg = d;
     }
 
     public LinkedList<Movie> getListe() {
         return liste;
-    }   
+    }
 
     @Override
     public void run() {
@@ -32,9 +42,12 @@ public class MovieLoaderThread implements Runnable {
         MediaInfo mi = new MediaInfo();
 
         for (int i = 0; i < listOfFiles.length; i++) {
-            
-            System.out.println("Loading Movie "+(i+1)+" from "+listOfFiles.length);
-            
+
+            String xfy = "Loading Movie " + (i + 1) + " from " + listOfFiles.length;
+            double inc = 100 / listOfFiles.length;
+
+            lb.setText(xfy);
+
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
@@ -83,8 +96,18 @@ public class MovieLoaderThread implements Runnable {
 
                 mi.close();
             }
+
+            loading.setValue(loading.getValue() + (int) inc);
+            if(loading.getValue() == 100)
+            {
+                dlg.dispose();
+            }
             
-            System.out.println("ListSize: "+liste.size());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MovieLoaderThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

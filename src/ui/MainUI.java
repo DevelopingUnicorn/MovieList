@@ -1,8 +1,12 @@
 package ui;
 
+import beans.Movie;
 import bl.ConfigUtility;
 import bl.MovieListModel;
 import bl.MovieLoader;
+import java.util.LinkedList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class MainUI extends javax.swing.JFrame {
 
@@ -10,29 +14,54 @@ public class MainUI extends javax.swing.JFrame {
     private MovieLoader ml;
     private String userdocs, pathtomovies;
     private ConfigUtility cu;
-    
+    private LinkedList<Movie> movielist = new LinkedList<Movie>();
+
     private String pathtoconf;
-    
+
     public MainUI(String ud) {
         initComponents();
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-        
+
         epInfos.setContentType("text/html");
-        
+
         userdocs = ud;
         pathtoconf = userdocs + "\\movielist.conf";
-        
+
         cu = new ConfigUtility(pathtoconf);
-        
+
         liMovies.setModel(mlm);
-        
+
         cu.getConfig();
         pathtomovies = cu.getPath();
-        ml = new MovieLoader(pathtomovies);
         
-        mlm.setList(ml.getMovies());
-        liMovies.updateUI();
+        liMovies.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    printInformation(liMovies.getSelectedIndex());
+                }
+            }
+        });
+    }
+
+    private void printInformation(int selectedIndex) {
+        Movie m = movielist.get(selectedIndex);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("<body style='font-family:Arial;font-size:14pt'><center><h1 style='color:#00d76f'>Movie Information</h1></center>");
+        sb.append("<hr width='80%' />");
+        sb.append("<br><center><table>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Titel:</strong></td><td>").append(m.getName()).append("</td></tr>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Duration:</strong></td><td>").append(m.getDuration()).append("</td></tr>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Resolution:</strong></td><td>").append(m.getWidth()).append("x").append(m.getHeight()).append("</td></tr>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Display Aspect Ratio:</strong></td><td>").append(m.getAspectratio()).append("</td></tr>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Fileextension:</strong></td><td>").append(m.getFileextension()).append("</td></tr>");
+        sb.append("<tr><td><strong style='color:#00bda5'>Filesize:</strong></td><td>").append(m.getFilesize()).append("</td></tr>");
+        sb.append("</table></center></body>");
+
+        epInfos.setText(sb.toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +79,7 @@ public class MainUI extends javax.swing.JFrame {
         mbBar = new javax.swing.JMenuBar();
         meFile = new javax.swing.JMenu();
         miOpen = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
@@ -85,9 +115,20 @@ public class MainUI extends javax.swing.JFrame {
         meFile.setText("File");
         meFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+        miOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         miOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/fileopen.png"))); // NOI18N
         miOpen.setText("Open MovieList File");
         meFile.add(miOpen);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/loadmovies.png"))); // NOI18N
+        jMenuItem1.setText("Load Movies");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onLoadMovies(evt);
+            }
+        });
+        meFile.add(jMenuItem1);
 
         mbBar.add(meFile);
 
@@ -96,8 +137,18 @@ public class MainUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
+        ProgressbarDLG pd = new ProgressbarDLG(this, false);
+        pd.setVisible(true);
+        
+        ml = new MovieLoader(pathtomovies, pd);
+        
+        loadMovies();
+    }//GEN-LAST:event_onLoadMovies
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epInfos;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
@@ -109,4 +160,11 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnRight;
     private javax.swing.JScrollPane spList;
     // End of variables declaration//GEN-END:variables
+
+    private void loadMovies() {  
+        
+        movielist = ml.getMovies();
+        mlm.setList(movielist);
+        liMovies.updateUI();
+    }
 }

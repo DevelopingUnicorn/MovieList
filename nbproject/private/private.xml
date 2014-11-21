@@ -5,10 +5,12 @@
         <group>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/bl/MovieListModel.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/ui/MainUI.java</file>
+            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/bl/MovieLoaderThread.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/beans/Movie.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/bl/MovieLoader.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/ui/StartDLG.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/bl/ConfigUtility.java</file>
+            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/ui/ProgressbarDLG.java</file>
         </group>
     </open-files>
 </project-private>

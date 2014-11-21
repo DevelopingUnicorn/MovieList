@@ -1,0 +1,54 @@
+package ui;
+
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
+
+public class ProgressbarDLG extends javax.swing.JDialog {
+
+    public ProgressbarDLG(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+                
+        this.setSize(400, 100);
+        this.setLocationRelativeTo(parent);
+                
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        dispose();
+                    }
+                });
+        
+        this.pbLoading.setStringPainted(true);
+    }
+    
+    public JProgressBar getProgBar()
+    {
+        return this.pbLoading;
+    }
+    
+    public JLabel getLabel()
+    {
+        return this.lbxfromy;
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        pbLoading = new javax.swing.JProgressBar();
+        lbxfromy = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridLayout(2, 0));
+        getContentPane().add(pbLoading);
+        getContentPane().add(lbxfromy);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lbxfromy;
+    private javax.swing.JProgressBar pbLoading;
+    // End of variables declaration//GEN-END:variables
+}
