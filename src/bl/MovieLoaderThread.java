@@ -32,6 +32,9 @@ public class MovieLoaderThread implements Runnable {
         MediaInfo mi = new MediaInfo();
 
         for (int i = 0; i < listOfFiles.length; i++) {
+            
+            System.out.println("Loading Movie "+(i+1)+" from "+listOfFiles.length);
+            
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
@@ -80,6 +83,8 @@ public class MovieLoaderThread implements Runnable {
 
                 mi.close();
             }
+            
+            System.out.println("ListSize: "+liste.size());
         }
     }
 
