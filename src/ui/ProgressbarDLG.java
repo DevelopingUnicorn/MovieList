@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 public class ProgressbarDLG extends javax.swing.JDialog {
 
