@@ -2,8 +2,11 @@ package ui;
 
 import beans.Movie;
 import bl.ConfigUtility;
+import bl.MovieCompare;
 import bl.MovieListModel;
 import bl.MovieLoader;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -168,6 +171,11 @@ public class MainUI extends javax.swing.JFrame {
     public void setList(LinkedList<Movie> liste)
     {
         movielist = liste;
+        
+        Collections.sort(movielist, new MovieCompare());
+        
+        System.out.println(""+movielist.size());
+        
         mlm.setList(movielist);
         liMovies.updateUI();
     }

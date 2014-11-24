@@ -43,6 +43,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         File[] listOfFiles = folder.listFiles();
         MediaInfo mi = new MediaInfo();
         
+        dlg.setMovieWorker(this);
+        
         for (int i = 0; i < listOfFiles.length; i++) {
             String xfy = "Loading Movie " + (i + 1) + " from " + listOfFiles.length;
             double inc = 1000000 / listOfFiles.length;
@@ -89,6 +91,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             }
             
             loading.setValue(loading.getValue() + (int) inc);
+            Thread.sleep(500);
         }
 
         return liste;

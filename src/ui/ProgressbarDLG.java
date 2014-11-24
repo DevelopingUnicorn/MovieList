@@ -5,6 +5,8 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 public class ProgressbarDLG extends javax.swing.JDialog {
+    
+    private SwingWorker movieworker;
 
     public ProgressbarDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -13,6 +15,15 @@ public class ProgressbarDLG extends javax.swing.JDialog {
         this.setSize(400, 100);
         this.setLocationRelativeTo(parent);
         this.setResizable(false);
+                
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        movieworker.cancel(true);
+                        System.out.println("Worker Cancled!");
+                        dispose();
+                    }
+                });
         
         this.pbLoading.setStringPainted(true);
     }
@@ -26,6 +37,12 @@ public class ProgressbarDLG extends javax.swing.JDialog {
     {
         return this.lbxfromy;
     }
+
+    public void setMovieWorker(SwingWorker mw) {
+        this.movieworker = mw;
+    }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
