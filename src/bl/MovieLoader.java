@@ -1,7 +1,6 @@
 package bl;
 
-import beans.Movie;
-import java.util.LinkedList;
+import ui.MainUI;
 import ui.ProgressbarDLG;
 
 public class MovieLoader {
@@ -13,13 +12,10 @@ public class MovieLoader {
     public MovieLoader(String pathtomov, ProgressbarDLG pb) {
         this.pathtomov = pathtomov;
         this.dlg = pb;
-        mlw = new MovieLoaderWorker(this.pathtomov, dlg);
     }
 
-    public LinkedList<Movie> getMovies() {
-        LinkedList<Movie> list = new LinkedList<Movie>();        
+    public void getMovies(MainUI mui) {   
+        mlw = new MovieLoaderWorker(this.pathtomov, dlg, mui);
         mlw.execute();
-        
-        return list;
     }
 }

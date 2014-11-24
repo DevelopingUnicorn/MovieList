@@ -161,9 +161,13 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane spList;
     // End of variables declaration//GEN-END:variables
 
-    private void loadMovies() {  
-        
-        movielist = ml.getMovies();
+    private void loadMovies() {          
+        ml.getMovies(this);
+    }
+    
+    public void setList(LinkedList<Movie> liste)
+    {
+        movielist = liste;
         mlm.setList(movielist);
         liMovies.updateUI();
     }

@@ -12,13 +12,7 @@ public class ProgressbarDLG extends javax.swing.JDialog {
                 
         this.setSize(400, 100);
         this.setLocationRelativeTo(parent);
-                
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        dispose();
-                    }
-                });
+        this.setResizable(false);
         
         this.pbLoading.setStringPainted(true);
     }
@@ -42,6 +36,8 @@ public class ProgressbarDLG extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(2, 0));
+
+        pbLoading.setMaximum(1000000);
         getContentPane().add(pbLoading);
         getContentPane().add(lbxfromy);
 

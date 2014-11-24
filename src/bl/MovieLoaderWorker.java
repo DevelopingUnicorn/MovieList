@@ -4,13 +4,11 @@ import beans.Movie;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import mediainfo.MediaInfo;
+import ui.MainUI;
 import ui.ProgressbarDLG;
 
 public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
@@ -22,15 +20,17 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private JProgressBar loading;
     private JLabel lb;
     private ProgressbarDLG dlg;
+    private MainUI mui;
 
     private static final String[] okFileExtensions
             = new String[]{"mkv", "avi", "mp4", "ogg", "flv", "3gp"};
 
-    public MovieLoaderWorker(String path, ProgressbarDLG d) {
+    public MovieLoaderWorker(String path, ProgressbarDLG d, MainUI mui) {
         this.path = path;
         this.loading = d.getProgBar();
         this.lb = d.getLabel();
         this.dlg = d;
+        this.mui = mui;
     }
 
     public LinkedList<Movie> getListe() {
@@ -45,7 +45,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         
         for (int i = 0; i < listOfFiles.length; i++) {
             String xfy = "Loading Movie " + (i + 1) + " from " + listOfFiles.length;
-            double inc = 100 / listOfFiles.length;
+            double inc = 1000000 / listOfFiles.length;
             lb.setText(xfy);
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
@@ -87,8 +87,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                 liste.add(new Movie(name, width, height, dar, duration, size, extension));
                 mi.close();
             }
+            
             loading.setValue(loading.getValue() + (int) inc);
-            Thread.sleep(2000);
         }
 
         return liste;
@@ -96,6 +96,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
   
     @Override
     protected void done() {
+        mui.setList(liste);
         dlg.dispose();
     }
 }

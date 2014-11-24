@@ -27,6 +27,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JProgressBar" name="pbLoading">
+      <Properties>
+        <Property name="maximum" type="int" value="1000000"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lbxfromy">
     </Component>
