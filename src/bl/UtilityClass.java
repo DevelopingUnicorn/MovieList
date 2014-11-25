@@ -4,26 +4,28 @@ import beans.Movie;
 import java.util.LinkedList;
 
 public class UtilityClass {
-    public String getSizeAndNumberOfFiles(LinkedList<Movie> list)
-    {
+
+    public String getSizeAndNumberOfFiles(LinkedList<Movie> list) {
         double filesize = 0.0;
         int numberoffiles = list.size();
-        String gibormib = "";
-        
-        for (Movie m: list) {
+        String gibormib = "GiB";
+
+        for (Movie m : list) {
             String[] spl = m.getFilesize().split("\\s+");
             
-            filesize+= Double.parseDouble(spl[0]);
-            
-            if(spl[1].equals("GiB"))
+            if(spl[1].equals("MiB"))
             {
-                gibormib = "GiB";
-            }else if(spl[1].equals("MiB"))
-            {
-                gibormib = "MiB";
+                filesize += (Double.parseDouble(spl[0])/1024.0);
+            }else {
+                filesize += Double.parseDouble(spl[0]);
             }
         }
-        
-        return "  "+numberoffiles+" Movies - "+filesize+" "+gibormib;
+
+        if (filesize < 1.0) {
+            gibormib = "MiB";
+            filesize *= 1024.0;
+        }
+
+        return String.format("  %d - %4.2f %s",numberoffiles, filesize, gibormib);
     }
 }

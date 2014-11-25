@@ -3,6 +3,7 @@ package bl;
 import beans.Movie;
 import java.io.File;
 import java.io.FileFilter;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -20,9 +21,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private ProgressbarDLG dlg;
     private MainUI mui;
     private UtilityClass uc = new UtilityClass();
+    private SimpleDateFormat durationFormat = new SimpleDateFormat("k'h' mm'mn'");
 
     private static final String[] okFileExtensions
-            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img"};
+            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob"};
     private static final String[] filesToIgnore
             = new String[]{"ds_store"};
 
@@ -63,8 +65,46 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                         return false;
                     }
                 });
+
                 if (listoffilesinmoviefolder != null) {
-                    if (listoffilesinmoviefolder.length >= 1) {
+                    if (listoffilesinmoviefolder.length > 1) {
+
+                        double filesize = 0.0;
+                        String gibormib = "GiB";
+                        
+                        File movie = listoffilesinmoviefolder[0];
+                        mi.open(movie);
+                        String name = listOfFiles[i].getName();
+                        String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                        String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                        String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                        String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                        String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                        mi.close();
+                        
+                        for (File f : listoffilesinmoviefolder) {
+                            if (f.isFile()) {
+                                mi.open(f);
+                                String[] spl = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name).split("\\s+");
+
+                                if (spl[1].equals("MiB")) {
+                                    filesize += (Double.parseDouble(spl[0]) / 1024.0);
+                                } else {
+                                    filesize += Double.parseDouble(spl[0]);
+                                }
+                            }
+                        }
+
+                        if (filesize < 1.0) {
+                            gibormib = "MiB";
+                            filesize *= 1024.0;
+                        }
+
+                        String size = String.format("%4.2f %s", filesize, gibormib);
+
+                        liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
+                        mi.close();
+                    } else if (listoffilesinmoviefolder.length == 1) {
                         File movie = listoffilesinmoviefolder[0];
                         mi.open(movie);
                         String name = listOfFiles[i].getName();
@@ -105,12 +145,12 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     @Override
     protected void done() {
         mui.setList(liste);
-        
+
         if (liste.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(liste);
             mui.getLbThings().setText(things);
         }
-        
+
         dlg.dispose();
     }
 }
