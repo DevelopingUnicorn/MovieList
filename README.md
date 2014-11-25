@@ -7,7 +7,10 @@ Information, such as Resolution, Filesize, Duration and more. <br>
 
 Features
 ==========
-* Nothing implemented yet
+* Scan Folder for Movies
+* Save Movies to MovieList File
+* Load from MovieList File
+* Display various information about File
 
 To Do:
 ===========
