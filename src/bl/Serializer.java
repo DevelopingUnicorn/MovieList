@@ -40,8 +40,8 @@ public class Serializer {
                 fileOut = new FileOutputStream(mlfile);
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
-                for (int i = 0; i < list.size(); i++) {
-                    out.writeObject(list.get(i));
+                for (Movie m: list) {
+                    out.writeObject(m);
                 }
 
                 out.close();
