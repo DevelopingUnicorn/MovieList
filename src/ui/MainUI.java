@@ -7,9 +7,10 @@ import bl.MovieCompare;
 import bl.MovieListModel;
 import bl.MovieLoader;
 import bl.Serializer;
-import java.util.Collection;
+import bl.UtilityClass;
 import java.util.Collections;
 import java.util.LinkedList;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -21,6 +22,7 @@ public class MainUI extends javax.swing.JFrame {
     private String userdocs, pathtomovies;
     private ConfigUtility cu;
     private LinkedList<Movie> movielist = new LinkedList<Movie>();
+    private UtilityClass uc = new UtilityClass();
 
     private String pathtoconf;
 
@@ -40,7 +42,7 @@ public class MainUI extends javax.swing.JFrame {
 
         cu.getConfig();
         pathtomovies = cu.getPath();
-        
+
         liMovies.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -53,21 +55,8 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     private void printInformation(int selectedIndex) {
-        Movie m = movielist.get(selectedIndex);
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("<body style='font-family:Arial;font-size:14pt'><center><h1 style='color:#00d76f'>Movie Information</h1></center>");
-        sb.append("<hr width='80%' />");
-        sb.append("<br><center><table>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Titel:</strong></td><td>").append(m.getName()).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Duration:</strong></td><td>").append(m.getDuration()).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Resolution:</strong></td><td>").append(m.getWidth()).append("x").append(m.getHeight()).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Display Aspect Ratio:</strong></td><td>").append(m.getAspectratio()).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Fileextension:</strong></td><td>").append(m.getFileextension()).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Filesize:</strong></td><td>").append(m.getFilesize()).append("</td></tr>");
-        sb.append("</table></center></body>");
-
-        epInfos.setText(sb.toString());
+        Movie m = movielist.get(selectedIndex);        
+        epInfos.setText(m.toHTMLString());
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +82,8 @@ public class MainUI extends javax.swing.JFrame {
 
         pnLeft.setLayout(new java.awt.BorderLayout());
 
-        lbThings.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lbThings.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lbThings.setForeground(new java.awt.Color(0, 123, 123));
         pnLeft.add(lbThings, java.awt.BorderLayout.PAGE_END);
 
         pnListe.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Movies", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
@@ -162,28 +152,30 @@ public class MainUI extends javax.swing.JFrame {
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
         pd.setVisible(true);
-        
+
         ml = new MovieLoader(pathtomovies, pd);
-        
+
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
 
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
         Serializer s = new Serializer();
-        
-        if(movielist.size() > 0)
-        {
+
+        if (movielist.size() > 0) {
             s.safeMovieList(movielist);
-        }else
-        {
+        } else {
             JOptionPane.showMessageDialog(this, "No Movies in List!\nPlease load Movies.", "Error!", 0);
         }
     }//GEN-LAST:event_onSave
 
     private void onOpenMLFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpenMLFile
-        DeSerializer ds = new DeSerializer(this);        
-        mlm.clear();
+        DeSerializer ds = new DeSerializer(this);
         ds.deSerialize();
+
+        if (movielist.size() > 0) {
+            String things = uc.getSizeAndNumberOfFiles(movielist);
+            this.lbThings.setText(things);
+        }
     }//GEN-LAST:event_onOpenMLFile
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -202,19 +194,30 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane spList;
     // End of variables declaration//GEN-END:variables
 
-    private void loadMovies() {          
+    private void loadMovies() {
         ml.getMovies(this);
     }
-    
-    public void setList(LinkedList<Movie> liste)
-    {
+
+    public void setList(LinkedList<Movie> liste) {
         movielist = liste;
-        
+
         Collections.sort(movielist, new MovieCompare());
+
+        System.out.println("" + movielist.size());
         
-        System.out.println(""+movielist.size());
-        
+        clearList();
         mlm.setList(movielist);
         liMovies.updateUI();
+    }
+    
+    public JLabel getLbThings()
+    {
+        return this.lbThings;
+    }
+    
+    public void clearList()
+    {
+        mlm.clear();
+        lbThings.setText("");
     }
 }
