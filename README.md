@@ -24,5 +24,5 @@ Developer(s)
 
 Version
 ========
-<h3>~Alpha~</h3>
+<h5>~Alpha~</h5>
 * v1.0a 
