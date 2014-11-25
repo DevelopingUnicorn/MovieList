@@ -7,15 +7,19 @@ Information, such as Resolution, Filesize, Duration and more. <br>
 
 Features
 ==========
-* Nothing implemented yet
+* Scan Folder for Movies
+* Save Movies to MovieList File
+* Load from MovieList File
+* Display various information about File
 
 To Do:
 ===========
-* GeneralUI
-* File Scanner
-* Infromation Viewer
+* <strike>GeneralUI</strike>
+* <strike>File Scanner</strike>
+* <strike>Infromation Viewer</strike>
 * MultiLang Support
-* Initial Relase
+* <strike>Initial Relase</strike>
+* Sourcecode documentation
 
 Developer(s)
 ============
@@ -24,4 +28,7 @@ Developer(s)
 
 Version
 ========
-Not released yet
+<h5>~Alpha~</h5>
+* v1.0a - <a href="http://goo.gl/02fpjr">Download</a>
+
+
