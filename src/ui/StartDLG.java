@@ -56,7 +56,7 @@ public class StartDLG extends javax.swing.JDialog {
         lbUe.setText("Welcome to the Setup!");
         getContentPane().add(lbUe, java.awt.BorderLayout.PAGE_START);
 
-        lbVers.setText("v1.0");
+        lbVers.setText("v1.0a");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
@@ -66,7 +66,7 @@ public class StartDLG extends javax.swing.JDialog {
         lbCLUE.setText("Choose Language");
         pnThings.add(lbCLUE);
 
-        cbLang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Deutsch" }));
+        cbLang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English" }));
         pnThings.add(cbLang);
 
         lbUEPM.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
