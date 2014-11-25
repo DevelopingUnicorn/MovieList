@@ -24,4 +24,5 @@ Developer(s)
 
 Version
 ========
-Not released yet
+<h3>~Alpha~</h3>
+* v1.0a 
