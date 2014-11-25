@@ -2,12 +2,15 @@ package ui;
 
 import beans.Movie;
 import bl.ConfigUtility;
+import bl.DeSerializer;
 import bl.MovieCompare;
 import bl.MovieListModel;
 import bl.MovieLoader;
+import bl.Serializer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -82,7 +85,8 @@ public class MainUI extends javax.swing.JFrame {
         mbBar = new javax.swing.JMenuBar();
         meFile = new javax.swing.JMenu();
         miOpen = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        miLoad = new javax.swing.JMenuItem();
+        miSave = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
@@ -121,17 +125,32 @@ public class MainUI extends javax.swing.JFrame {
         miOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         miOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/fileopen.png"))); // NOI18N
         miOpen.setText("Open MovieList File");
+        miOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onOpenMLFile(evt);
+            }
+        });
         meFile.add(miOpen);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/loadmovies.png"))); // NOI18N
-        jMenuItem1.setText("Load Movies");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        miLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        miLoad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/loadmovies.png"))); // NOI18N
+        miLoad.setText("Load Movies");
+        miLoad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onLoadMovies(evt);
             }
         });
-        meFile.add(jMenuItem1);
+        meFile.add(miLoad);
+
+        miSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        miSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/save.png"))); // NOI18N
+        miSave.setText("Save to MovieList File");
+        miSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSave(evt);
+            }
+        });
+        meFile.add(miSave);
 
         mbBar.add(meFile);
 
@@ -149,15 +168,34 @@ public class MainUI extends javax.swing.JFrame {
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
 
+    private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
+        Serializer s = new Serializer();
+        
+        if(movielist.size() > 0)
+        {
+            s.safeMovieList(movielist);
+        }else
+        {
+            JOptionPane.showMessageDialog(this, "No Movies in List!\nPlease load Movies.", "Error!", 0);
+        }
+    }//GEN-LAST:event_onSave
+
+    private void onOpenMLFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpenMLFile
+        DeSerializer ds = new DeSerializer(this);        
+        mlm.clear();
+        ds.deSerialize();
+    }//GEN-LAST:event_onOpenMLFile
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epInfos;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
     private javax.swing.JMenu meFile;
+    private javax.swing.JMenuItem miLoad;
     private javax.swing.JMenuItem miOpen;
+    private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel pnLeft;
     private javax.swing.JPanel pnListe;
     private javax.swing.JPanel pnRight;

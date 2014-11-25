@@ -1,6 +1,7 @@
 package ui;
 
 import bl.ConfigUtility;
+import java.awt.Dimension;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
@@ -115,6 +116,8 @@ public class StartDLG extends javax.swing.JDialog {
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
         JFileChooser fc = new JFileChooser();
+        fc.setPreferredSize(new Dimension(700, 500));
+        
         FileFilter directoryFilter = new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory();
