@@ -11,11 +11,11 @@ Features
 
 To Do:
 ===========
-* GeneralUI
-* File Scanner
-* Infromation Viewer
+* <strike>GeneralUI</strike>
+* <strike>File Scanner</strike>
+* <strike>Infromation Viewer</strike>
 * MultiLang Support
-* Initial Relase
+* <strike>Initial Relase</strike>
 * Sourcecode documentation
 
 Developer(s)
