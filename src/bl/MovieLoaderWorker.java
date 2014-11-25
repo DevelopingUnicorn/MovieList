@@ -23,7 +23,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private MainUI mui;
 
     private static final String[] okFileExtensions
-            = new String[]{"mkv", "avi", "mp4", "ogg", "flv", "3gp"};
+            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso"};
 
     public MovieLoaderWorker(String path, ProgressbarDLG d, MainUI mui) {
         this.path = path;
@@ -91,7 +91,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             }
             
             loading.setValue(loading.getValue() + (int) inc);
-            Thread.sleep(500);
         }
 
         return liste;

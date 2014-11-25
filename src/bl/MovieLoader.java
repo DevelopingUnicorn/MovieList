@@ -18,4 +18,9 @@ public class MovieLoader {
         mlw = new MovieLoaderWorker(this.pathtomov, dlg, mui);
         mlw.execute();
     }
+    
+    public void getMoviesFromFile()
+    {
+        
+    }
 }
