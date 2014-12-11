@@ -24,7 +24,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private SimpleDateFormat durationFormat = new SimpleDateFormat("k'h' mm'mn'");
 
     private static final String[] okFileExtensions
-            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob"};
+            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
     private static final String[] filesToIgnore
             = new String[]{"ds_store"};
 
@@ -58,7 +58,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                     @Override
                     public boolean accept(File file) {
                         for (String extension : okFileExtensions) {
-                            if (file.getName().toLowerCase().endsWith(extension)) {
+                            if (file.getName().toLowerCase().endsWith(extension) || (file.getName().toLowerCase().equals("video_ts") && file.isDirectory())) {
                                 return true;
                             }
                         }
@@ -71,7 +71,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
                         double filesize = 0.0;
                         String gibormib = "GiB";
-                        
+
                         File movie = listoffilesinmoviefolder[0];
                         mi.open(movie);
                         String name = listOfFiles[i].getName();
@@ -81,7 +81,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                         String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                         String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                         mi.close();
-                        
+
                         for (File f : listoffilesinmoviefolder) {
                             if (f.isFile()) {
                                 mi.open(f);
@@ -101,22 +101,75 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                         }
 
                         String size = String.format("%4.2f %s", filesize, gibormib);
-                        size = size.replaceAll(",",".");
+                        size = size.replaceAll(",", ".");
 
                         liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
                         mi.close();
                     } else if (listoffilesinmoviefolder.length == 1) {
-                        File movie = listoffilesinmoviefolder[0];
-                        mi.open(movie);
-                        String name = listOfFiles[i].getName();
-                        String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
-                        mi.close();
+                        if (listoffilesinmoviefolder[0].getName().toLowerCase().equals("video_ts") && listoffilesinmoviefolder[0].isDirectory()) {
+
+                            File[] moviesinfolderfolder = listoffilesinmoviefolder[0].listFiles(new FileFilter() {
+                                @Override
+                                public boolean accept(File file) {
+                                    for (String extension : okFileExtensions) {
+                                        if (file.getName().toLowerCase().endsWith(extension)) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }
+                            });
+
+                            double filesize = 0.0;
+                            String gibormib = "GiB";
+
+                            File movie = moviesinfolderfolder[0];
+                            mi.open(movie);
+                            String name = listOfFiles[i].getName();
+                            String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            mi.close();
+
+                            for (File f : listoffilesinmoviefolder) {
+                                if (f.isFile()) {
+                                    mi.open(f);
+                                    String[] spl = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name).split("\\s+");
+
+                                    if (spl[1].equals("MiB")) {
+                                        filesize += (Double.parseDouble(spl[0]) / 1024.0);
+                                    } else {
+                                        filesize += Double.parseDouble(spl[0]);
+                                    }
+                                }
+                            }
+
+                            if (filesize < 1.0) {
+                                gibormib = "MiB";
+                                filesize *= 1024.0;
+                            }
+
+                            String size = String.format("%4.2f %s", filesize, gibormib);
+                            size = size.replaceAll(",", ".");
+
+                            liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
+                            mi.close();
+                        } else {
+                            File movie = listoffilesinmoviefolder[0];
+                            mi.open(movie);
+                            String name = listOfFiles[i].getName();
+                            String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                            liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
+                            mi.close();
+                        }
+
                     }
                 }
             } else if (listOfFiles[i].isFile()) {
