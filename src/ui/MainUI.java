@@ -76,6 +76,8 @@ public class MainUI extends javax.swing.JFrame {
         miOpen = new javax.swing.JMenuItem();
         miLoad = new javax.swing.JMenuItem();
         miSave = new javax.swing.JMenuItem();
+        meSettings = new javax.swing.JMenu();
+        miPreferences = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
@@ -144,6 +146,20 @@ public class MainUI extends javax.swing.JFrame {
 
         mbBar.add(meFile);
 
+        meSettings.setText("Settings");
+
+        miPreferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        miPreferences.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/settings.png"))); // NOI18N
+        miPreferences.setText("Preferences");
+        miPreferences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onSettings(evt);
+            }
+        });
+        meSettings.add(miPreferences);
+
+        mbBar.add(meSettings);
+
         setJMenuBar(mbBar);
 
         pack();
@@ -178,6 +194,13 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onOpenMLFile
 
+    private void onSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSettings
+       SettingsDLG sdlg = new SettingsDLG(this, true, pathtomovies, cu);
+       sdlg.setVisible(true);
+       
+       JOptionPane.showMessageDialog(this, "Restart the Program for changes\nto take effect!", "Restart!", 1);
+    }//GEN-LAST:event_onSettings
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epInfos;
     private javax.swing.JScrollPane jScrollPane1;
@@ -185,8 +208,10 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
     private javax.swing.JMenu meFile;
+    private javax.swing.JMenu meSettings;
     private javax.swing.JMenuItem miLoad;
     private javax.swing.JMenuItem miOpen;
+    private javax.swing.JMenuItem miPreferences;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel pnLeft;
     private javax.swing.JPanel pnListe;

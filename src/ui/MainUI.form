@@ -61,6 +61,27 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="meSettings">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Settings"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="miPreferences">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+P"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/resources/settings.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Preferences"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onSettings"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>

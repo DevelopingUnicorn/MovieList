@@ -101,6 +101,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                         }
 
                         String size = String.format("%4.2f %s", filesize, gibormib);
+                        size = size.replaceAll(",",".");
 
                         liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
                         mi.close();

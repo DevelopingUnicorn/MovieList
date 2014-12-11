@@ -12,6 +12,7 @@ public class UtilityClass {
 
         for (Movie m : list) {
             String[] spl = m.getFilesize().split("\\s+");
+            spl[0] = spl[0].replaceAll(",",".");
             
             if(spl[1].equals("MiB"))
             {
@@ -25,7 +26,10 @@ public class UtilityClass {
             gibormib = "MiB";
             filesize *= 1024.0;
         }
-
-        return String.format("  %d - %4.2f %s",numberoffiles, filesize, gibormib);
+       
+        String ret = String.format("  %d Movies - %4.2f %s",numberoffiles, filesize, gibormib);
+        ret = ret.replaceAll(",",".");
+        
+        return ret;
     }
 }
