@@ -2,7 +2,10 @@ package ui;
 
 import bl.ConfigUtility;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.io.File;
+import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -11,6 +14,7 @@ public class SettingsDLG extends javax.swing.JDialog {
 
     private String pathtomovies;
     private ConfigUtility cu;
+    private LinkedList<Image> iconlist = new LinkedList<Image>();
 
     public SettingsDLG(java.awt.Frame parent, boolean modal, String ptm, ConfigUtility c) {
         super(parent, modal);
@@ -19,14 +23,20 @@ public class SettingsDLG extends javax.swing.JDialog {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
-        
+
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+
+        this.setIconImages(iconlist);
+
         pathtomovies = ptm;
         lbPath.setText(ptm);
         cu = c;
-        
+
         this.setSize(500, 250);
         this.setLocationRelativeTo(null);
         this.setAlwaysOnTop(true);
@@ -48,6 +58,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         btOk = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconImages(null);
 
         lbUe.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lbUe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -61,16 +72,16 @@ public class SettingsDLG extends javax.swing.JDialog {
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
 
         lbCLUE.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lbCLUE.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbCLUE.setText("Choose Language");
+        lbCLUE.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbCLUE.setText("Language:");
         pnThings.add(lbCLUE);
 
         cbLang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English" }));
         pnThings.add(cbLang);
 
         lbUEPM.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lbUEPM.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbUEPM.setText("Path to movies");
+        lbUEPM.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbUEPM.setText("Path to movies:");
         pnThings.add(lbUEPM);
 
         pnPath.setLayout(new java.awt.GridLayout(1, 2));
@@ -102,17 +113,17 @@ public class SettingsDLG extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
-        
-        String lang = cbLang.getSelectedItem().toString();        
+
+        String lang = cbLang.getSelectedItem().toString();
         cu.createConfigFile(lang, pathtomovies);
-        
+
         this.dispose();
     }//GEN-LAST:event_onFinish
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
         JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
-        
+
         FileFilter directoryFilter = new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory();
@@ -126,7 +137,7 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         fc.setFileFilter(directoryFilter);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         int returnVal = fc.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {

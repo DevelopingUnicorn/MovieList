@@ -2,7 +2,10 @@ package ui;
 
 import bl.ConfigUtility;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.io.File;
+import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -14,6 +17,7 @@ public class StartDLG extends javax.swing.JDialog {
     private String pathtomovies;
     private ConfigUtility cu = new ConfigUtility(pathtoconf);
     private File conf = new File(pathtoconf);
+    private LinkedList<Image> iconlist = new LinkedList<Image>();
 
     public StartDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -25,11 +29,15 @@ public class StartDLG extends javax.swing.JDialog {
                 System.exit(0);
             }
         });
-        
+
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+
         this.setSize(500, 250);
         this.setLocationRelativeTo(null);
         this.setAlwaysOnTop(true);
-        
+
         checkConf();
     }
 
@@ -103,11 +111,11 @@ public class StartDLG extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
-        
+
         String lang = cbLang.getSelectedItem().toString();
-        
+
         cu.createConfigFile(lang, pathtomovies);
-        
+
         MainUI mui = new MainUI(userdocs);
         this.dispose();
         mui.setVisible(true);
@@ -116,7 +124,7 @@ public class StartDLG extends javax.swing.JDialog {
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
         JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
-        
+
         FileFilter directoryFilter = new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory();
@@ -130,7 +138,7 @@ public class StartDLG extends javax.swing.JDialog {
 
         fc.setFileFilter(directoryFilter);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         int returnVal = fc.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {

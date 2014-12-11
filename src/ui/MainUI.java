@@ -8,8 +8,10 @@ import bl.MovieListModel;
 import bl.MovieLoader;
 import bl.Serializer;
 import bl.UtilityClass;
+import java.awt.Image;
 import java.util.Collections;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -23,6 +25,7 @@ public class MainUI extends javax.swing.JFrame {
     private ConfigUtility cu;
     private LinkedList<Movie> movielist = new LinkedList<Movie>();
     private UtilityClass uc = new UtilityClass();
+    private LinkedList<Image> iconlist = new LinkedList<Image>();
 
     private String pathtoconf;
 
@@ -30,7 +33,14 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-
+        this.setTitle("MovieList - Forever Watching");
+        
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+        
+        this.setIconImages(iconlist);
+        
         epInfos.setContentType("text/html");
 
         userdocs = ud;
