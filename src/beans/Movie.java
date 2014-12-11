@@ -52,22 +52,24 @@ public class Movie implements Serializable {
 
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<body style='font-family:Arial;font-size:14pt'><center><h1 style='color:#00d76f'>Movie Information</h1></center>");
-        sb.append("<hr width='80%' />");
-        sb.append("<br><center><table>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Titel:</strong></td><td>").append(name).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Duration:</strong></td><td>").append(duration).append("</td></tr>");
-        
+        sb.append("<br><center><h1>").append(name).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Duration:</strong></td><td>").append(duration).append("</td></tr>");
+
         if (width.equals("") && height.equals("")) {
-            sb.append("<tr><td><strong style='color:#00bda5'>Resolution:</strong></td><td>DVD</td></tr>");
+            sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Resolution:</strong></td><td width='50%' >DVD</td></tr>");
         } else {
-            sb.append("<tr><td><strong style='color:#00bda5'>Resolution:</strong></td><td>").append(width).append("x").append(height).append("</td></tr>");
+            if (Integer.parseInt(width) >= 1280) {
+                sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Resolution:</strong></td><td width='50%' >").append(width).append("x").append(height).append("  HD</td></tr>");
+            } else {
+                sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Resolution:</strong></td><td width='50%' >").append(width).append("x").append(height).append("  SD</td></tr>");
+            }
+
         }
 
-        sb.append("<tr><td><strong style='color:#00bda5'>Display Aspect Ratio:</strong></td><td>").append(aspectratio).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Fileextension:</strong></td><td>").append(fileextension).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Filesize:</strong></td><td>").append(filesize).append("</td></tr>");
-        sb.append("<tr><td><strong style='color:#00bda5'>Number of Files:</strong></td><td>").append(numberoffiles).append("</td></tr>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Display Aspect Ratio:</strong></td><td width='50%' >").append(aspectratio).append("</td></tr>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Fileextension:</strong></td><td width='50%' >").append(fileextension).append("</td></tr>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Filesize:</strong></td><td width='50%' >").append(filesize).append("</td></tr>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>Number of Files:</strong></td><td width='50%' >").append(numberoffiles).append("</td></tr>");
         sb.append("</table></center></body>");
 
         return sb.toString();
