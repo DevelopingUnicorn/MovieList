@@ -33,7 +33,7 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-        this.setTitle("MovieList - Forever Watching");
+        this.setTitle("MovieList - Forever Watching (ALPHA v1.1a)");
         
         iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());

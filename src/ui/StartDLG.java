@@ -63,7 +63,7 @@ public class StartDLG extends javax.swing.JDialog {
         lbUe.setText("Welcome to the Setup!");
         getContentPane().add(lbUe, java.awt.BorderLayout.PAGE_START);
 
-        lbVers.setText("v1.0a");
+        lbVers.setText("v1.1a");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
