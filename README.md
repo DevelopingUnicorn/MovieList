@@ -11,6 +11,7 @@ Features
 * Save Movies to MovieList File
 * Load from MovieList File
 * Display various information about File
+* Display amount and size of all Movies
 
 To Do:
 ===========
