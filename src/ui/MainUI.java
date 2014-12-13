@@ -8,9 +8,13 @@ import bl.MovieListModel;
 import bl.MovieLoader;
 import bl.Serializer;
 import bl.UtilityClass;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.LocalAttribute;
 import java.awt.Image;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,34 +23,59 @@ import javax.swing.event.ListSelectionListener;
 
 public class MainUI extends javax.swing.JFrame {
 
-    private MovieListModel mlm = new MovieListModel();
+    private final MovieListModel mlm = new MovieListModel();
     private MovieLoader ml;
-    private String userdocs, pathtomovies;
+    private final String userdocs, pathtomovies;
     private ConfigUtility cu;
-    private LinkedList<Movie> movielist = new LinkedList<Movie>();
-    private UtilityClass uc = new UtilityClass();
-    private LinkedList<Image> iconlist = new LinkedList<Image>();
+    private LinkedList<Movie> movielist = new LinkedList<>();
+    private final UtilityClass uc = new UtilityClass();
+    private final LinkedList<Image> iconlist = new LinkedList<>();
 
-    private String pathtoconf;
+    private final String pathtoconf;
+
+    private final ResourceBundle resBundle;
 
     public MainUI(String ud) {
         initComponents();
-        this.setSize(1000, 700);
-        this.setLocationRelativeTo(null);
-        this.setTitle("MovieList - Forever Watching (ALPHA v1.1a)");
-        
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
-        
-        this.setIconImages(iconlist);
-        
-        epInfos.setContentType("text/html");
 
         userdocs = ud;
         pathtoconf = userdocs + "\\movielist.conf";
 
         cu = new ConfigUtility(pathtoconf);
+
+        // Lang support
+        Locale currentLocal = Locale.ENGLISH;
+
+        System.out.println(cu.getLang());
+
+        if (cu.getLang().equals("de")) {
+            currentLocal = Locale.GERMAN;
+        }
+
+        System.out.println(currentLocal.toString());
+
+        resBundle = ResourceBundle.getBundle("src.ResourceBundle", currentLocal);
+        meFile.setText(resBundle.getString("main_menu_file"));
+        miOpen.setText(resBundle.getString("main_menu_file_open"));
+        miLoad.setText(resBundle.getString("main_menu_file_load"));
+        miSave.setText(resBundle.getString("main_menu_file_save"));
+        meSettings.setText(resBundle.getString("main_menu_settings"));
+        miPreferences.setText(resBundle.getString("main_menu_settings_preferences"));
+        pnListe.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_left_titel")));
+        pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
+        // END lang support
+
+        this.setSize(1000, 700);
+        this.setLocationRelativeTo(null);
+        this.setTitle("MovieList - Forever Watching (ALPHA v1.1a)");
+
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+
+        this.setIconImages(iconlist);
+
+        epInfos.setContentType("text/html");
 
         liMovies.setModel(mlm);
 
@@ -65,7 +94,7 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     private void printInformation(int selectedIndex) {
-        Movie m = movielist.get(selectedIndex);        
+        Movie m = movielist.get(selectedIndex);
         epInfos.setText(m.toHTMLString());
     }
 
@@ -205,10 +234,10 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onOpenMLFile
 
     private void onSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSettings
-       SettingsDLG sdlg = new SettingsDLG(this, true, pathtomovies, cu);
-       sdlg.setVisible(true);
-       
-       JOptionPane.showMessageDialog(this, "Restart the Program for changes\nto take effect!", "Restart!", 1);
+        SettingsDLG sdlg = new SettingsDLG(this, true, pathtomovies, cu);
+        sdlg.setVisible(true);
+
+        JOptionPane.showMessageDialog(this, "Restart the Program for changes\nto take effect!", "Restart!", 1);
     }//GEN-LAST:event_onSettings
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -239,19 +268,17 @@ public class MainUI extends javax.swing.JFrame {
         Collections.sort(movielist, new MovieCompare());
 
         System.out.println("" + movielist.size());
-        
+
         clearList();
         mlm.setList(movielist);
         liMovies.updateUI();
     }
-    
-    public JLabel getLbThings()
-    {
+
+    public JLabel getLbThings() {
         return this.lbThings;
     }
-    
-    public void clearList()
-    {
+
+    public void clearList() {
         mlm.clear();
         lbThings.setText("");
     }

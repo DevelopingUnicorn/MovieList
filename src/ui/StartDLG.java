@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
@@ -12,16 +15,24 @@ import javax.swing.JOptionPane;
 
 public class StartDLG extends javax.swing.JDialog {
 
-    private String userdocs = System.getProperty("user.home") + "\\Documents\\MovieList";
-    private String pathtoconf = userdocs + "\\movielist.conf";
+    private final String userdocs = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "MovieList";
+    private final String pathtoconf = userdocs + File.separator + "movielist.conf";
     private String pathtomovies;
-    private ConfigUtility cu = new ConfigUtility(pathtoconf);
-    private File conf = new File(pathtoconf);
-    private LinkedList<Image> iconlist = new LinkedList<Image>();
+    private final ConfigUtility cu = new ConfigUtility(pathtoconf);
+    private final File conf = new File(pathtoconf);
+    private final LinkedList<Image> iconlist = new LinkedList<Image>();
+    private final ResourceBundle resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
 
     public StartDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        // Lang support
+        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch"}));
+        lbTitel.setText(resBundle.getString("setup_titel"));
+        lbPath.setText(resBundle.getString("setup_path"));
+        lbChooseLang.setText(resBundle.getString("setup_chooseLang"));
+        // END lang support
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -39,53 +50,54 @@ public class StartDLG extends javax.swing.JDialog {
         this.setAlwaysOnTop(true);
 
         checkConf();
+
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lbUe = new javax.swing.JLabel();
+        lbTitel = new javax.swing.JLabel();
         lbVers = new javax.swing.JLabel();
         pnThings = new javax.swing.JPanel();
-        lbCLUE = new javax.swing.JLabel();
+        lbChooseLang = new javax.swing.JLabel();
         cbLang = new javax.swing.JComboBox();
-        lbUEPM = new javax.swing.JLabel();
-        pnPath = new javax.swing.JPanel();
         lbPath = new javax.swing.JLabel();
+        pnPath = new javax.swing.JPanel();
+        lbPathFeedback = new javax.swing.JLabel();
         btChoosePath = new javax.swing.JButton();
         btOk = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lbUe.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        lbUe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbUe.setText("Welcome to the Setup!");
-        getContentPane().add(lbUe, java.awt.BorderLayout.PAGE_START);
+        lbTitel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lbTitel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbTitel.setText("Welcome to the Setup!");
+        getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
         lbVers.setText("v1.1a");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
 
-        lbCLUE.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lbCLUE.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbCLUE.setText("Choose Language");
-        pnThings.add(lbCLUE);
+        lbChooseLang.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbChooseLang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbChooseLang.setText("Choose Language");
+        pnThings.add(lbChooseLang);
 
         cbLang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English" }));
         pnThings.add(cbLang);
 
-        lbUEPM.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lbUEPM.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbUEPM.setText("Path to movies");
-        pnThings.add(lbUEPM);
+        lbPath.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbPath.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbPath.setText("Path to movies");
+        pnThings.add(lbPath);
 
         pnPath.setLayout(new java.awt.GridLayout(1, 2));
 
-        lbPath.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbPath.setText("Not choosen yet!");
-        pnPath.add(lbPath);
+        lbPathFeedback.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbPathFeedback.setText("Not choosen yet!");
+        pnPath.add(lbPathFeedback);
 
         btChoosePath.setText("Choose folder");
         btChoosePath.addActionListener(new java.awt.event.ActionListener() {
@@ -114,6 +126,17 @@ public class StartDLG extends javax.swing.JDialog {
 
         String lang = cbLang.getSelectedItem().toString();
 
+        switch (lang) {
+            case "Deutsch":
+                lang = "de";
+                break;
+            case "English":
+                lang = "en";
+                break;
+            default:
+                lang = "en";
+        }
+
         cu.createConfigFile(lang, pathtomovies);
 
         MainUI mui = new MainUI(userdocs);
@@ -126,6 +149,7 @@ public class StartDLG extends javax.swing.JDialog {
         fc.setPreferredSize(new Dimension(700, 500));
 
         FileFilter directoryFilter = new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return file.isDirectory();
             }
@@ -143,9 +167,9 @@ public class StartDLG extends javax.swing.JDialog {
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             pathtomovies = fc.getSelectedFile().toString();
-            lbPath.setText(pathtomovies);
+            lbPathFeedback.setText(pathtomovies);
         } else {
-            JOptionPane.showMessageDialog(this, "Error!", "No folder choosen!", 0);
+            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error"), resBundle.getString("setup_error_path"), 0);
         }
     }//GEN-LAST:event_onChooseFolder
 
@@ -191,10 +215,10 @@ public class StartDLG extends javax.swing.JDialog {
     private javax.swing.JButton btChoosePath;
     private javax.swing.JButton btOk;
     private javax.swing.JComboBox cbLang;
-    private javax.swing.JLabel lbCLUE;
+    private javax.swing.JLabel lbChooseLang;
     private javax.swing.JLabel lbPath;
-    private javax.swing.JLabel lbUEPM;
-    private javax.swing.JLabel lbUe;
+    private javax.swing.JLabel lbPathFeedback;
+    private javax.swing.JLabel lbTitel;
     private javax.swing.JLabel lbVers;
     private javax.swing.JPanel pnPath;
     private javax.swing.JPanel pnThings;

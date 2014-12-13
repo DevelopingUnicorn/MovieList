@@ -46,7 +46,7 @@ public class SettingsDLG extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lbUe = new javax.swing.JLabel();
+        lbTitel = new javax.swing.JLabel();
         lbVers = new javax.swing.JLabel();
         pnThings = new javax.swing.JPanel();
         lbCLUE = new javax.swing.JLabel();
@@ -60,11 +60,11 @@ public class SettingsDLG extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconImages(null);
 
-        lbUe.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        lbUe.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbUe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/settingsBig.png"))); // NOI18N
-        lbUe.setText("Settings");
-        getContentPane().add(lbUe, java.awt.BorderLayout.PAGE_START);
+        lbTitel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lbTitel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbTitel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/settingsBig.png"))); // NOI18N
+        lbTitel.setText("Settings");
+        getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
         lbVers.setText("v1.1a");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
@@ -155,8 +155,8 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JComboBox cbLang;
     private javax.swing.JLabel lbCLUE;
     private javax.swing.JLabel lbPath;
+    private javax.swing.JLabel lbTitel;
     private javax.swing.JLabel lbUEPM;
-    private javax.swing.JLabel lbUe;
     private javax.swing.JLabel lbVers;
     private javax.swing.JPanel pnPath;
     private javax.swing.JPanel pnThings;
