@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+import jdk.nashorn.internal.runtime.regexp.joni.Option;
 import mediainfo.MediaInfo;
 import ui.MainUI;
 import ui.ProgressbarDLG;
@@ -26,7 +27,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private static final String[] okFileExtensions
             = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
     private static final String[] filesToIgnore
-            = new String[]{"ds_store", "nfo"};
+            = new String[]{"ds_store", ".nfo", ".mp3"};
 
     public MovieLoaderWorker(String path, ProgressbarDLG d, MainUI mui) {
         this.path = path;
@@ -173,19 +174,26 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                     }
                 }
             } else if (listOfFiles[i].isFile()) {
+
+                boolean isNotIgnored = true;
+
                 for (int j = 0; j < filesToIgnore.length; j++) {
-                    if (!listOfFiles[i].getName().toLowerCase().endsWith(filesToIgnore[j])) {
-                        mi.open(listOfFiles[i]);
-                        String name = listOfFiles[i].getName();
-                        String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                        liste.add(new Movie(name, width, height, dar, duration, size, extension, 1));
-                        mi.close();
+                    if (listOfFiles[i].getName().toLowerCase().endsWith(filesToIgnore[j])) {
+                        isNotIgnored = false;
                     }
+                }
+
+                if (isNotIgnored == true) {
+                    mi.open(listOfFiles[i]);
+                    String name = listOfFiles[i].getName();
+                    String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+                    liste.add(new Movie(name, width, height, dar, duration, size, extension, 1));
+                    mi.close();
                 }
 
             }
