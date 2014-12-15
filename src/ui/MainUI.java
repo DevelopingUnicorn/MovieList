@@ -8,7 +8,6 @@ import bl.MovieListModel;
 import bl.MovieLoader;
 import bl.Serializer;
 import bl.UtilityClass;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.LocalAttribute;
 import java.awt.Image;
 import java.util.Collections;
 import java.util.LinkedList;
