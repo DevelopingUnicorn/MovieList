@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 import mediainfo.MediaInfo.StreamKind;
 
-
-
 public class MediaDurationFilter implements FileFilter {
 
 	private final MediaInfo mediaInfo = new MediaInfo();
