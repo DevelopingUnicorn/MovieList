@@ -22,13 +22,13 @@ import javax.swing.event.ListSelectionListener;
 
 public class MainUI extends javax.swing.JFrame {
 
-    private final MovieListModel mlm = new MovieListModel();
+    private MovieListModel mlm = new MovieListModel();
     private MovieLoader ml;
-    private final String userdocs, pathtomovies;
+    private String userdocs, pathtomovies;
     private ConfigUtility cu;
     private LinkedList<Movie> movielist = new LinkedList<>();
-    private final UtilityClass uc = new UtilityClass();
-    private final LinkedList<Image> iconlist = new LinkedList<>();
+    private UtilityClass uc = new UtilityClass();
+    private LinkedList<Image> iconlist = new LinkedList<>();
 
     private final String pathtoconf;
 

@@ -17,12 +17,12 @@ import javax.swing.JOptionPane;
 
 public class StartDLG extends javax.swing.JDialog {
 
-    private final String userdocs = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "MovieList";
-    private final String pathtoconf = userdocs + File.separator + "movielist.conf";
+    private String userdocs = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "MovieList";
+    private String pathtoconf = userdocs + File.separator + "movielist.conf";
     private String pathtomovies;
-    private final ConfigUtility cu = new ConfigUtility(pathtoconf);
-    private final File conf = new File(pathtoconf);
-    private final LinkedList<Image> iconlist = new LinkedList<Image>();
+    private ConfigUtility cu = new ConfigUtility(pathtoconf);
+    private File conf = new File(pathtoconf);
+    private LinkedList<Image> iconlist = new LinkedList<Image>();
     private ResourceBundle resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
 
     public StartDLG(java.awt.Frame parent, boolean modal) {
