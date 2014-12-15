@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-import jdk.nashorn.internal.runtime.regexp.joni.Option;
 import mediainfo.MediaInfo;
 import ui.MainUI;
 import ui.ProgressbarDLG;
