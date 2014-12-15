@@ -29,7 +29,7 @@ public class StartDLG extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch"}));
+        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
         cbLang.addActionListener(new ActionListener() {
 
             @Override
@@ -42,6 +42,9 @@ public class StartDLG extends javax.swing.JDialog {
                         break;
                     case "English":
                         language("en");
+                        break;
+                    case "Espaniol":
+                        language("es");
                         break;
                     default:
                         language("en");
@@ -101,7 +104,7 @@ public class StartDLG extends javax.swing.JDialog {
         lbTitel.setText("Welcome to the Setup!");
         getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
-        lbVers.setText("v1.1a");
+        lbVers.setText("v1.2a");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
@@ -158,6 +161,9 @@ public class StartDLG extends javax.swing.JDialog {
                     break;
                 case "English":
                     lang = "en";
+                    break;
+                case "Espaniol":
+                    lang = "es";
                     break;
                 default:
                     lang = "en";
@@ -276,6 +282,8 @@ public class StartDLG extends javax.swing.JDialog {
             resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
         } else if (lang.equals("en")) {
             resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+        } else if (lang.equals("es")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
         }
 
         // Lang support

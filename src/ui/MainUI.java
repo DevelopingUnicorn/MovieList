@@ -271,6 +271,9 @@ public class MainUI extends javax.swing.JFrame {
 
         if (cu.getLang().equals("de")) {
             currentLocal = Locale.GERMAN;
+        }else if(cu.getLang().equals("es"))
+        {
+            currentLocal = new Locale("es");
         }
 
         System.out.println(currentLocal.toString());
