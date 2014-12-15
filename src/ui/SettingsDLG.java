@@ -30,17 +30,17 @@ public class SettingsDLG extends javax.swing.JDialog {
         cu.getConfig();
 
         switch (cu.getLang()) {
-            case "en":
-                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
-                break;
             case "de":
-                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+                language("de");
+                break;
+            case "en":
+                language("en");
                 break;
             case "es":
-                resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
+                language("es");
                 break;
             default:
-                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+                language("en");
         }
 
         cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
@@ -160,6 +160,21 @@ public class SettingsDLG extends javax.swing.JDialog {
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
 
         String lang = cbLang.getSelectedItem().toString();
+
+        switch (lang) {
+            case "Deutsch":
+                lang = "de";
+                break;
+            case "English":
+                lang = "en";
+                break;
+            case "Espaniol":
+                lang = "es";
+                break;
+            default:
+                lang = "en";
+        }
+
         cu.createConfigFile(lang, pathtomovies);
 
         this.dispose();
@@ -188,8 +203,6 @@ public class SettingsDLG extends javax.swing.JDialog {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             pathtomovies = fc.getSelectedFile().toString();
             lbPath.setText(pathtomovies);
-        } else {
-            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error_path"), resBundle.getString("setup_error"), 0);
         }
     }//GEN-LAST:event_onChooseFolder
 
@@ -221,7 +234,6 @@ public class SettingsDLG extends javax.swing.JDialog {
         lbTitel.setText(resBundle.getString("setup_titel"));
         lbUEPM.setText(resBundle.getString("setup_path"));
         lbCLUE.setText(resBundle.getString("setup_chooseLang"));
-        lbPath.setText(resBundle.getString("setup_noPath"));
         btOk.setText(resBundle.getString("setup_finish"));
         btChoosePath.setText(resBundle.getString("setup_choosePath"));
         // END lang support
