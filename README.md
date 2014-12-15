@@ -18,7 +18,9 @@ To Do:
 * <strike>GeneralUI</strike>
 * <strike>File Scanner</strike>
 * <strike>Infromation Viewer</strike>
-* MultiLang Support
+* <strike>MultiLang Support</strike>
+  * German
+  * English
 * <strike>Initial Relase</strike>
 * Sourcecode documentation
 * <strike>Settings option</strike>
