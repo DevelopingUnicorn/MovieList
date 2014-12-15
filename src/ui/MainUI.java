@@ -33,7 +33,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private final String pathtoconf;
 
-    private final ResourceBundle resBundle;
+    private ResourceBundle resBundle;
 
     public MainUI(String ud) {
         initComponents();
@@ -42,28 +42,6 @@ public class MainUI extends javax.swing.JFrame {
         pathtoconf = userdocs + "\\movielist.conf";
 
         cu = new ConfigUtility(pathtoconf);
-
-        // Lang support
-        Locale currentLocal = Locale.ENGLISH;
-
-        System.out.println(cu.getLang());
-
-        if (cu.getLang().equals("de")) {
-            currentLocal = Locale.GERMAN;
-        }
-
-        System.out.println(currentLocal.toString());
-
-        resBundle = ResourceBundle.getBundle("src.ResourceBundle", currentLocal);
-        meFile.setText(resBundle.getString("main_menu_file"));
-        miOpen.setText(resBundle.getString("main_menu_file_open"));
-        miLoad.setText(resBundle.getString("main_menu_file_load"));
-        miSave.setText(resBundle.getString("main_menu_file_save"));
-        meSettings.setText(resBundle.getString("main_menu_settings"));
-        miPreferences.setText(resBundle.getString("main_menu_settings_preferences"));
-        pnListe.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_left_titel")));
-        pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
-        // END lang support
 
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
@@ -81,7 +59,9 @@ public class MainUI extends javax.swing.JFrame {
 
         cu.getConfig();
         pathtomovies = cu.getPath();
-
+        
+        resource();
+        
         liMovies.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -281,5 +261,31 @@ public class MainUI extends javax.swing.JFrame {
     public void clearList() {
         mlm.clear();
         lbThings.setText("");
+    }
+    
+    public void resource()
+    {
+        // Lang support
+        Locale currentLocal = Locale.ENGLISH;
+
+        System.out.println(cu.getLang());
+
+        if (cu.getLang().equals("de")) {
+            currentLocal = Locale.GERMAN;
+        }
+
+        System.out.println(currentLocal.toString());
+
+        resBundle = ResourceBundle.getBundle("src.ResourceBundle", currentLocal);
+        meFile.setText(resBundle.getString("main_menu_file"));
+        miOpen.setText(resBundle.getString("main_menu_file_open"));
+        miLoad.setText(resBundle.getString("main_menu_file_load"));
+        miSave.setText(resBundle.getString("main_menu_file_save"));
+        meSettings.setText(resBundle.getString("main_menu_settings"));
+        miPreferences.setText(resBundle.getString("main_menu_settings_preferences"));
+        pnListe.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_left_titel")));
+        pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
+        // END lang support
+
     }
 }
