@@ -19,6 +19,10 @@ To Do:
 * <strike>File Scanner</strike>
 * <strike>Infromation Viewer</strike>
 * MultiLang Support
+  * <strike>German</strike>
+  * <strike>English</strike>
+  * Spanish
+  * Italian
 * <strike>Initial Relase</strike>
 * Sourcecode documentation
 * <strike>Settings option</strike>
@@ -34,5 +38,3 @@ Version
 <h5>~Alpha~</h5>
 * v1.0a - <a href="http://goo.gl/02fpjr">Download v1.0a</a>
 * v1.1a - <a href="http://goo.gl/E1Fxpw">Download v1.1a</a>
-
-
