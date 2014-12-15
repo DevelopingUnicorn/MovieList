@@ -26,7 +26,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private static final String[] okFileExtensions
             = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
     private static final String[] filesToIgnore
-            = new String[]{"ds_store"};
+            = new String[]{"ds_store", "nfo"};
 
     public MovieLoaderWorker(String path, ProgressbarDLG d, MainUI mui) {
         this.path = path;
@@ -174,7 +174,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                 }
             } else if (listOfFiles[i].isFile()) {
                 for (int j = 0; j < filesToIgnore.length; j++) {
-                    if (!listOfFiles[i].getName().toLowerCase().contains(filesToIgnore[j])) {
+                    if (!listOfFiles[i].getName().toLowerCase().endsWith(filesToIgnore[j])) {
                         mi.open(listOfFiles[i]);
                         String name = listOfFiles[i].getName();
                         String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
