@@ -3,6 +3,8 @@ package ui;
 import bl.ConfigUtility;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -21,17 +23,39 @@ public class StartDLG extends javax.swing.JDialog {
     private final ConfigUtility cu = new ConfigUtility(pathtoconf);
     private final File conf = new File(pathtoconf);
     private final LinkedList<Image> iconlist = new LinkedList<Image>();
-    private final ResourceBundle resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+    private ResourceBundle resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
 
     public StartDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
-        // Lang support
         cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch"}));
+        cbLang.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String lang = cbLang.getSelectedItem().toString();
+
+                switch (lang) {
+                    case "Deutsch":
+                        language("de");
+                        break;
+                    case "English":
+                        language("en");
+                        break;
+                    default:
+                        language("en");
+                }
+            }
+        });
+
+        // Lang support
         lbTitel.setText(resBundle.getString("setup_titel"));
         lbPath.setText(resBundle.getString("setup_path"));
         lbChooseLang.setText(resBundle.getString("setup_chooseLang"));
+        lbPathFeedback.setText(resBundle.getString("setup_noPath"));
+        btOk.setText(resBundle.getString("setup_finish"));
+        btChoosePath.setText(resBundle.getString("setup_choosePath"));
         // END lang support
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -44,6 +68,8 @@ public class StartDLG extends javax.swing.JDialog {
         iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+
+        this.setIconImages(iconlist);
 
         this.setSize(500, 250);
         this.setLocationRelativeTo(null);
@@ -123,25 +149,28 @@ public class StartDLG extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
+        if (!lbPathFeedback.getText().equals(resBundle.getString("setup_noPath"))) {
+            String lang = cbLang.getSelectedItem().toString();
 
-        String lang = cbLang.getSelectedItem().toString();
+            switch (lang) {
+                case "Deutsch":
+                    lang = "de";
+                    break;
+                case "English":
+                    lang = "en";
+                    break;
+                default:
+                    lang = "en";
+            }
 
-        switch (lang) {
-            case "Deutsch":
-                lang = "de";
-                break;
-            case "English":
-                lang = "en";
-                break;
-            default:
-                lang = "en";
+            cu.createConfigFile(lang, pathtomovies);
+
+            MainUI mui = new MainUI(userdocs);
+            this.dispose();
+            mui.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error_path"), resBundle.getString("setup_error"), 0);
         }
-
-        cu.createConfigFile(lang, pathtomovies);
-
-        MainUI mui = new MainUI(userdocs);
-        this.dispose();
-        mui.setVisible(true);
     }//GEN-LAST:event_onFinish
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
@@ -169,7 +198,7 @@ public class StartDLG extends javax.swing.JDialog {
             pathtomovies = fc.getSelectedFile().toString();
             lbPathFeedback.setText(pathtomovies);
         } else {
-            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error"), resBundle.getString("setup_error_path"), 0);
+            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error_path"), resBundle.getString("setup_error"), 0);
         }
     }//GEN-LAST:event_onChooseFolder
 
@@ -239,5 +268,23 @@ public class StartDLG extends javax.swing.JDialog {
             movielistdir.mkdir();
             this.setVisible(true);
         }
+    }
+
+    public void language(String lang) {
+
+        if (lang.equals("de")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+        } else if (lang.equals("en")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+        }
+
+        // Lang support
+        lbTitel.setText(resBundle.getString("setup_titel"));
+        lbPath.setText(resBundle.getString("setup_path"));
+        lbChooseLang.setText(resBundle.getString("setup_chooseLang"));
+        lbPathFeedback.setText(resBundle.getString("setup_noPath"));
+        btOk.setText(resBundle.getString("setup_finish"));
+        btChoosePath.setText(resBundle.getString("setup_choosePath"));
+        // END lang support
     }
 }
