@@ -3,8 +3,13 @@ package ui;
 import bl.ConfigUtility;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
@@ -15,10 +20,51 @@ public class SettingsDLG extends javax.swing.JDialog {
     private String pathtomovies;
     private ConfigUtility cu;
     private LinkedList<Image> iconlist = new LinkedList<Image>();
+    private ResourceBundle resBundle;
 
     public SettingsDLG(java.awt.Frame parent, boolean modal, String ptm, ConfigUtility c) {
         super(parent, modal);
         initComponents();
+
+        cu = c;
+        cu.getConfig();
+
+        switch (cu.getLang()) {
+            case "en":
+                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+                break;
+            case "de":
+                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+                break;
+            case "es":
+                resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
+                break;
+            default:
+                resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+        }
+
+        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
+        cbLang.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String lang = cbLang.getSelectedItem().toString();
+
+                switch (lang) {
+                    case "Deutsch":
+                        language("de");
+                        break;
+                    case "English":
+                        language("en");
+                        break;
+                    case "Espaniol":
+                        language("es");
+                        break;
+                    default:
+                        language("en");
+                }
+            }
+        });
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -35,7 +81,6 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         pathtomovies = ptm;
         lbPath.setText(ptm);
-        cu = c;
 
         this.setSize(500, 250);
         this.setLocationRelativeTo(null);
@@ -144,7 +189,7 @@ public class SettingsDLG extends javax.swing.JDialog {
             pathtomovies = fc.getSelectedFile().toString();
             lbPath.setText(pathtomovies);
         } else {
-            JOptionPane.showMessageDialog(this, "Error!", "No folder choosen!", 0);
+            JOptionPane.showMessageDialog(this, resBundle.getString("setup_error_path"), resBundle.getString("setup_error"), 0);
         }
     }//GEN-LAST:event_onChooseFolder
 
@@ -162,4 +207,23 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JPanel pnThings;
     // End of variables declaration//GEN-END:variables
 
+    public void language(String lang) {
+
+        if (lang.equals("de")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+        } else if (lang.equals("en")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+        } else if (lang.equals("es")) {
+            resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
+        }
+
+        // Lang support
+        lbTitel.setText(resBundle.getString("setup_titel"));
+        lbUEPM.setText(resBundle.getString("setup_path"));
+        lbCLUE.setText(resBundle.getString("setup_chooseLang"));
+        lbPath.setText(resBundle.getString("setup_noPath"));
+        btOk.setText(resBundle.getString("setup_finish"));
+        btChoosePath.setText(resBundle.getString("setup_choosePath"));
+        // END lang support
+    }
 }
