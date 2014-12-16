@@ -46,9 +46,9 @@ public class MainUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("MovieList - Forever Watching (ALPHA v1.1a)");
 
-        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.large.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.medium.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.small.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.small.png")).getImage());
 
         this.setIconImages(iconlist);
 
