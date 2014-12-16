@@ -39,7 +39,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lbVers">
       <Properties>
-        <Property name="text" type="java.lang.String" value="v1.2a"/>
+        <Property name="text" type="java.lang.String" value="v2.0a"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
