@@ -23,7 +23,7 @@ public class StartDLG extends javax.swing.JDialog {
     private ConfigUtility cu = new ConfigUtility(pathtoconf);
     private File conf = new File(pathtoconf);
     private LinkedList<Image> iconlist = new LinkedList<Image>();
-    private ResourceBundle resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+    private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
 
     public StartDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -279,11 +279,11 @@ public class StartDLG extends javax.swing.JDialog {
     public void language(String lang) {
 
         if (lang.equals("de")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.GERMAN);
         } else if (lang.equals("en")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
         } else if (lang.equals("es")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", new Locale("es"));
         }
 
         // Lang support

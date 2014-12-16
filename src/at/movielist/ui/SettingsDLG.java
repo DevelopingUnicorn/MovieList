@@ -223,11 +223,11 @@ public class SettingsDLG extends javax.swing.JDialog {
     public void language(String lang) {
 
         if (lang.equals("de")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.GERMAN);
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.GERMAN);
         } else if (lang.equals("en")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", Locale.ENGLISH);
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
         } else if (lang.equals("es")) {
-            resBundle = ResourceBundle.getBundle("src.ResourceBundle", new Locale("es"));
+            resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", new Locale("es"));
         }
 
         // Lang support

@@ -278,7 +278,7 @@ public class MainUI extends javax.swing.JFrame {
 
         System.out.println(currentLocal.toString());
 
-        resBundle = ResourceBundle.getBundle("src.ResourceBundle", currentLocal);
+        resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", currentLocal);
         meFile.setText(resBundle.getString("main_menu_file"));
         miOpen.setText(resBundle.getString("main_menu_file_open"));
         miLoad.setText(resBundle.getString("main_menu_file_load"));
