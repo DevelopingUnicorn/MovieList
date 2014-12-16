@@ -198,7 +198,7 @@ public class MainUI extends javax.swing.JFrame {
         if (movielist.size() > 0) {
             s.safeMovieList(movielist);
         } else {
-            JOptionPane.showMessageDialog(this, "No Movies in List!\nPlease load Movies.", "Error!", 0);
+            JOptionPane.showMessageDialog(this, resBundle.getString("main_save_noMovies"), resBundle.getString("main_save_noMoviesTitle"), 0);
         }
     }//GEN-LAST:event_onSave
 
