@@ -75,6 +75,9 @@ public class MainUI extends javax.swing.JFrame {
 
     private void printInformation(int selectedIndex) {
         Movie m = movielist.get(selectedIndex);
+        Locale current = resBundle.getLocale(); 
+        m.setResBundle(current);
+        
         epInfos.setText(m.toHTMLString());
     }
 
@@ -166,6 +169,7 @@ public class MainUI extends javax.swing.JFrame {
         mbBar.add(meFile);
 
         meSettings.setText("Settings");
+        meSettings.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         miPreferences.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         miPreferences.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settings.png"))); // NOI18N
