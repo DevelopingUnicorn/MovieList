@@ -46,3 +46,7 @@ Version
  * Huge update!
  * Full English, German and Spanish support
  * <strong>Note: If comming from v1.1a -> delete config file</strong>
+
+<h5>~Beta~</h5>
+* v1.0b - <a href="http://goo.gl/FdS0Vs">Download v1.0b</a>
+ * Biggest bug fixed! Now it works. 
