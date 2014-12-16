@@ -73,9 +73,9 @@ public class SettingsDLG extends javax.swing.JDialog {
             }
         });
 
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.small.png")).getImage());
 
         this.setIconImages(iconlist);
 

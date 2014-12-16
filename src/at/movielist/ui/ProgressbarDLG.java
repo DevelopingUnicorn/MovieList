@@ -20,9 +20,9 @@ public class ProgressbarDLG extends javax.swing.JDialog {
         this.setLocationRelativeTo(parent);
         this.setResizable(false);
 
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.large.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.medium.png")).getImage());
-        iconlist.add(new ImageIcon(this.getClass().getResource("/resources/windowicon.small.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.large.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.medium.png")).getImage());
+        iconlist.add(new ImageIcon(this.getClass().getResource("/at.movielist.resources/windowicon.small.png")).getImage());
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
