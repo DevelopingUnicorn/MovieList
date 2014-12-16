@@ -107,7 +107,7 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         lbTitel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lbTitel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbTitel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/settingsBig.png"))); // NOI18N
+        lbTitel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settingsBig.png"))); // NOI18N
         lbTitel.setText("Settings");
         getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
