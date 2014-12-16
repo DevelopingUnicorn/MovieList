@@ -1,4 +1,4 @@
-package mediainfo;
+package at.lib.mediainfo;
 
 import java.io.Closeable;
 import java.io.File;

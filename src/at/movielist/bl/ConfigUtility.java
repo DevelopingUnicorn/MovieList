@@ -1,4 +1,4 @@
-package bl;
+package at.movielist.bl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

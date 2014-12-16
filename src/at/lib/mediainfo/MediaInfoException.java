@@ -1,5 +1,5 @@
 
-package mediainfo;
+package at.lib.mediainfo;
 
 
 import com.sun.jna.Platform;

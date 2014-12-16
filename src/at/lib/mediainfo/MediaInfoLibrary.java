@@ -1,4 +1,4 @@
-package mediainfo;
+package at.lib.mediainfo;
 
 
 import static java.util.Collections.*;

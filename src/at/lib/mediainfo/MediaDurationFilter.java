@@ -1,8 +1,8 @@
-package mediainfo;
+package at.lib.mediainfo;
 
 import java.io.File;
 import java.io.FileFilter;
-import mediainfo.MediaInfo.StreamKind;
+import at.lib.mediainfo.MediaInfo.StreamKind;
 
 public class MediaDurationFilter implements FileFilter {
 

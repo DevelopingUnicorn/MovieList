@@ -1,4 +1,4 @@
-package ui;
+package at.movielist.ui;
 
 import java.awt.Image;
 import java.util.LinkedList;

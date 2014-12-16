@@ -1,6 +1,6 @@
-package bl;
+package at.movielist.bl;
 
-import beans.Movie;
+import at.movielist.beans.Movie;
 import java.io.File;
 import java.io.FileFilter;
 import java.text.SimpleDateFormat;
@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-import mediainfo.MediaInfo;
-import ui.MainUI;
-import ui.ProgressbarDLG;
+import at.lib.mediainfo.MediaInfo;
+import at.movielist.ui.MainUI;
+import at.movielist.ui.ProgressbarDLG;
 
 public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 

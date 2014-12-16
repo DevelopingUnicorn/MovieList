@@ -1,6 +1,6 @@
-package bl;
+package at.movielist.bl;
 
-import beans.Movie;
+import at.movielist.beans.Movie;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import ui.MainUI;
+import at.movielist.ui.MainUI;
 
 public class DeSerializer {
 

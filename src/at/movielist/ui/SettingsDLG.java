@@ -1,6 +1,6 @@
-package ui;
+package at.movielist.ui;
 
-import bl.ConfigUtility;
+import at.movielist.bl.ConfigUtility;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;

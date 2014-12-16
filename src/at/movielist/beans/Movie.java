@@ -1,4 +1,4 @@
-package beans;
+package at.movielist.beans;
 
 import java.io.Serializable;
 

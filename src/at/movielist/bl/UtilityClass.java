@@ -1,6 +1,6 @@
-package bl;
+package at.movielist.bl;
 
-import beans.Movie;
+import at.movielist.beans.Movie;
 import java.util.LinkedList;
 
 public class UtilityClass {

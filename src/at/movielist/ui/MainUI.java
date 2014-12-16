@@ -1,13 +1,13 @@
-package ui;
+package at.movielist.ui;
 
-import beans.Movie;
-import bl.ConfigUtility;
-import bl.DeSerializer;
-import bl.MovieCompare;
-import bl.MovieListModel;
-import bl.MovieLoader;
-import bl.Serializer;
-import bl.UtilityClass;
+import at.movielist.beans.Movie;
+import at.movielist.bl.ConfigUtility;
+import at.movielist.bl.DeSerializer;
+import at.movielist.bl.MovieCompare;
+import at.movielist.bl.MovieListModel;
+import at.movielist.bl.MovieLoader;
+import at.movielist.bl.Serializer;
+import at.movielist.bl.UtilityClass;
 import java.awt.Image;
 import java.util.Collections;
 import java.util.LinkedList;

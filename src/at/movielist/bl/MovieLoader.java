@@ -1,7 +1,7 @@
-package bl;
+package at.movielist.bl;
 
-import ui.MainUI;
-import ui.ProgressbarDLG;
+import at.movielist.ui.MainUI;
+import at.movielist.ui.ProgressbarDLG;
 
 public class MovieLoader {
 

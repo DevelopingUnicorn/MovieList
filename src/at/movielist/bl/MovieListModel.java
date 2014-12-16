@@ -1,6 +1,6 @@
-package bl;
+package at.movielist.bl;
 
-import beans.Movie;
+import at.movielist.beans.Movie;
 import java.util.LinkedList;
 import javax.swing.AbstractListModel;
 
