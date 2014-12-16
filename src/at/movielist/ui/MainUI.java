@@ -9,6 +9,7 @@ import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
 import java.awt.Image;
+import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -38,7 +39,7 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
 
         userdocs = ud;
-        pathtoconf = userdocs + "\\movielist.conf";
+        pathtoconf = userdocs + File.separator + "movielist.conf";
 
         cu = new ConfigUtility(pathtoconf);
 
