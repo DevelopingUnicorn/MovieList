@@ -39,5 +39,10 @@ Version
 * v1.0a - <a href="http://goo.gl/02fpjr">Download v1.0a</a>
 * v1.1a - <a href="http://goo.gl/E1Fxpw">Download v1.1a</a>
 * v1.2a - <a href="http://goo.gl/5AnPqo">Download v1.2a</a>
+ * <strong>Delete your config file! Before Launching this version!</strong>
  * Major Bugfixes
  * Partial MultiLang
+* v2.0a - <a href="http://goo.gl/bmfl2n">Download v2.0a</a>
+ * Huge update!
+ * Full English, German and Spanish support
+ * <strong>Note: If comming from v1.1a -> delete config file</strong>
