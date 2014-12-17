@@ -8,7 +8,7 @@ public class Movie implements Serializable {
 
     private String name, width, height, aspectratio, duration, filesize, fileextension;
     private int numberoffiles;
-    private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
+    transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
 
     public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles) {
         this.name = name;
