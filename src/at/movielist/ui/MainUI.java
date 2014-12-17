@@ -39,7 +39,7 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
 
         userdocs = ud;
-        pathtoconf = userdocs + File.separator + "movielist.conf";
+        pathtoconf = new StringBuilder().append(userdocs).append(File.separator).append("movielist.conf").toString();
 
         cu = new ConfigUtility(pathtoconf);
 
@@ -212,7 +212,7 @@ public class MainUI extends javax.swing.JFrame {
         ds.deSerialize();
 
         if (movielist.size() > 0) {
-            String things = uc.getSizeAndNumberOfFiles(movielist);
+            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
         }
     }//GEN-LAST:event_onOpenMLFile

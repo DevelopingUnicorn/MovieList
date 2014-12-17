@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 
 public class StartDLG extends javax.swing.JDialog {
 
-    private String userdocs = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "MovieList";
-    private String pathtoconf = userdocs + File.separator + "movielist.conf";
+    private String userdocs = new StringBuilder().append(System.getProperty("user.home")).append(File.separator).append("Documents").append(File.separator).append("MovieList").toString();
+    private String pathtoconf = new StringBuilder().append(userdocs).append(File.separator).append("movielist.conf").toString();
     private String pathtomovies;
     private ConfigUtility cu = new ConfigUtility(pathtoconf);
     private File conf = new File(pathtoconf);
