@@ -2,10 +2,15 @@ package at.movielist.bl;
 
 import at.movielist.beans.Movie;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class UtilityClass {
 
-    public String getSizeAndNumberOfFiles(LinkedList<Movie> list) {
+    public String getSizeAndNumberOfFiles(LinkedList<Movie> list, Locale loc) {
+        
+        ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
+        
         double filesize = 0.0;
         int numberoffiles = list.size();
         String gibormib = "GiB";
@@ -27,7 +32,7 @@ public class UtilityClass {
             filesize *= 1024.0;
         }
        
-        String ret = String.format("  %d Movies - %4.2f %s",numberoffiles, filesize, gibormib);
+        String ret = String.format("  %d %s - %4.2f %s",numberoffiles,resBundle.getString("main_bottom_info"), filesize, gibormib);
         ret = ret.replaceAll(",",".");
         
         return ret;

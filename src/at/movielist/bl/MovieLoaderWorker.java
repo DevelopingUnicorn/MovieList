@@ -220,7 +220,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         mui.setList(liste);
 
         if (liste.size() > 0) {
-            String things = uc.getSizeAndNumberOfFiles(liste);
+            String things = uc.getSizeAndNumberOfFiles(liste, resBundle.getLocale());
             mui.getLbThings().setText(things);
         }
 
