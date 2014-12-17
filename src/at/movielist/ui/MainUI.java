@@ -192,7 +192,7 @@ public class MainUI extends javax.swing.JFrame {
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
         pd.setVisible(true);
 
-        ml = new MovieLoader(pathtomovies, pd);
+        ml = new MovieLoader(pathtomovies, pd, resBundle.getLocale());
 
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
