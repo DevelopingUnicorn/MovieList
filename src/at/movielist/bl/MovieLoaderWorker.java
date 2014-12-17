@@ -25,9 +25,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private UtilityClass uc = new UtilityClass();
     private SimpleDateFormat durationFormat = new SimpleDateFormat("k'h' mm'mn'");
     private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
+    private MediaInfo mi = new MediaInfo();
 
     private String prog1, prog2;
-    
+
     private static final String[] okFileExtensions
             = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
     private static final String[] filesToIgnore
@@ -40,7 +41,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         this.dlg = d;
         this.mui = mui;
         this.resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
-        
+
         prog1 = resBundle.getString("progress_string_1");
         prog2 = resBundle.getString("progress_string_2");
     }
@@ -48,22 +49,25 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     public LinkedList<Movie> getListe() {
         return liste;
     }
- 
+
     @Override
     protected LinkedList<Movie> doInBackground() throws Exception {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
-        MediaInfo mi = new MediaInfo();
-
-        int length = listOfFiles.length;
         
+        int length = listOfFiles.length;
+
         dlg.setMovieWorker(this);
 
         for (int i = 0; i < length; i++) {
             StringBuilder sb = new StringBuilder();
+            
             String xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
+            
             double inc = 1000000 / listOfFiles.length;
+            
             lb.setText(xfy);
+            
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
@@ -170,16 +174,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                             mi.close();
                         } else {
                             File movie = listoffilesinmoviefolder[0];
-                            mi.open(movie);
-                            String name = listOfFiles[i].getName();
-                            String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                            liste.add(new Movie(name, width, height, dar, duration, size, extension, listoffilesinmoviefolder.length));
-                            mi.close();
+                            createMovie(movie);
                         }
 
                     }
@@ -195,16 +190,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                 }
 
                 if (isNotIgnored == true) {
-                    mi.open(listOfFiles[i]);
-                    String name = listOfFiles[i].getName();
-                    String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-                    liste.add(new Movie(name, width, height, dar, duration, size, extension, 1));
-                    mi.close();
+                    createMovie(listOfFiles[i]);
                 }
 
             }
@@ -225,5 +211,18 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         }
 
         dlg.dispose();
+    }
+
+    private void createMovie(File f) {
+        mi.open(f);
+        String name = f.getName();
+        String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
+        liste.add(new Movie(name, width, height, dar, duration, size, extension, 1));
+        mi.close();
     }
 }
