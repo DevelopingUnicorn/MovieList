@@ -3,7 +3,7 @@ MovieList
 
 A Project started by a friend of mine and me for managing and listing your movies. <br>
 It scans a directory for movies and adds them to a list. You can show various <br>
-Information, such as Resolution, Filesize, Duration and more. <br>
+Information, such as Resolution, Filesize, Duration and more. For more information: <a href="http://goo.gl/xNzbkw"> Wiki</a><br>
 
 Features
 ==========
