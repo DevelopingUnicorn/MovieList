@@ -54,20 +54,20 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     protected LinkedList<Movie> doInBackground() throws Exception {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
-        
+
         int length = listOfFiles.length;
 
         dlg.setMovieWorker(this);
 
         for (int i = 0; i < length; i++) {
             StringBuilder sb = new StringBuilder();
-            
+
             String xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
-            
+
             double inc = 1000000 / listOfFiles.length;
-            
+
             lb.setText(xfy);
-            
+
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
@@ -180,19 +180,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                     }
                 }
             } else if (listOfFiles[i].isFile()) {
-
-                boolean isNotIgnored = true;
-
-                for (int j = 0; j < filesToIgnore.length; j++) {
-                    if (listOfFiles[i].getName().toLowerCase().endsWith(filesToIgnore[j])) {
-                        isNotIgnored = false;
-                    }
-                }
-
-                if (isNotIgnored == true) {
+                for (String ext : okFileExtensions) {
+                    if(listOfFiles[i].getName().endsWith(ext))
                     createMovie(listOfFiles[i]);
                 }
-
             }
 
             loading.setValue(loading.getValue() + (int) inc);
