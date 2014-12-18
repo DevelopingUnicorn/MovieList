@@ -220,7 +220,9 @@ public class MainUI extends javax.swing.JFrame {
         SettingsDLG sdlg = new SettingsDLG(this, true, pathtomovies, cu);
         sdlg.setVisible(true);
 
-        JOptionPane.showMessageDialog(this, resBundle.getString("settings_message"), resBundle.getString("settings_messageTitle"), 1);
+        cu.getConfig();
+        resource();
+        pathtomovies = cu.getPath();
     }//GEN-LAST:event_onSettings
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
