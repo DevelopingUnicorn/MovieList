@@ -59,9 +59,9 @@ public class MainUI extends javax.swing.JFrame {
 
         cu.getConfig();
         pathtomovies = cu.getPath();
-        
+
         resource();
-        
+
         liMovies.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -75,9 +75,9 @@ public class MainUI extends javax.swing.JFrame {
 
     private void printInformation(int selectedIndex) {
         Movie m = movielist.get(selectedIndex);
-        Locale current = resBundle.getLocale(); 
+        Locale current = resBundle.getLocale();
         m.setResBundle(current);
-        
+
         epInfos.setText(m.toHTMLString());
     }
 
@@ -190,7 +190,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
-        
+
         ml = new MovieLoader(pathtomovies, pd, resBundle.getLocale());
 
         loadMovies();
@@ -223,6 +223,11 @@ public class MainUI extends javax.swing.JFrame {
         cu.getConfig();
         resource();
         pathtomovies = cu.getPath();
+
+        if (movielist.size() > 0) {
+            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+            this.lbThings.setText(things);
+        }
     }//GEN-LAST:event_onSettings
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -267,9 +272,8 @@ public class MainUI extends javax.swing.JFrame {
         mlm.clear();
         lbThings.setText("");
     }
-    
-    public void resource()
-    {
+
+    public void resource() {
         // Lang support
         Locale currentLocal = Locale.ENGLISH;
 
@@ -277,8 +281,7 @@ public class MainUI extends javax.swing.JFrame {
 
         if (cu.getLang().equals("de")) {
             currentLocal = Locale.GERMAN;
-        }else if(cu.getLang().equals("es"))
-        {
+        } else if (cu.getLang().equals("es")) {
             currentLocal = new Locale("es");
         }
 
