@@ -112,7 +112,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         lbTitel.setText("Settings");
         getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
-        lbVers.setText("v1.0b");
+        lbVers.setText("v1.1b");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
