@@ -44,6 +44,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
         prog1 = resBundle.getString("progress_string_1");
         prog2 = resBundle.getString("progress_string_2");
+        
+        dlg.setVisible(true);
     }
 
     public LinkedList<Movie> getListe() {
@@ -55,10 +57,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
 
-        int length = listOfFiles.length;
-
         dlg.setMovieWorker(this);
 
+        int length = listOfFiles.length;
+        
         for (int i = 0; i < length; i++) {
             StringBuilder sb = new StringBuilder();
 
@@ -70,6 +72,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
             if (listOfFiles[i].isDirectory()) {
                 File moviefolder = new File(listOfFiles[i].getAbsolutePath());
+                
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file) {
@@ -174,7 +177,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                             mi.close();
                         } else {
                             File movie = listoffilesinmoviefolder[0];
-                            createMovie(movie);
+                            createMovie(movie, moviefolder.getName());
                         }
 
                     }
@@ -182,7 +185,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             } else if (listOfFiles[i].isFile()) {
                 for (String ext : okFileExtensions) {
                     if(listOfFiles[i].getName().endsWith(ext))
-                    createMovie(listOfFiles[i]);
+                    createMovie(listOfFiles[i], listOfFiles[i].getName());
                 }
             }
 
@@ -204,9 +207,9 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         dlg.dispose();
     }
 
-    private void createMovie(File f) {
+    private void createMovie(File f, String fname) {
         mi.open(f);
-        String name = f.getName();
+        String name = fname;
         String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
         String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
         String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
