@@ -127,6 +127,7 @@ public class MainUI extends javax.swing.JFrame {
         pnRight.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
         pnRight.setLayout(new java.awt.BorderLayout());
 
+        epInfos.setEditable(false);
         jScrollPane1.setViewportView(epInfos);
 
         pnRight.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -190,6 +191,11 @@ public class MainUI extends javax.swing.JFrame {
 
         miCredits.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/about.png"))); // NOI18N
         miCredits.setText("Credits");
+        miCredits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onCredits(evt);
+            }
+        });
         meAbout.add(miCredits);
 
         mbBar.add(meAbout);
@@ -240,6 +246,11 @@ public class MainUI extends javax.swing.JFrame {
             this.lbThings.setText(things);
         }
     }//GEN-LAST:event_onSettings
+
+    private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
+        CreditsDLG dlg = new CreditsDLG(this, true, resBundle.getLocale());
+        dlg.setVisible(true);
+    }//GEN-LAST:event_onCredits
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epInfos;
