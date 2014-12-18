@@ -190,8 +190,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
-        pd.setVisible(true);
-
+        
         ml = new MovieLoader(pathtomovies, pd, resBundle.getLocale());
 
         loadMovies();
