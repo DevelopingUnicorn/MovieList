@@ -85,6 +85,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         this.setSize(500, 250);
         this.setLocationRelativeTo(null);
         this.setAlwaysOnTop(true);
+        this.setResizable(false);
     }
 
     @SuppressWarnings("unchecked")
