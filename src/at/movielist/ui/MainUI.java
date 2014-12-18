@@ -100,6 +100,8 @@ public class MainUI extends javax.swing.JFrame {
         miSave = new javax.swing.JMenuItem();
         meSettings = new javax.swing.JMenu();
         miPreferences = new javax.swing.JMenuItem();
+        meAbout = new javax.swing.JMenu();
+        miCredits = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
@@ -183,6 +185,15 @@ public class MainUI extends javax.swing.JFrame {
 
         mbBar.add(meSettings);
 
+        meAbout.setText("About");
+        meAbout.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        miCredits.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/about.png"))); // NOI18N
+        miCredits.setText("Credits");
+        meAbout.add(miCredits);
+
+        mbBar.add(meAbout);
+
         setJMenuBar(mbBar);
 
         pack();
@@ -236,8 +247,10 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
+    private javax.swing.JMenu meAbout;
     private javax.swing.JMenu meFile;
     private javax.swing.JMenu meSettings;
+    private javax.swing.JMenuItem miCredits;
     private javax.swing.JMenuItem miLoad;
     private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenuItem miPreferences;
@@ -294,6 +307,8 @@ public class MainUI extends javax.swing.JFrame {
         miSave.setText(resBundle.getString("main_menu_file_save"));
         meSettings.setText(resBundle.getString("main_menu_settings"));
         miPreferences.setText(resBundle.getString("main_menu_settings_preferences"));
+        meAbout.setText(resBundle.getString("main_menu_about"));
+        miCredits.setText(resBundle.getString("main_menu_about_credits"));
         pnListe.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_left_titel")));
         pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
         // END lang support
