@@ -77,8 +77,8 @@ public class MainUI extends javax.swing.JFrame {
 
         liMovies.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent ke) {
-                if (ke.getKeyCode() == 127 && liMovies.getSelectedIndices().length != 0) {
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
                     removeListEntry();
                 }
             }
@@ -295,7 +295,6 @@ public class MainUI extends javax.swing.JFrame {
 
         System.out.println("" + movielist.size());
 
-        clearList();
         mlm.setList(movielist);
         liMovies.updateUI();
     }
@@ -346,8 +345,9 @@ public class MainUI extends javax.swing.JFrame {
                 movielist.remove(i);
             }
         }
-
-        this.setList(movielist);
+        
+        mlm.setList(movielist);
+        liMovies.updateUI();
         
         if (movielist.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
