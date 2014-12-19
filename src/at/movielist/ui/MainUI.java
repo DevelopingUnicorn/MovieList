@@ -9,6 +9,8 @@ import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,8 +21,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -65,6 +69,15 @@ public class MainUI extends javax.swing.JFrame {
 
         resource();
 
+        liMovies.registerKeyboardAction(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                removeListEntry();
+            }
+        },
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
+
         liMovies.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -75,14 +88,14 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        liMovies.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
-                    removeListEntry();
-                }
-            }
-        });
+//        liMovies.addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyPressed(KeyEvent ke) {
+//                if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+//                    removeListEntry();
+//                }
+//            }
+//        });
     }
 
     private void printInformation(int selectedIndex) {
@@ -339,19 +352,25 @@ public class MainUI extends javax.swing.JFrame {
 
     public void removeListEntry() {
         int[] toDel = liMovies.getSelectedIndices();
-
+        int minus = 0;
+        
         for (int i : toDel) {
             if (movielist.size() != 0) {
-                movielist.remove(i);
+                movielist.remove(i-minus);
+                minus++;
             }
         }
         
         mlm.setList(movielist);
         liMovies.updateUI();
-        
+
         if (movielist.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
+        }else if(movielist.size() == 0)
+        {
+            this.lbThings.setText("");
+            this.epInfos.setText("");
         }
     }
 }
