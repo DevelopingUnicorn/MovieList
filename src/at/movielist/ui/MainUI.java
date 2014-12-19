@@ -9,6 +9,9 @@ import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -68,6 +71,15 @@ public class MainUI extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent lse) {
                 if (!lse.getValueIsAdjusting()) {
                     printInformation(liMovies.getSelectedIndex());
+                }
+            }
+        });
+
+        liMovies.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == 127 && liMovies.getSelectedIndices().length != 0) {
+                    removeListEntry();
                 }
             }
         });
@@ -324,5 +336,22 @@ public class MainUI extends javax.swing.JFrame {
         pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
         // END lang support
 
+    }
+
+    public void removeListEntry() {
+        int[] toDel = liMovies.getSelectedIndices();
+
+        for (int i : toDel) {
+            if (movielist.size() != 0) {
+                movielist.remove(i);
+            }
+        }
+
+        this.setList(movielist);
+        
+        if (movielist.size() > 0) {
+            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+            this.lbThings.setText(things);
+        }
     }
 }
