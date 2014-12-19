@@ -13,7 +13,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 public class SettingsDLG extends javax.swing.JDialog {
 
