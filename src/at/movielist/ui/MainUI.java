@@ -77,7 +77,7 @@ public class MainUI extends javax.swing.JFrame {
 
         liMovies.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent ke) {
+            public void keyTyped(KeyEvent ke) {
                 if (ke.getKeyCode() == 127 && liMovies.getSelectedIndices().length != 0) {
                     removeListEntry();
                 }
