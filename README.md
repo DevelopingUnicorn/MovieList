@@ -42,6 +42,9 @@ Version
 * v2.0a
 
 <h5>~Beta~</h5>
-* v1.0b - <a href="http://goo.gl/FdS0Vs">Download v1.0b</a>
+<strong>Note: If comming from 1.2a or below -> delete config file</strong>
+* v1.0b
  * Biggest bug fixed! Now it works. 
- * <strong>Note: If comming from 1.2a or below -> delete config file</strong>
+* v1.1b - <a href="http://goo.gl/LQDHPZ">Download v1.1b</a>
+ * New About Tag
+ * Fully translated
