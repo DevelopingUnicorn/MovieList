@@ -87,15 +87,6 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
         });
-
-//        liMovies.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent ke) {
-//                if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
-//                    removeListEntry();
-//                }
-//            }
-//        });
     }
 
     private void printInformation(int selectedIndex) {

@@ -44,8 +44,9 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
         prog1 = resBundle.getString("progress_string_1");
         prog2 = resBundle.getString("progress_string_2");
-        
+
         dlg.setVisible(true);
+
     }
 
     public LinkedList<Movie> getListe() {
@@ -55,24 +56,23 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     @Override
     protected LinkedList<Movie> doInBackground() throws Exception {
         File folder = new File(path);
-        File[] listOfFiles = folder.listFiles();
+        File[] dirListing = folder.listFiles();
 
         dlg.setMovieWorker(this);
 
-        int length = listOfFiles.length;
-        
+        int length = dirListing.length;
+        String xfy = "";
+        double inc = 1000000 / length;
+
         for (int i = 0; i < length; i++) {
+            
             StringBuilder sb = new StringBuilder();
-
-            String xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
-
-            double inc = 1000000 / listOfFiles.length;
-
+            xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
             lb.setText(xfy);
 
-            if (listOfFiles[i].isDirectory()) {
-                File moviefolder = new File(listOfFiles[i].getAbsolutePath());
-                
+            if (dirListing[i].isDirectory()) {
+                File moviefolder = new File(dirListing[i].getAbsolutePath());
+
                 File[] listoffilesinmoviefolder = moviefolder.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file) {
@@ -93,7 +93,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
                         File movie = listoffilesinmoviefolder[0];
                         mi.open(movie);
-                        String name = listOfFiles[i].getName();
+                        String name = dirListing[i].getName();
                         String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                         String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                         String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
@@ -144,7 +144,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
                             File movie = moviesinfolderfolder[0];
                             mi.open(movie);
-                            String name = listOfFiles[i].getName();
+                            String name = dirListing[i].getName();
                             String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                             String height = mi.get(MediaInfo.StreamKind.Video, 0, "Height", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
                             String dar = mi.get(MediaInfo.StreamKind.Video, 0, "DisplayAspectRatio/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
@@ -177,15 +177,16 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                             mi.close();
                         } else {
                             File movie = listoffilesinmoviefolder[0];
-                            createMovie(movie, moviefolder.getName());
+                            createMovie(movie, moviefolder.getName(), 1);
                         }
 
                     }
                 }
-            } else if (listOfFiles[i].isFile()) {
+            } else if (dirListing[i].isFile()) {
                 for (String ext : okFileExtensions) {
-                    if(listOfFiles[i].getName().endsWith(ext))
-                    createMovie(listOfFiles[i], listOfFiles[i].getName());
+                    if (dirListing[i].getName().endsWith(ext)) {
+                        createMovie(dirListing[i], dirListing[i].getName(), 1);
+                    }
                 }
             }
 
@@ -207,7 +208,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         dlg.dispose();
     }
 
-    private void createMovie(File f, String fname) {
+    private void createMovie(File f, String fname, int nof) {
         mi.open(f);
         String name = fname;
         String width = mi.get(MediaInfo.StreamKind.Video, 0, "Width", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
@@ -216,7 +217,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
         String size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
         String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
-        liste.add(new Movie(name, width, height, dar, duration, size, extension, 1));
+        liste.add(new Movie(name, width, height, dar, duration, size, extension, nof));
         mi.close();
     }
 }
