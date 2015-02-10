@@ -17,8 +17,12 @@ public class MovieLoader {
         this.loc = loc;
     }
 
-    public void getMovies(MainUI mui) {   
+    public void getMovies(MainUI mui) {
         mlw = new MovieLoaderWorker(this.pathtomov, dlg, mui, loc);
         mlw.execute();
+    }
+
+    public void setPathtomov(String pathtomov) {
+        this.pathtomov = pathtomov;
     }
 }
