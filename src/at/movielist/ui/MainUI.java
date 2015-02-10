@@ -11,9 +11,7 @@ import at.movielist.bl.UtilityClass;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -223,9 +221,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
-
         ml = new MovieLoader(pathtomovies, pd, resBundle.getLocale());
-
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
 
@@ -293,14 +289,39 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     public void setList(LinkedList<Movie> liste) {
-        movielist = liste;
+        if (movielist.size() > 0) {
+            int reply = JOptionPane.showConfirmDialog(this, resBundle.getString("main_optionpane_clearlist_message"), resBundle.getString("main_optionpane_clearlist_title"), JOptionPane.YES_NO_OPTION);
 
-        Collections.sort(movielist, new MovieCompare());
+            if (reply == JOptionPane.YES_OPTION) {
+                movielist = liste;
 
-        System.out.println("" + movielist.size());
+                Collections.sort(movielist, new MovieCompare());
 
-        mlm.setList(movielist);
-        liMovies.updateUI();
+                System.out.println("" + movielist.size());
+
+                mlm.setList(movielist);
+                liMovies.updateUI();
+            } else {
+                movielist.addAll(liste);
+
+                Collections.sort(movielist, new MovieCompare());
+
+                System.out.println("" + movielist.size());
+
+                mlm.setList(movielist);
+                liMovies.updateUI();
+            }
+        } else {
+            movielist = liste;
+
+            Collections.sort(movielist, new MovieCompare());
+
+            System.out.println("" + movielist.size());
+
+            mlm.setList(movielist);
+            liMovies.updateUI();
+        }
+
     }
 
     public JLabel getLbThings() {
@@ -344,22 +365,21 @@ public class MainUI extends javax.swing.JFrame {
     public void removeListEntry() {
         int[] toDel = liMovies.getSelectedIndices();
         int minus = 0;
-        
+
         for (int i : toDel) {
             if (movielist.size() != 0) {
-                movielist.remove(i-minus);
+                movielist.remove(i - minus);
                 minus++;
             }
         }
-        
+
         mlm.setList(movielist);
         liMovies.updateUI();
 
         if (movielist.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
-        }else if(movielist.size() == 0)
-        {
+        } else if (movielist.size() == 0) {
             this.lbThings.setText("");
             this.epInfos.setText("");
         }

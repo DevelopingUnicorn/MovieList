@@ -27,22 +27,27 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         cu = c;
         cu.getConfig();
-
+        
+        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
+        
         switch (cu.getLang()) {
             case "de":
                 language("de");
+                cbLang.setSelectedIndex(1);
                 break;
             case "en":
                 language("en");
+                cbLang.setSelectedIndex(0);
                 break;
             case "es":
                 language("es");
+                cbLang.setSelectedIndex(2);
                 break;
             default:
                 language("en");
+                cbLang.setSelectedIndex(0);
         }
 
-        cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
         cbLang.addActionListener(new ActionListener() {
 
             @Override
@@ -92,7 +97,6 @@ public class SettingsDLG extends javax.swing.JDialog {
     private void initComponents() {
 
         lbTitel = new javax.swing.JLabel();
-        lbVers = new javax.swing.JLabel();
         pnThings = new javax.swing.JPanel();
         lbCLUE = new javax.swing.JLabel();
         cbLang = new javax.swing.JComboBox();
@@ -110,9 +114,6 @@ public class SettingsDLG extends javax.swing.JDialog {
         lbTitel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settingsBig.png"))); // NOI18N
         lbTitel.setText("Settings");
         getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
-
-        lbVers.setText("v1.2b");
-        getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
 
@@ -181,7 +182,7 @@ public class SettingsDLG extends javax.swing.JDialog {
     }//GEN-LAST:event_onFinish
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
-        JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser(cu.getPath());
         fc.setPreferredSize(new Dimension(700, 500));
 
         FileFilter directoryFilter = new FileFilter() {
@@ -215,7 +216,6 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JLabel lbPath;
     private javax.swing.JLabel lbTitel;
     private javax.swing.JLabel lbUEPM;
-    private javax.swing.JLabel lbVers;
     private javax.swing.JPanel pnPath;
     private javax.swing.JPanel pnThings;
     // End of variables declaration//GEN-END:variables
@@ -231,7 +231,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         }
 
         // Lang support
-        lbTitel.setText(resBundle.getString("setup_titel"));
+        lbTitel.setText(resBundle.getString("settings_titel"));
         lbUEPM.setText(resBundle.getString("setup_path"));
         lbCLUE.setText(resBundle.getString("setup_chooseLang"));
         btOk.setText(resBundle.getString("setup_finish"));
