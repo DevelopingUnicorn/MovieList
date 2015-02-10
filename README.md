@@ -48,3 +48,7 @@ Version
 * v1.1b - <a href="http://goo.gl/LQDHPZ">Download v1.1b</a>
  * New About Tag
  * Fully translated
+* v1.2b - <a href="http://goo.gl/IZKSqN">Download v1.2b</a>
+ * Added delete function (press del on keyboard)
+ * Bugfixes
+ * Performance tweaks
