@@ -50,7 +50,7 @@ public class MainUI extends javax.swing.JFrame {
 
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-        this.setTitle("MovieList - Forever Watching (BETA v1.2b)");
+        this.setTitle("MovieList - Forever Watching v1.0rev1");
 
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.large.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.medium.png")).getImage());
