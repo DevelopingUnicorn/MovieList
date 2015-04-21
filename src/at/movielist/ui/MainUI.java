@@ -25,9 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -69,7 +67,6 @@ public class MainUI extends javax.swing.JFrame {
 
         resource();
         setListener();
-
     }
 
     private void printInformation(int selectedIndex) {
