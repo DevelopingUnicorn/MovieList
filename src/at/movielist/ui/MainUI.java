@@ -12,6 +12,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -20,8 +22,12 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -45,46 +51,25 @@ public class MainUI extends javax.swing.JFrame {
 
         userdocs = ud;
         pathtoconf = new StringBuilder().append(userdocs).append(File.separator).append("movielist.conf").toString();
-
         cu = new ConfigUtility(pathtoconf);
 
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
-        this.setTitle("MovieList - Forever Watching v1.0rev1");
 
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.large.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.medium.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.small.png")).getImage());
-
         this.setIconImages(iconlist);
 
         epInfos.setContentType("text/html");
-
         liMovies.setModel(mlm);
 
         cu.getConfig();
         pathtomovies = cu.getPath();
 
         resource();
+        setListener();
 
-        liMovies.registerKeyboardAction(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                removeListEntry();
-            }
-        },
-                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
-
-        liMovies.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                if (!lse.getValueIsAdjusting()) {
-                    printInformation(liMovies.getSelectedIndex());
-                }
-            }
-        });
     }
 
     private void printInformation(int selectedIndex) {
@@ -348,6 +333,9 @@ public class MainUI extends javax.swing.JFrame {
         System.out.println(currentLocal.toString());
 
         resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", currentLocal);
+
+        this.setTitle("MovieList - Forever Watching | " + resBundle.getString("version"));
+
         meFile.setText(resBundle.getString("main_menu_file"));
         miOpen.setText(resBundle.getString("main_menu_file_open"));
         miLoad.setText(resBundle.getString("main_menu_file_load"));
@@ -383,5 +371,46 @@ public class MainUI extends javax.swing.JFrame {
             this.lbThings.setText("");
             this.epInfos.setText("");
         }
+    }
+
+    private void setListener() {
+        liMovies.registerKeyboardAction(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                removeListEntry();
+            }
+        },
+                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
+
+        liMovies.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                if (!lse.getValueIsAdjusting()) {
+                    printInformation(liMovies.getSelectedIndex());
+                }
+            }
+        });
+
+        liMovies.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                JList list = (JList) evt.getSource();
+                if (evt.getClickCount() == 2) {
+                    int index = list.locationToIndex(evt.getPoint());
+
+                    String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
+                    if (!(ren == null)) {
+                        if (!ren.equals("")) {
+                            ((Movie) mlm.getElementAt(index)).setName(ren);
+                            liMovies.updateUI();
+                            printInformation(index);
+                        } else {
+                            JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
