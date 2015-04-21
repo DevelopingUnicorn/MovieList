@@ -15,7 +15,7 @@ public class MovieListModel extends AbstractListModel {
 
     @Override
     public Object getElementAt(int index) {
-        return movies.get(index).getName();
+        return movies.get(index);
     }
 
     public void add(Movie m) {
