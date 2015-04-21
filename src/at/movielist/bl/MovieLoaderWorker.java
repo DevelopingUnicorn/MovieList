@@ -164,7 +164,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             mi.close();
         }
 
-        liste.add(new Movie(name, width, height, dar, duration, size, extension, nof));
+        liste.add(new Movie(name, width, height, dar, duration, size, extension, nof, f[0].getAbsolutePath()));
     }
 
     public void isAFile(File f) {
