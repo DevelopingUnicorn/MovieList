@@ -104,7 +104,7 @@ public class StartDLG extends javax.swing.JDialog {
         lbTitel.setText("Welcome to the Setup!");
         getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
 
-        lbVers.setText("v1.2b");
+        lbVers.setText("version");
         getContentPane().add(lbVers, java.awt.BorderLayout.PAGE_END);
 
         pnThings.setLayout(new java.awt.GridLayout(5, 0));
@@ -289,6 +289,7 @@ public class StartDLG extends javax.swing.JDialog {
         // Lang support
         lbTitel.setText(resBundle.getString("setup_titel"));
         lbPath.setText(resBundle.getString("setup_path"));
+        lbVers.setText(resBundle.getString("version"));
         lbChooseLang.setText(resBundle.getString("setup_chooseLang"));
         lbPathFeedback.setText(resBundle.getString("setup_noPath"));
         btOk.setText(resBundle.getString("setup_finish"));
