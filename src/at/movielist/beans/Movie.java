@@ -6,11 +6,11 @@ import java.util.ResourceBundle;
 
 public class Movie implements Serializable {
 
-    private String name, width, height, aspectratio, duration, filesize, fileextension;
+    private String name, width, height, aspectratio, duration, filesize, fileextension, path;
     private int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
 
-    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles) {
+    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles,String path) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -19,6 +19,7 @@ public class Movie implements Serializable {
         this.filesize = filesize;
         this.fileextension = fileextension;
         this.numberoffiles = numberoffiles;
+        this.path = path;
     }
 
     public void setResBundle(Locale loc) {
@@ -57,6 +58,10 @@ public class Movie implements Serializable {
         return numberoffiles;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }   
+
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<br><center><h1>").append(name).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
@@ -81,4 +86,11 @@ public class Movie implements Serializable {
  
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+    
+    
 }
