@@ -375,10 +375,17 @@ public class MainUI extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
+                renameMovie(liMovies.getSelectedIndex());
+            }
+        },KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), JComponent.WHEN_FOCUSED);
+        
+        liMovies.registerKeyboardAction(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
                 removeListEntry();
             }
-        },
-                KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
+        },KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         liMovies.addListSelectionListener(new ListSelectionListener() {
 
@@ -395,19 +402,22 @@ public class MainUI extends javax.swing.JFrame {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 2) {
                     int index = list.locationToIndex(evt.getPoint());
-
-                    String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
-                    if (!(ren == null)) {
-                        if (!ren.equals("")) {
-                            ((Movie) mlm.getElementAt(index)).setName(ren);
-                            liMovies.updateUI();
-                            printInformation(index);
-                        } else {
-                            JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
-                        }
-                    }
+                    renameMovie(index);
                 }
             }
         });
+    }
+
+    public void renameMovie(int index) {
+        String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
+        if (!(ren == null)) {
+            if (!ren.equals("")) {
+                ((Movie) mlm.getElementAt(index)).setName(ren);
+                liMovies.updateUI();
+                printInformation(index);
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
+            }
+        }
     }
 }
