@@ -364,6 +364,7 @@ public class MainUI extends javax.swing.JFrame {
         if (movielist.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
+            printInformation(liMovies.getSelectedIndex());
         } else if (movielist.size() == 0) {
             this.lbThings.setText("");
             this.epInfos.setText("");

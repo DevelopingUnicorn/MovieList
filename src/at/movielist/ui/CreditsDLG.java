@@ -25,7 +25,7 @@ public class CreditsDLG extends javax.swing.JDialog {
         ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
         
         StringBuilder sb = new StringBuilder();
-        sb.append("<h2>").append(resBundle.getString("credits_developers")).append("</h2>").append("</br>").append("<ul><li>Schni (DU)</li></ul>")
+        sb.append("<h2>").append(resBundle.getString("credits_developers")).append("</h2>").append("</br>").append("<ul><li>Schni (DU)</li><li>Manu (DH)</li></ul>")
                 .append("</br><h2>").append(resBundle.getString("credits_translation")).append("</h2></br>")
                 .append("<ul><li>German (Schni)</li><li>English (Schni)</li><li>Espaniol (SamDo)</li></ul>");
         
