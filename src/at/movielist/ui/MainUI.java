@@ -6,19 +6,25 @@ import at.movielist.bl.DeSerializer;
 import at.movielist.bl.MovieCompare;
 import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
+import at.movielist.bl.OLDMovieLoader;
+import at.movielist.bl.OLDSerializer;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
+import at.movielist.ui.CreditsDLG;
+import at.movielist.ui.ProgressbarDLG;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -32,24 +38,23 @@ import javax.swing.event.ListSelectionListener;
 
 public class MainUI extends javax.swing.JFrame {
 
-    private MovieListModel mlm = new MovieListModel();
+    private final MovieListModel mlm = new MovieListModel();
     private MovieLoader ml;
-    private String userdocs, pathtomovies;
-    private ConfigUtility cu;
+    private String[] pathsToMovies;
     private LinkedList<Movie> movielist = new LinkedList<>();
-    private UtilityClass uc = new UtilityClass();
-    private LinkedList<Image> iconlist = new LinkedList<>();
-
-    private final String pathtoconf;
+    private final UtilityClass utilityclass = new UtilityClass();
+    private final LinkedList<Image> iconlist = new LinkedList<>();
 
     private ResourceBundle resBundle;
 
-    public MainUI(String ud) {
+    public MainUI() {
         initComponents();
 
-        userdocs = ud;
-        pathtoconf = new StringBuilder().append(userdocs).append(File.separator).append("movielist.conf").toString();
-        cu = new ConfigUtility(pathtoconf);
+        try {
+            ConfigUtility.getInstance().loadConfig();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
@@ -62,11 +67,19 @@ public class MainUI extends javax.swing.JFrame {
         epInfos.setContentType("text/html");
         liMovies.setModel(mlm);
 
-        cu.getConfig();
-        pathtomovies = cu.getPath();
+        try {
+            pathsToMovies = ConfigUtility.getInstance().getPropPaths();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        resource();
+        try {
+            setLang();
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         setListener();
+        this.setVisible(true);
     }
 
     private void printInformation(int selectedIndex) {
@@ -83,6 +96,9 @@ public class MainUI extends javax.swing.JFrame {
 
         pnLeft = new javax.swing.JPanel();
         lbThings = new javax.swing.JLabel();
+        pnSearchbar = new javax.swing.JPanel();
+        tfSearch = new javax.swing.JTextField();
+        btSearch = new javax.swing.JButton();
         pnListe = new javax.swing.JPanel();
         spList = new javax.swing.JScrollPane();
         liMovies = new javax.swing.JList();
@@ -107,6 +123,19 @@ public class MainUI extends javax.swing.JFrame {
         lbThings.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lbThings.setForeground(new java.awt.Color(0, 123, 123));
         pnLeft.add(lbThings, java.awt.BorderLayout.PAGE_END);
+
+        pnSearchbar.setLayout(new java.awt.BorderLayout());
+        pnSearchbar.add(tfSearch, java.awt.BorderLayout.CENTER);
+
+        btSearch.setText("Search");
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSearchActionPerformed(evt);
+            }
+        });
+        pnSearchbar.add(btSearch, java.awt.BorderLayout.EAST);
+
+        pnLeft.add(pnSearchbar, java.awt.BorderLayout.NORTH);
 
         pnListe.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Movies", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
         pnListe.setLayout(new java.awt.BorderLayout());
@@ -203,18 +232,12 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
-        ml = new MovieLoader(pathtomovies, pd, resBundle.getLocale());
+        ml = new MovieLoader(pathsToMovies, pd, resBundle.getLocale());
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
 
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
-        Serializer s = new Serializer();
-
-        if (movielist.size() > 0) {
-            s.safeMovieList(movielist);
-        } else {
-            JOptionPane.showMessageDialog(this, resBundle.getString("main_save_noMovies"), resBundle.getString("main_save_noMoviesTitle"), 0);
-        }
+        safeMovies(false);
     }//GEN-LAST:event_onSave
 
     private void onOpenMLFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpenMLFile
@@ -222,31 +245,38 @@ public class MainUI extends javax.swing.JFrame {
         ds.deSerialize();
 
         if (movielist.size() > 0) {
-            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+            String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
         }
     }//GEN-LAST:event_onOpenMLFile
 
     private void onSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSettings
-        SettingsDLG sdlg = new SettingsDLG(this, true, pathtomovies, cu);
-        sdlg.setVisible(true);
+        try {
+            SettingsDLG sdlg = new SettingsDLG(this, true);
 
-        cu.getConfig();
-        resource();
-        pathtomovies = cu.getPath();
+            ConfigUtility.getInstance().loadConfig();
+            setLang();
+            pathsToMovies = ConfigUtility.getInstance().getPropPaths();
 
-        if (movielist.size() > 0) {
-            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
-            this.lbThings.setText(things);
+            if (movielist.size() > 0) {
+                String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+                this.lbThings.setText(things);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_onSettings
 
     private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
-        CreditsDLG dlg = new CreditsDLG(this, true, resBundle.getLocale());
-        dlg.setVisible(true);
+        new CreditsDLG(this, true, resBundle.getLocale());
     }//GEN-LAST:event_onCredits
 
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
+        doSearch();
+    }//GEN-LAST:event_btSearchActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSearch;
     private javax.swing.JEditorPane epInfos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbThings;
@@ -263,47 +293,37 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnLeft;
     private javax.swing.JPanel pnListe;
     private javax.swing.JPanel pnRight;
+    private javax.swing.JPanel pnSearchbar;
     private javax.swing.JScrollPane spList;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
     private void loadMovies() {
         ml.getMovies(this);
     }
 
-    public void setList(LinkedList<Movie> liste) {
+    public void setList(LinkedList<Movie> liste, boolean doAskForOverride) {
         if (movielist.size() > 0) {
-            int reply = JOptionPane.showConfirmDialog(this, resBundle.getString("main_optionpane_clearlist_message"), resBundle.getString("main_optionpane_clearlist_title"), JOptionPane.YES_NO_OPTION);
+            int reply = JOptionPane.YES_OPTION;
+            if (doAskForOverride) {
+                reply = JOptionPane.showConfirmDialog(this, resBundle.getString("main_optionpane_clearlist_message"), resBundle.getString("main_optionpane_clearlist_title"), JOptionPane.YES_NO_OPTION);
+            }
 
             if (reply == JOptionPane.YES_OPTION) {
                 movielist = liste;
-
-                Collections.sort(movielist, new MovieCompare());
-
-                System.out.println("" + movielist.size());
-
-                mlm.setList(movielist);
-                liMovies.updateUI();
             } else {
                 movielist.addAll(liste);
-
-                Collections.sort(movielist, new MovieCompare());
-
-                System.out.println("" + movielist.size());
-
-                mlm.setList(movielist);
-                liMovies.updateUI();
             }
         } else {
             movielist = liste;
-
-            Collections.sort(movielist, new MovieCompare());
-
-            System.out.println("" + movielist.size());
-
-            mlm.setList(movielist);
-            liMovies.updateUI();
         }
 
+        Collections.sort(movielist, new MovieCompare());
+
+        System.out.println("" + movielist.size());
+
+        mlm.setList(movielist);
+        liMovies.updateUI();
     }
 
     public JLabel getLbThings() {
@@ -315,16 +335,19 @@ public class MainUI extends javax.swing.JFrame {
         lbThings.setText("");
     }
 
-    public void resource() {
+    public void setLang() throws IOException {
         // Lang support
         Locale currentLocal = Locale.ENGLISH;
 
-        System.out.println(cu.getLang());
+        System.out.println(ConfigUtility.getInstance().getPropLang());
 
-        if (cu.getLang().equals("de")) {
-            currentLocal = Locale.GERMAN;
-        } else if (cu.getLang().equals("es")) {
-            currentLocal = new Locale("es");
+        switch (ConfigUtility.getInstance().getPropLang()) {
+            case "de":
+                currentLocal = Locale.GERMAN;
+                break;
+            case "es":
+                currentLocal = new Locale("es");
+                break;
         }
 
         System.out.println(currentLocal.toString());
@@ -362,9 +385,8 @@ public class MainUI extends javax.swing.JFrame {
         liMovies.updateUI();
 
         if (movielist.size() > 0) {
-            String things = uc.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+            String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
-            printInformation(liMovies.getSelectedIndex());
         } else if (movielist.size() == 0) {
             this.lbThings.setText("");
             this.epInfos.setText("");
@@ -373,23 +395,20 @@ public class MainUI extends javax.swing.JFrame {
 
     private void setListener() {
         liMovies.registerKeyboardAction(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent ae) {
                 renameMovie(liMovies.getSelectedIndex());
             }
-        },KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), JComponent.WHEN_FOCUSED);
-        
-        liMovies.registerKeyboardAction(new ActionListener() {
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), JComponent.WHEN_FOCUSED);
 
+        liMovies.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 removeListEntry();
             }
-        },KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), JComponent.WHEN_FOCUSED);
 
         liMovies.addListSelectionListener(new ListSelectionListener() {
-
             @Override
             public void valueChanged(ListSelectionEvent lse) {
                 if (!lse.getValueIsAdjusting()) {
@@ -399,6 +418,7 @@ public class MainUI extends javax.swing.JFrame {
         });
 
         liMovies.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent evt) {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 2) {
@@ -407,6 +427,13 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
         });
+
+        tfSearch.registerKeyboardAction(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doSearch();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_FOCUSED);
     }
 
     public void renameMovie(int index) {
@@ -419,6 +446,48 @@ public class MainUI extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
             }
+        }
+    }
+
+    public void safeMovies(boolean isAutoSafe) {
+        Serializer s = new Serializer();
+
+        if (movielist.size() > 0) {
+            try {
+                s.safeMovieList(movielist, isAutoSafe);
+
+            } catch (IOException ex) {
+                Logger.getLogger(MainUI.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, resBundle.getString("main_save_noMovies"), resBundle.getString("main_save_noMoviesTitle"), 0);
+        }
+    }
+
+    private void doSearch() {
+        String searchstring = tfSearch.getText();
+        if (!searchstring.equals("")) {
+            String[] searchArguments = searchstring.split(" ");
+
+            LinkedList<Movie> searchList = new LinkedList<>();
+            for (int i = 0; i < mlm.getSize(); i++) {
+                for (String searchArg : searchArguments) {
+                    Movie m = (Movie) mlm.getElementAt(i);
+                    if (m.getName().contains(searchArg)) {
+                        System.out.println("Contains:\t" + m.getName());
+                        searchList.add(m);
+                    }
+                }
+            }
+
+            Collections.sort(searchList, new MovieCompare());
+            mlm.setList(searchList);
+            liMovies.updateUI();
+        } else {
+            Collections.sort(movielist, new MovieCompare());
+            mlm.setList(movielist);
+            liMovies.updateUI();
         }
     }
 }

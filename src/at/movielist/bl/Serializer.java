@@ -1,6 +1,7 @@
 package at.movielist.bl;
 
 import at.movielist.beans.Movie;
+import at.movielist.bl.ConfigUtility;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,44 +20,40 @@ public class Serializer {
     public Serializer() {
     }
 
-    public void safeMovieList(LinkedList<Movie> list) {
+    public void safeMovieList(LinkedList<Movie> list, boolean isAutoSafe) throws IOException {
+        File mlfile = null;
+        if (!isAutoSafe) {
+            JFileChooser fc = new JFileChooser();
+            fc.setPreferredSize(new Dimension(700, 500));
 
-        JFileChooser fc = new JFileChooser();
-        fc.setPreferredSize(new Dimension(700, 500));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "MovieList File", "ml");
+            fc.setFileFilter(filter);
+            
+            fc.setSelectedFile(new File("movielist.ml"));
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "MovieList File", "ml");
+            int ret = fc.showSaveDialog(new JFrame());
 
-        fc.setFileFilter(filter);
-
-        fc.setSelectedFile(new File("movielist.ml"));
-        
-        int ret = fc.showSaveDialog(new JFrame());
-
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            FileOutputStream fileOut = null;
-            try {
-                File mlfile = fc.getSelectedFile();
-                fileOut = new FileOutputStream(mlfile);
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
-
-                for (Movie m: list) {
-                    out.writeObject(m);
-                }
-
-                out.close();
-                fileOut.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    fileOut.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                mlfile = fc.getSelectedFile();
             }
+        } else {
+            mlfile = new File(ConfigUtility.getInstance().getUserdocs() + File.separator + "autosave.ml");
+        }
+        
+        FileOutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(mlfile);
+            ObjectOutputStream objOutStream = new ObjectOutputStream(outStream);
+
+            for (Movie m : list) {
+                objOutStream.writeObject(m);
+            }
+
+            objOutStream.close();
+            outStream.close();
+        } finally {
+            outStream.close();
         }
     }
 }

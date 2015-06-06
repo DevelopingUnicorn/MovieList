@@ -9,15 +9,20 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import at.lib.mediainfo.MediaInfo;
+import at.movielist.bl.ConfigUtility;
+import at.movielist.bl.UtilityClass;
 import at.movielist.ui.MainUI;
 import at.movielist.ui.ProgressbarDLG;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
-    private String path;
-    private LinkedList<Movie> liste = new LinkedList<Movie>();
+    private String[] paths;
+    private LinkedList<Movie> liste = new LinkedList<>();
     private JProgressBar loading;
     private JLabel lb;
     private ProgressbarDLG dlg;
@@ -58,8 +63,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private static final String[] filesToIgnore
             = new String[]{"ds_store", ".nfo", ".mp3"};
 
-    public MovieLoaderWorker(String path, ProgressbarDLG d, MainUI mui, Locale loc) {
-        this.path = path;
+    public MovieLoaderWorker(String[] paths, ProgressbarDLG d, MainUI mui, Locale loc) {
+        this.paths = paths;
         this.loading = d.getProgBar();
         this.lb = d.getLabel();
         this.dlg = d;
@@ -70,7 +75,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         prog2 = resBundle.getString("progress_string_2");
 
         dlg.setVisible(true);
-
     }
 
     public void setListe(LinkedList<Movie> liste) {
@@ -83,35 +87,36 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
     @Override
     protected LinkedList<Movie> doInBackground() throws Exception {
-        File folder = new File(path);
-        File[] dirListing = folder.listFiles();
+        for (String path : paths) {
+            File folder = new File(path);
+            File[] dirListing = folder.listFiles();
 
-        dlg.setMovieWorker(this);
-        int length = dirListing.length;
+            dlg.setMovieWorker(this);
+            int length = dirListing.length;
 
-        String xfy = "";
-        double inc = 1000000 / length;
+            String xfy = "";
+            double inc = 1000000 / length;
 
-        for (int i = 0; i < length; i++) {
-            StringBuilder sb = new StringBuilder();
-            xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
-            lb.setText(xfy);
+            for (int i = 0; i < length; i++) {
+                StringBuilder sb = new StringBuilder();
+                xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
+                lb.setText(xfy);
 
-            if (dirListing[i].isDirectory()) {
-                isADirectory(dirListing[i], dirListing[i].getName());
-            } else {
-                isAFile(dirListing[i]);
+                if (dirListing[i].isDirectory()) {
+                    isADirectory(dirListing[i], dirListing[i].getName());
+                } else {
+                    isAFile(dirListing[i]);
+                }
+
+                loading.setValue(loading.getValue() + (int) inc);
             }
-
-            loading.setValue(loading.getValue() + (int) inc);
         }
-
         return liste;
     }
 
     @Override
     protected void done() {
-        mui.setList(liste);
+        mui.setList(liste, false);
 
         if (liste.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(liste, resBundle.getLocale());
@@ -119,9 +124,16 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         }
 
         dlg.dispose();
+        try {
+            if (ConfigUtility.getInstance().isPropAutoSafe()) {
+                mui.safeMovies(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MovieLoaderWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void createMovie(String fname, int nof, File... f) {
+    private void createMovie(String fname, int numberOfFiles, File... f) {
         double filesize = 0.0;
         String gibormib = "GiB";
 
@@ -135,10 +147,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         String duration = mi.get(MediaInfo.StreamKind.General, 0, "Duration/String", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
         String extension = mi.get(MediaInfo.StreamKind.General, 0, "FileExtension", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
 
-        if (nof == 1) {
+        if (numberOfFiles == 1) {
             size = mi.get(MediaInfo.StreamKind.General, 0, "FileSize/String2", MediaInfo.InfoKind.Text, MediaInfo.InfoKind.Name);
             mi.close();
-        } else if (nof > 1) {
+        } else if (numberOfFiles > 1) {
             mi.close();
 
             for (File file : f) {
@@ -164,7 +176,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             mi.close();
         }
 
-        liste.add(new Movie(name, width, height, dar, duration, size, extension, nof, f[0].getParent()));
+        liste.add(new Movie(name, width, height, dar, duration, size, extension, numberOfFiles, f[0].getParent()));
     }
 
     public void isAFile(File f) {

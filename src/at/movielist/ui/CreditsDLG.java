@@ -30,6 +30,7 @@ public class CreditsDLG extends javax.swing.JDialog {
                 .append("<ul><li>German (Schni)</li><li>English (Schni)</li><li>Espaniol (SamDo)</li></ul>");
         
         epCredits.setText(sb.toString());
+        this.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")

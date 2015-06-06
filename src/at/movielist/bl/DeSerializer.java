@@ -15,7 +15,7 @@ import at.movielist.ui.MainUI;
 
 public class DeSerializer {
 
-    private MainUI mui;
+    private final MainUI mui;
 
     public DeSerializer(MainUI mui) {
         this.mui = mui;
@@ -23,7 +23,7 @@ public class DeSerializer {
 
     public void deSerialize() {
 
-        LinkedList<Movie> list = new LinkedList<Movie>();
+        LinkedList<Movie> list = new LinkedList<>();
 
         JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
@@ -55,7 +55,7 @@ public class DeSerializer {
                     objectInputStream.close();
                     inputFileStream.close();
                     
-                    mui.setList(list);
+                    mui.setList(list, false);
                 }
             } catch (FileNotFoundException ex) {
                 System.err.println("File Not Found!");

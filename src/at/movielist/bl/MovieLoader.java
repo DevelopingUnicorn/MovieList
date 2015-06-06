@@ -1,18 +1,19 @@
 package at.movielist.bl;
 
+import at.movielist.bl.MovieLoaderWorker;
 import at.movielist.ui.MainUI;
 import at.movielist.ui.ProgressbarDLG;
 import java.util.Locale;
 
 public class MovieLoader {
 
-    private String pathtomov;
+    private String[] pathtomov;
     private MovieLoaderWorker mlw;
-    private ProgressbarDLG dlg;
-    private Locale loc;
+    private final ProgressbarDLG dlg;
+    private final Locale loc;
 
-    public MovieLoader(String pathtomov, ProgressbarDLG pb, Locale loc) {
-        this.pathtomov = pathtomov;
+    public MovieLoader(String[] pathsToMovies, ProgressbarDLG pb, Locale loc) {
+        this.pathtomov = pathsToMovies;
         this.dlg = pb;
         this.loc = loc;
     }
@@ -22,7 +23,7 @@ public class MovieLoader {
         mlw.execute();
     }
 
-    public void setPathtomov(String pathtomov) {
+    public void setPathtomov(String[] pathtomov) {
         this.pathtomov = pathtomov;
     }
 }

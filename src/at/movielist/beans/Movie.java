@@ -6,11 +6,12 @@ import java.util.ResourceBundle;
 
 public class Movie implements Serializable {
 
-    private String name, width, height, aspectratio, duration, filesize, fileextension, path;
-    private int numberoffiles;
+    private final String width, height, aspectratio, duration, filesize, fileextension;
+    private String name, path;
+    private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
 
-    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles,String path) {
+    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -25,7 +26,7 @@ public class Movie implements Serializable {
     public void setResBundle(Locale loc) {
         this.resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
     }
-    
+
     public String getName() {
         return name;
     }
@@ -65,10 +66,10 @@ public class Movie implements Serializable {
     public void setPath(String path) {
         this.path = path;
     }
-        
+
     public void setName(String name) {
         this.name = name;
-    }   
+    }
 
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
@@ -91,7 +92,7 @@ public class Movie implements Serializable {
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_filesize")).append(":</strong></td><td width='50%' >").append(filesize).append("</td></tr>");
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_numboffiles")).append(":</strong></td><td width='50%' >").append(numberoffiles).append("</td></tr>");
         sb.append("</table></center></body>");
- 
+
         return sb.toString();
     }
 
@@ -99,6 +100,5 @@ public class Movie implements Serializable {
     public String toString() {
         return this.getName();
     }
-    
-    
+
 }
