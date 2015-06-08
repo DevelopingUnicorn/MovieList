@@ -117,11 +117,10 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         this.setIconImages(iconlist);
 
-        this.setSize(500, 250);
+        this.setSize(750, 300);
         this.setLocationRelativeTo(null);
         this.setAlwaysOnTop(false);
         this.setResizable(true);
-        this.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")

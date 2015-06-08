@@ -1,17 +1,15 @@
 package at.movielist.ui;
 
 import at.movielist.beans.Movie;
+import at.movielist.beans.TMDBMovie;
 import at.movielist.bl.ConfigUtility;
 import at.movielist.bl.DeSerializer;
 import at.movielist.bl.MovieCompare;
 import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
-import at.movielist.bl.OLDMovieLoader;
-import at.movielist.bl.OLDSerializer;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
-import at.movielist.ui.CreditsDLG;
-import at.movielist.ui.ProgressbarDLG;
+import at.movielist.dal.APItmdb;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -80,14 +79,6 @@ public class MainUI extends javax.swing.JFrame {
         }
         setListener();
         this.setVisible(true);
-    }
-
-    private void printInformation(int selectedIndex) {
-        Movie m = movielist.get(selectedIndex);
-        Locale current = resBundle.getLocale();
-        m.setResBundle(current);
-
-        epInfos.setText(m.toHTMLString());
     }
 
     @SuppressWarnings("unchecked")
@@ -269,6 +260,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
         new CreditsDLG(this, true, resBundle.getLocale());
+        this.setVisible(true);
     }//GEN-LAST:event_onCredits
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
@@ -297,6 +289,32 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane spList;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
+
+    private void printInformation(int selectedIndex) {
+        try {
+            Movie m = movielist.get(selectedIndex);
+            Locale current = resBundle.getLocale();
+            m.setResBundle(current);
+
+            String html = m.toHTMLString();
+
+            APItmdb.getInstance().setProxyUse();
+            ArrayList<TMDBMovie> list = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), m.getName());
+            if (!list.isEmpty()) {
+                html += list.get(0).toHTMLString();
+                System.out.println(list.get(0).toHTMLString());
+            }
+
+            epInfos.setText(html);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "An error occured when fetching the TMDB data", "Error", JOptionPane.ERROR_MESSAGE);
+            Movie m = movielist.get(selectedIndex);
+            Locale current = resBundle.getLocale();
+            m.setResBundle(current);
+            epInfos.setText(m.toHTMLString());
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private void loadMovies() {
         ml.getMovies(this);

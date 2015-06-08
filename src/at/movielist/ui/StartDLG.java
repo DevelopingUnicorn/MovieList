@@ -5,6 +5,7 @@
  */
 package at.movielist.ui;
 
+import at.movielist.bl.ConfigUtility;
 import java.awt.Frame;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -19,6 +20,14 @@ public class StartDLG extends SettingsDLG {
     public StartDLG(Frame parent, boolean modal) throws IOException {
         super(parent, modal);
         initComponents();
+
+        System.out.println(ConfigUtility.getInstance().isFileExisting());
+        
+        if (!ConfigUtility.getInstance().isFileExisting()) {
+            this.setVisible(true);
+        } else {
+            new MainUI();
+        }
     }
 
     private void initComponents() {

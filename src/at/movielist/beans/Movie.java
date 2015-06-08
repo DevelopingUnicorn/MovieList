@@ -91,7 +91,8 @@ public class Movie implements Serializable {
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_fileext")).append(":</strong></td><td width='50%' >").append(fileextension).append("</td></tr>");
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_filesize")).append(":</strong></td><td width='50%' >").append(filesize).append("</td></tr>");
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_numboffiles")).append(":</strong></td><td width='50%' >").append(numberoffiles).append("</td></tr>");
-        sb.append("</table></center></body>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_path")).append(":</strong></td><td width='50%' >").append(path).append("</td></tr>");
+        sb.append("</table></center>");
 
         return sb.toString();
     }

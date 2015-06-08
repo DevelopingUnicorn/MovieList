@@ -48,7 +48,7 @@ public class ConfigUtility {
     public void saveConfigToFile(String lang, boolean autoSafe, String[] pathToMovies) throws IOException {
 
         properties.setProperty("Lang", lang.equals("") ? "en" : lang);
-        properties.setProperty("AutoSafe", autoSafe ? "true" : "false");
+        properties.setProperty("AutoSave", autoSafe ? "true" : "false");
 
         String allPaths = "";
         for (int i = 0; i < pathToMovies.length - 1; i++) {
@@ -59,12 +59,12 @@ public class ConfigUtility {
         properties.setProperty("Paths", allPaths);
         outStream = new FileOutputStream(pathToConfFile);
         properties.store(outStream, null);
+        loadConfig();
     }
 
     public void loadConfig() throws IOException {
-
         this.propLang = properties.getProperty("Lang", "en");
-        this.propAutoSafe = Boolean.valueOf(properties.getProperty("AutoSafe"));
+        this.propAutoSafe = Boolean.valueOf(properties.getProperty("AutoSave"));
 
         try {
             this.propPaths = properties.getProperty("Paths").split(";");
@@ -78,6 +78,10 @@ public class ConfigUtility {
             ConfigUtility.INSTANCE = new ConfigUtility();
         }
         return ConfigUtility.INSTANCE;
+    }
+
+    public boolean isFileExisting() throws IOException {
+        return !ConfigUtility.getInstance().properties.isEmpty();
     }
 
     public String getPropLang() {
