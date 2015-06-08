@@ -447,7 +447,7 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
         });
-       
+
         tfSearch.addCaretListener(new CaretListener() {
 
             @Override
@@ -488,14 +488,13 @@ public class MainUI extends javax.swing.JFrame {
 
     private void searchMovie() {
         String searchstring = tfSearch.getText().toLowerCase();
-        if (!searchstring.equals("")) {
-            String[] searchArguments = searchstring.split(" ");
-
+        if (!searchstring.equals("")) {            
             LinkedList<Movie> searchList = new LinkedList<>();
-            for (int i = 0; i < mlm.getSize(); i++) {
-                for (String searchArg : searchArguments) {
-                    Movie m = (Movie) mlm.getElementAt(i);
-                    if (m.getName().toLowerCase().contains(searchArg)) {
+            
+            for (int i = 0; i < movielist.size(); i++) {
+                Movie m = (Movie) movielist.get(i);
+                if (m.getName().toLowerCase().contains(searchstring)) {
+                    if (!searchList.contains(m)) {
                         System.out.println("Contains:\t" + m.getName());
                         searchList.add(m);
                     }
