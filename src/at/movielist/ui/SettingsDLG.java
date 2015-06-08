@@ -117,7 +117,7 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         this.setIconImages(iconlist);
 
-        this.setSize(750, 300);
+        this.setSize(750, 400);
         this.setLocationRelativeTo(null);
         this.setAlwaysOnTop(false);
         this.setResizable(true);

@@ -32,6 +32,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -244,6 +246,7 @@ public class MainUI extends javax.swing.JFrame {
     private void onSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSettings
         try {
             SettingsDLG sdlg = new SettingsDLG(this, true);
+            sdlg.setVisible(true);
 
             ConfigUtility.getInstance().loadConfig();
             setLang();
@@ -260,11 +263,10 @@ public class MainUI extends javax.swing.JFrame {
 
     private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
         new CreditsDLG(this, true, resBundle.getLocale());
-        this.setVisible(true);
     }//GEN-LAST:event_onCredits
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
-        doSearch();
+        searchMovie();
     }//GEN-LAST:event_btSearchActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -445,13 +447,14 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
         });
+       
+        tfSearch.addCaretListener(new CaretListener() {
 
-        tfSearch.registerKeyboardAction(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                doSearch();
+            public void caretUpdate(CaretEvent ce) {
+                searchMovie();
             }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_FOCUSED);
+        });
     }
 
     public void renameMovie(int index) {
@@ -483,8 +486,8 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
-    private void doSearch() {
-        String searchstring = tfSearch.getText();
+    private void searchMovie() {
+        String searchstring = tfSearch.getText().toLowerCase();
         if (!searchstring.equals("")) {
             String[] searchArguments = searchstring.split(" ");
 
@@ -492,7 +495,7 @@ public class MainUI extends javax.swing.JFrame {
             for (int i = 0; i < mlm.getSize(); i++) {
                 for (String searchArg : searchArguments) {
                     Movie m = (Movie) mlm.getElementAt(i);
-                    if (m.getName().contains(searchArg)) {
+                    if (m.getName().toLowerCase().contains(searchArg)) {
                         System.out.println("Contains:\t" + m.getName());
                         searchList.add(m);
                     }

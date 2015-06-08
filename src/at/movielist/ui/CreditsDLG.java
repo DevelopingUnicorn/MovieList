@@ -9,7 +9,7 @@ public class CreditsDLG extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        this.setSize(400, 600);
+        this.setSize(400, 700);
         this.setResizable(false);
         this.setLocationRelativeTo(parent);
 
@@ -41,6 +41,7 @@ public class CreditsDLG extends javax.swing.JDialog {
         pnContent = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         epCredits = new javax.swing.JEditorPane();
+        lbTMDB = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -56,6 +57,9 @@ public class CreditsDLG extends javax.swing.JDialog {
 
         pnContent.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        lbTMDB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/tmdb.png"))); // NOI18N
+        pnContent.add(lbTMDB, java.awt.BorderLayout.PAGE_START);
+
         getContentPane().add(pnContent, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -65,6 +69,7 @@ public class CreditsDLG extends javax.swing.JDialog {
     private javax.swing.JEditorPane epCredits;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbLogo;
+    private javax.swing.JLabel lbTMDB;
     private javax.swing.JPanel pnContent;
     // End of variables declaration//GEN-END:variables
 }
