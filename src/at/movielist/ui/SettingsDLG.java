@@ -155,7 +155,7 @@ public class SettingsDLG extends javax.swing.JDialog {
                 onFinish(evt);
             }
         });
-        getContentPane().add(btOk, java.awt.BorderLayout.PAGE_END);
+        getContentPane().add(btOk, java.awt.BorderLayout.SOUTH);
 
         pnThings.setLayout(new java.awt.BorderLayout());
 

@@ -105,6 +105,7 @@ public class MainUI extends javax.swing.JFrame {
         miSave = new javax.swing.JMenuItem();
         meSettings = new javax.swing.JMenu();
         miPreferences = new javax.swing.JMenuItem();
+        miProxy = new javax.swing.JMenuItem();
         meAbout = new javax.swing.JMenu();
         miCredits = new javax.swing.JMenuItem();
 
@@ -202,6 +203,16 @@ public class MainUI extends javax.swing.JFrame {
         });
         meSettings.add(miPreferences);
 
+        miProxy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        miProxy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settings.png"))); // NOI18N
+        miProxy.setText("Set Proxy");
+        miProxy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miProxyonSettings(evt);
+            }
+        });
+        meSettings.add(miProxy);
+
         mbBar.add(meSettings);
 
         meAbout.setText("About");
@@ -269,6 +280,15 @@ public class MainUI extends javax.swing.JFrame {
         searchMovie();
     }//GEN-LAST:event_btSearchActionPerformed
 
+    private void miProxyonSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProxyonSettings
+        try {
+            APItmdb.getInstance().setProxyUse();
+            JOptionPane.showMessageDialog(null, "Proxy has been successfully configured", "Information", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_miProxyonSettings
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearch;
     private javax.swing.JEditorPane epInfos;
@@ -283,6 +303,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem miLoad;
     private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenuItem miPreferences;
+    private javax.swing.JMenuItem miProxy;
     private javax.swing.JMenuItem miSave;
     private javax.swing.JPanel pnLeft;
     private javax.swing.JPanel pnListe;
@@ -292,6 +313,8 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
+    
+    
     private void printInformation(int selectedIndex) {
         try {
             Movie m = movielist.get(selectedIndex);
@@ -299,13 +322,7 @@ public class MainUI extends javax.swing.JFrame {
             m.setResBundle(current);
 
             String html = m.toHTMLString();
-
-            APItmdb.getInstance().setProxyUse();
-            ArrayList<TMDBMovie> list = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), m.getName());
-            if (!list.isEmpty()) {
-                html += list.get(0).toHTMLString();
-                System.out.println(list.get(0).toHTMLString());
-            }
+            html += m.getClosestMatch();
 
             epInfos.setText(html);
         } catch (Exception ex) {
@@ -488,9 +505,9 @@ public class MainUI extends javax.swing.JFrame {
 
     private void searchMovie() {
         String searchstring = tfSearch.getText().toLowerCase();
-        if (!searchstring.equals("")) {            
+        if (!searchstring.equals("")) {
             LinkedList<Movie> searchList = new LinkedList<>();
-            
+
             for (int i = 0; i < movielist.size(); i++) {
                 Movie m = (Movie) movielist.get(i);
                 if (m.getName().toLowerCase().contains(searchstring)) {

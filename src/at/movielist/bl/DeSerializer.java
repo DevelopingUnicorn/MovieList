@@ -22,7 +22,6 @@ public class DeSerializer {
     }
 
     public void deSerialize() {
-
         LinkedList<Movie> list = new LinkedList<>();
 
         JFileChooser fc = new JFileChooser();
@@ -35,8 +34,8 @@ public class DeSerializer {
         int ret = fc.showOpenDialog(new JFrame());
 
         if (ret == JFileChooser.APPROVE_OPTION) {
-            FileInputStream inputFileStream = null;
-            ObjectInputStream objectInputStream = null;
+            FileInputStream inputFileStream;
+            ObjectInputStream objectInputStream;
 
             try {
                 inputFileStream = new FileInputStream(fc.getSelectedFile());

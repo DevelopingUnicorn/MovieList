@@ -21,8 +21,8 @@ public class StartDLG extends SettingsDLG {
         super(parent, modal);
         initComponents();
 
-        System.out.println(ConfigUtility.getInstance().isFileExisting());
-        
+        System.out.println("Does config file exist?\t" + ConfigUtility.getInstance().isFileExisting());
+
         if (!ConfigUtility.getInstance().isFileExisting()) {
             this.setVisible(true);
         } else {
