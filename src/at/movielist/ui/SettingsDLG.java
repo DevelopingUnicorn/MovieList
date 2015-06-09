@@ -177,7 +177,7 @@ public class SettingsDLG extends javax.swing.JDialog {
     }//GEN-LAST:event_onFinish
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
-        JFileChooser fc = new JFileChooser();
+                JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
 
         FileFilter directoryFilter = new FileFilter() {
@@ -193,6 +193,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         };
 
         fc.setFileFilter(directoryFilter);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int returnVal = fc.showOpenDialog(this);
 

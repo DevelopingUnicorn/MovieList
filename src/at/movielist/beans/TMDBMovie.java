@@ -85,11 +85,19 @@ public class TMDBMovie implements Serializable {
     }
 
     public String getReleaseDate() {
-        return new SimpleDateFormat("dd.MM.yyyy").format(releaseDate);
+        if (new SimpleDateFormat("dd.MM.yyyy").format(releaseDate).equals("11.11.1111")) {
+            return "no Date";
+        } else {
+            return new SimpleDateFormat("dd.MM.yyyy").format(releaseDate);
+        }
     }
 
     public String getReleaseYear() {
-        return new SimpleDateFormat("yyyy").format(releaseDate);
+        if (new SimpleDateFormat("dd.MM.yyyy").format(releaseDate).equals("11.11.1111")) {
+            return "no Date";
+        } else {
+            return new SimpleDateFormat("yyyy").format(releaseDate);
+        }
     }
 
     public Long getId() {

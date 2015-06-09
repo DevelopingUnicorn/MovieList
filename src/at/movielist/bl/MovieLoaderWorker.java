@@ -96,17 +96,21 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             double inc = 1000000 / length;
 
             for (int i = 0; i < length; i++) {
-                StringBuilder sb = new StringBuilder();
-                xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
-                lb.setText(xfy);
+                if (!isCancelled()) {
+                    StringBuilder sb = new StringBuilder();
+                    xfy = sb.append(prog1).append(" ").append((i + 1)).append(" ").append(prog2).append(" ").append(length).toString();
+                    lb.setText(xfy);
 
-                if (dirListing[i].isDirectory()) {
-                    isADirectory(dirListing[i], dirListing[i].getName());
+                    if (dirListing[i].isDirectory()) {
+                        isADirectory(dirListing[i], dirListing[i].getName());
+                    } else {
+                        isAFile(dirListing[i]);
+                    }
+
+                    loading.setValue(loading.getValue() + (int) inc);
                 } else {
-                    isAFile(dirListing[i]);
+                    i = length;
                 }
-
-                loading.setValue(loading.getValue() + (int) inc);
             }
         }
         return liste;
@@ -125,6 +129,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         try {
             if (ConfigUtility.getInstance().isPropAutoSave()) {
                 mui.safeMovies(true);
+                System.out.println("SAVE");
             }
         } catch (IOException ex) {
             Logger.getLogger(MovieLoaderWorker.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,7 +138,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
     private void createMovie(String fname, int numberOfFiles, File... f) {
         double filesize = 0.0;
-        String gibormib = "GiB";
+        double kib = 0.0;
+        String gibmiborkib = "GiB";
 
         mi.open(f[0]);
 
@@ -158,18 +164,24 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
                     if (spl[1].equals("MiB")) {
                         filesize += (Double.parseDouble(spl[0]) / 1024.0);
-                    } else {
+                    } else if (spl[1].equals("GiB")) {
                         filesize += Double.parseDouble(spl[0]);
+                    } else {
+                        kib += Double.parseDouble(spl[0]);
+                        if (kib >= 1024) {
+                            filesize+= 1/1024;
+                            kib-=1024;
+                        }
                     }
                 }
             }
 
             if (filesize < 1.0) {
-                gibormib = "MiB";
+                gibmiborkib = "MiB";
                 filesize *= 1024.0;
             }
 
-            size = String.format("%4.2f %s", filesize, gibormib);
+            size = String.format("%4.2f %s", filesize, gibmiborkib);
             size = size.replaceAll(",", ".");
             mi.close();
         }

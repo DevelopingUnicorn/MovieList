@@ -6,19 +6,20 @@
 package at.movielist.tmdb;
 
 import at.movielist.beans.TMDBMovie;
-import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
-import javax.imageio.ImageIO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,6 +33,7 @@ public class APItmdb {
 
     private static final String URL = "http://api.themoviedb.org/3/search/movie?api_key=dd3c14bcb799a290119b8e0628514721";
     private String imgBaseURL;
+    private static Proxy proxy = null;
 
     private static APItmdb INSTANCE = null;
 
@@ -50,14 +52,23 @@ public class APItmdb {
         return formatJSON(makeTMDBRequest(lang, query));
     }
 
-    public void setProxyUse() {
-        System.setProperty("java.net.useSystemProxies", "true");
+    public void setProxyUse(String address, int port) {
+        proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
+    }
+
+    public void setProxyUseWithAuth(String address, int port, final String user, final char[] password) {
+        proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
+
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("snimaa11", "Raffii123".toCharArray());
+                return new PasswordAuthentication(user, password);
             }
         });
+    }
+
+    public void setProxyNull() {
+        proxy = null;
     }
 
     private void setBaseURL() throws Exception {
@@ -77,7 +88,7 @@ public class APItmdb {
             setBaseURL();
         }
 
-        URL url = new URL(this.imgBaseURL + "/original" + posterURL);
+        URL url = new URL(this.imgBaseURL + "/w300" + posterURL);
         return url;
     }
 
@@ -88,29 +99,45 @@ public class APItmdb {
 
         JSONObject obj = (JSONObject) parser.parse(apiString);
 
-        JSONArray msg = (JSONArray) obj.get("results");
-        Iterator<JSONObject> iterator = msg.iterator();
-        while (iterator.hasNext()) {
-            JSONObject factObj = (JSONObject) iterator.next();
-            Long id = (Long) factObj.get("id");
-            String release_date = (String) factObj.get("release_date");
-            Double vote_average = (Double) factObj.get("vote_average");
-            Long vote_count = (Long) factObj.get("vote_count");
-            String overview = (String) factObj.get("overview");
-            String original_title = (String) factObj.get("original_title");
-            String title = (String) factObj.get("title");
-            String poster_path = (String) factObj.get("poster_path");
+        if (obj != null) {
+            JSONArray msg = (JSONArray) obj.get("results");
+            Iterator<JSONObject> iterator = msg.iterator();
+            while (iterator.hasNext()) {
+                JSONObject factObj = (JSONObject) iterator.next();
+                Long id = (Long) factObj.get("id");
+                String release_date = (String) factObj.get("release_date");
+                Double vote_average = (Double) factObj.get("vote_average");
+                Long vote_count = (Long) factObj.get("vote_count");
+                String overview = (String) factObj.get("overview");
+                String original_title = (String) factObj.get("original_title");
+                String title = (String) factObj.get("title");
+                String poster_path = (String) factObj.get("poster_path");
 
-            list.add(new TMDBMovie(
-                    overview,
-                    original_title,
-                    title,
-                    vote_average,
-                    vote_count.doubleValue(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(release_date),
-                    id,
-                    poster_path
-            ));
+                if (release_date == null || release_date.equals("")) {
+                    list.add(new TMDBMovie(
+                            overview,
+                            original_title,
+                            title,
+                            vote_average,
+                            vote_count.doubleValue(),
+                            new SimpleDateFormat("yyyy-MM-dd").parse("1111-11-11"),
+                            id,
+                            poster_path
+                    ));
+                }else
+                {
+                     list.add(new TMDBMovie(
+                        overview,
+                        original_title,
+                        title,
+                        vote_average,
+                        vote_count.doubleValue(),
+                        new SimpleDateFormat("yyyy-MM-dd").parse(release_date),
+                        id,
+                        poster_path
+                ));
+                }
+            }
         }
 
         return list;
@@ -121,7 +148,13 @@ public class APItmdb {
 
         try {
             URL usedURL = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) usedURL.openConnection();
+            HttpURLConnection connection = null;
+
+            if (proxy != null) {
+                connection = (HttpURLConnection) usedURL.openConnection(proxy);
+            } else {
+                connection = (HttpURLConnection) usedURL.openConnection();
+            }
 
             connection.setRequestMethod("GET");
 
@@ -156,7 +189,6 @@ public class APItmdb {
 
     private static String makeTMDBRequest(String lang, String query) throws Exception {
         String usedURL = APItmdb.URL + "&language=" + lang + "&query=" + URLEncoder.encode(query, "UTF-8");
-        System.out.println(usedURL);
         return makeHTTPRequest(usedURL);
     }
 }

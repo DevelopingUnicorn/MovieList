@@ -2,6 +2,7 @@ package at.movielist.beans;
 
 import at.movielist.bl.ConfigUtility;
 import at.movielist.tmdb.APItmdb;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;

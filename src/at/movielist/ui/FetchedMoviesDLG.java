@@ -1,11 +1,16 @@
 package at.movielist.ui;
 
 import at.movielist.beans.TMDBMovie;
+import at.movielist.bl.ConfigUtility;
 import at.movielist.tmdb.APItmdb;
-import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +19,9 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
     private int selMatch = 0;
     private URL poster = null;
     private final ArrayList<TMDBMovie> matches;
+    private ResourceBundle resBundle;
 
-    public FetchedMoviesDLG(java.awt.Frame parent, boolean modal, ArrayList<TMDBMovie> matches, String moviename) {
+    public FetchedMoviesDLG(java.awt.Frame parent, boolean modal, final ArrayList<TMDBMovie> match, String moviename) {
         super(parent, modal);
         initComponents();
         this.setSize(400, 400);
@@ -23,16 +29,48 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
 
         this.setLocationRelativeTo(parent);
 
-        this.matches = matches;
+        this.matches = match;
 
         LinkedList<String> arr = new LinkedList<>();
 
-        for (TMDBMovie tm : matches) {
-            arr.add(tm.getOriginalTitle() + "  -  (" + tm.getReleaseYear() + ")");
+        for (TMDBMovie tm : match) {
+            arr.add(tm.getTitle() + "  -  (" + tm.getReleaseYear() + ")");
         }
 
         liSelMovies.setListData(arr.toArray());
         lbForMovie.setText(moviename);
+
+        try {
+            switch (ConfigUtility.getInstance().getPropLang()) {
+                case "de":
+                    setLang("de");
+                    break;
+                case "en":
+                    setLang("en");
+                    break;
+                case "es":
+                    setLang("es");
+                    break;
+                default:
+                    setLang("en");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(FetchedMoviesDLG.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        this.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent we) {
+                try {
+                    poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                } catch (Exception ex) {
+                    Logger.getLogger(FetchedMoviesDLG.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                dispose();
+            }
+
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -76,6 +114,7 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
         pn.add(spListe, java.awt.BorderLayout.CENTER);
 
         lbForMovie.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbForMovie.setForeground(new java.awt.Color(0, 204, 204));
         lbForMovie.setText("MovieName");
         pn.add(lbForMovie, java.awt.BorderLayout.PAGE_START);
 
@@ -110,5 +149,25 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
     public URL getPoster() {
         return poster;
     }
-    
+
+    private void setLang(String lang) {
+
+        switch (lang) {
+            case "de":
+                resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.GERMAN);
+                break;
+            case "en":
+                resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
+                break;
+            case "es":
+                resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", new Locale("es"));
+                break;
+        }
+
+        // Lang support
+        lbUe.setText(resBundle.getString("fetch_dlg_ue"));
+        btNext.setText(resBundle.getString("fetch_dlg_btn"));
+        // END lang support
+    }
+
 }

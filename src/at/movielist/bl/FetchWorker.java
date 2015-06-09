@@ -37,7 +37,8 @@ public class FetchWorker extends SwingWorker<String, String> {
             ArrayList<TMDBMovie> matches = new ArrayList<TMDBMovie>();
 
             for (Movie m : ml) {
-                matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), m.getName());
+                String movie = m.getName().replace(".", " ");
+                matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), movie);
 
                 if (matches.size() > 1) {
                     FetchedMoviesDLG dlg = new FetchedMoviesDLG(new JFrame(), true, matches, m.getName());
@@ -72,7 +73,15 @@ public class FetchWorker extends SwingWorker<String, String> {
     protected void done() {
         JOptionPane.showMessageDialog(null, "Finished le Fetch", "Finished!", JOptionPane.INFORMATION_MESSAGE);
         mui.setList(ml, false);
-        mui.safeMovies(true);
+
+        try {
+            if (ConfigUtility.getInstance().isPropAutoSave()) {
+                mui.safeMovies(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(FetchWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     private void savePoster(URL poster, TMDBMovie tm) {

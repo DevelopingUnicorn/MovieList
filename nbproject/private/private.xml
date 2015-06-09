@@ -8,16 +8,14 @@
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/CreditsDLG.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/src/ResourceBundle_es.properties</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/MovieLoaderWorker.java</file>
-            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/SetupDLG.java</file>
+            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/Serializer.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/MovieLoader.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/ProgressbarDLG.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/SettingsDLG.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/tmdb/APItmdb.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/beans/Movie.java</file>
             <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/ConfigUtility.java</file>
-            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/StartDLG.java</file>
-            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/ui/FetchedMoviesDLG.java</file>
-            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/FetchWorker.java</file>
+            <file>file:/C:/Users/Maci/Documents/NetBeansProjects/MovieList/src/at/movielist/bl/DeSerializer.java</file>
         </group>
     </open-files>
 </project-private>

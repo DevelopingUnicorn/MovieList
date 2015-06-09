@@ -294,12 +294,8 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btSearchActionPerformed
 
     private void miProxyonSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProxyonSettings
-        try {
-            APItmdb.getInstance().setProxyUse();
-            JOptionPane.showMessageDialog(null, "Proxy has been successfully configured", "Information", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException ex) {
-            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ProxySettingsDLG dlg = new ProxySettingsDLG(this, true);
+        dlg.setVisible(true);
     }//GEN-LAST:event_miProxyonSettings
 
     private void onFetch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFetch
