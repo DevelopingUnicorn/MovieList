@@ -1,6 +1,5 @@
 package at.movielist.bl;
 
-import at.movielist.bl.MovieLoaderWorker;
 import at.movielist.ui.MainUI;
 import at.movielist.ui.ProgressbarDLG;
 import java.util.Locale;

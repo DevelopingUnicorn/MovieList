@@ -9,8 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import at.lib.mediainfo.MediaInfo;
-import at.movielist.bl.ConfigUtility;
-import at.movielist.bl.UtilityClass;
 import at.movielist.ui.MainUI;
 import at.movielist.ui.ProgressbarDLG;
 import java.io.IOException;
@@ -116,7 +114,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
     @Override
     protected void done() {
-        mui.setList(liste, false);
+        mui.setList(liste, true);
 
         if (liste.size() > 0) {
             String things = uc.getSizeAndNumberOfFiles(liste, resBundle.getLocale());
@@ -125,7 +123,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
         dlg.dispose();
         try {
-            if (ConfigUtility.getInstance().isPropAutoSafe()) {
+            if (ConfigUtility.getInstance().isPropAutoSave()) {
                 mui.safeMovies(true);
             }
         } catch (IOException ex) {

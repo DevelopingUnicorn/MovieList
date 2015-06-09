@@ -48,6 +48,8 @@ public class SettingsDLG extends javax.swing.JDialog {
         listPathsToMovies.updateUI();
 
         cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
+        cbAutoSave.setSelected(ConfigUtility.getInstance().isPropAutoSave());
+        cbSavePosters.setSelected(ConfigUtility.getInstance().isPropSavePosters());
 
         switch (ConfigUtility.getInstance().getPropLang()) {
             case "de":
@@ -67,53 +69,11 @@ public class SettingsDLG extends javax.swing.JDialog {
                 cbLang.setSelectedIndex(0);
         }
 
-        cbLang.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                String lang = cbLang.getSelectedItem().toString();
-                switch (lang) {
-                    case "Deutsch":
-                        setLang("de");
-                        break;
-                    case "English":
-                        setLang("en");
-                        break;
-                    case "Espaniol":
-                        setLang("es");
-                        break;
-                    default:
-                        setLang("en");
-                }
-            }
-        });
-        
-        cbAutoSave.setSelected(true);
-
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                dispose();
-            }
-        });
-
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.large.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.medium.png")).getImage());
         iconlist.add(new ImageIcon(this.getClass().getResource("/at/movielist/resources/windowicon.small.png")).getImage());
 
-        listPathsToMovies.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                JList list = (JList) evt.getSource();
-                if (evt.getClickCount() == 2) {
-//                    int index = list.locationToIndex(evt.getPoint());
-                    int index = list.getSelectedIndex();
-                    pathsToMovies.remove(index);
-                    listPathsToMovies.setListData(pathsToMovies.toArray(new String[pathsToMovies.size()]));
-                    listPathsToMovies.updateUI();
-                    System.out.println(index);
-                }
-            }
-        });
+        setListeners();
 
         this.setIconImages(iconlist);
 
@@ -137,7 +97,9 @@ public class SettingsDLG extends javax.swing.JDialog {
         btChoosePath = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listPathsToMovies = new javax.swing.JList();
+        jPanel2 = new javax.swing.JPanel();
         cbAutoSave = new javax.swing.JCheckBox();
+        cbSavePosters = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconImages(null);
@@ -193,9 +155,17 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         pnThings.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        jPanel2.setLayout(new java.awt.GridLayout(2, 0));
+
         cbAutoSave.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cbAutoSave.setText("Auto save to loaded movies to a file?");
-        pnThings.add(cbAutoSave, java.awt.BorderLayout.SOUTH);
+        jPanel2.add(cbAutoSave);
+
+        cbSavePosters.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbSavePosters.setText("Save Posters to folder?");
+        jPanel2.add(cbSavePosters);
+
+        pnThings.add(jPanel2, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(pnThings, java.awt.BorderLayout.CENTER);
 
@@ -223,7 +193,6 @@ public class SettingsDLG extends javax.swing.JDialog {
         };
 
         fc.setFileFilter(directoryFilter);
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int returnVal = fc.showOpenDialog(this);
 
@@ -240,7 +209,9 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JButton btOk;
     private javax.swing.JCheckBox cbAutoSave;
     private javax.swing.JComboBox cbLang;
+    private javax.swing.JCheckBox cbSavePosters;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCLUE;
     protected javax.swing.JLabel lbTitel;
@@ -269,21 +240,22 @@ public class SettingsDLG extends javax.swing.JDialog {
         lbCLUE.setText(resBundle.getString("setup_chooseLang"));
         btOk.setText(resBundle.getString("setup_finish"));
         btChoosePath.setText(resBundle.getString("setup_choosePath"));
+        cbAutoSave.setText(resBundle.getString("settings_autoSave"));
+        cbSavePosters.setText(resBundle.getString("settings_dlposters"));
         // END lang support
     }
 
     /**
-     * 
+     *
      * @return true if all went right; false on error
      */
     protected boolean onFinish() {
-        
-        if (pathsToMovies.isEmpty())
-        {
+
+        if (pathsToMovies.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please select at least one path", "Attention", JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-        
+
         String lang = cbLang.getSelectedItem().toString();
 
         switch (lang) {
@@ -301,7 +273,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         }
 
         try {
-            ConfigUtility.getInstance().saveConfigToFile(lang, cbAutoSave.isSelected(), pathsToMovies.toArray(new String[pathsToMovies.size()]));
+            ConfigUtility.getInstance().saveConfigToFile(lang, cbAutoSave.isSelected(), cbSavePosters.isSelected(), pathsToMovies.toArray(new String[pathsToMovies.size()]));
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "An error occured! Maybe the config file is missing.", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(SettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
@@ -309,5 +281,49 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         this.dispose();
         return true;
+    }
+
+    private void setListeners() {
+        cbLang.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String lang = cbLang.getSelectedItem().toString();
+                switch (lang) {
+                    case "Deutsch":
+                        setLang("de");
+                        break;
+                    case "English":
+                        setLang("en");
+                        break;
+                    case "Espaniol":
+                        setLang("es");
+                        break;
+                    default:
+                        setLang("en");
+                }
+            }
+        });
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                dispose();
+            }
+        });
+
+        listPathsToMovies.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                JList list = (JList) evt.getSource();
+                if (evt.getClickCount() == 2) {
+//                    int index = list.locationToIndex(evt.getPoint());
+                    int index = list.getSelectedIndex();
+                    pathsToMovies.remove(index);
+                    listPathsToMovies.setListData(pathsToMovies.toArray(new String[pathsToMovies.size()]));
+                    listPathsToMovies.updateUI();
+                    System.out.println(index);
+                }
+            }
+        });
     }
 }

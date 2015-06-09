@@ -4,12 +4,13 @@ import at.movielist.beans.Movie;
 import at.movielist.beans.TMDBMovie;
 import at.movielist.bl.ConfigUtility;
 import at.movielist.bl.DeSerializer;
+import at.movielist.bl.FetchWorker;
 import at.movielist.bl.MovieCompare;
 import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
-import at.movielist.dal.APItmdb;
+import at.movielist.tmdb.APItmdb;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,9 +101,11 @@ public class MainUI extends javax.swing.JFrame {
         epInfos = new javax.swing.JEditorPane();
         mbBar = new javax.swing.JMenuBar();
         meFile = new javax.swing.JMenu();
-        miOpen = new javax.swing.JMenuItem();
         miLoad = new javax.swing.JMenuItem();
+        miOpen = new javax.swing.JMenuItem();
         miSave = new javax.swing.JMenuItem();
+        spSepp = new javax.swing.JPopupMenu.Separator();
+        miFetchFromTMDB = new javax.swing.JMenuItem();
         meSettings = new javax.swing.JMenu();
         miPreferences = new javax.swing.JMenuItem();
         miProxy = new javax.swing.JMenuItem();
@@ -158,16 +161,6 @@ public class MainUI extends javax.swing.JFrame {
         meFile.setText("File");
         meFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        miOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        miOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/fileopen.png"))); // NOI18N
-        miOpen.setText("Open MovieList File");
-        miOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onOpenMLFile(evt);
-            }
-        });
-        meFile.add(miOpen);
-
         miLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         miLoad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/loadmovies.png"))); // NOI18N
         miLoad.setText("Load Movies");
@@ -178,6 +171,16 @@ public class MainUI extends javax.swing.JFrame {
         });
         meFile.add(miLoad);
 
+        miOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        miOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/fileopen.png"))); // NOI18N
+        miOpen.setText("Open MovieList File");
+        miOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onOpenMLFile(evt);
+            }
+        });
+        meFile.add(miOpen);
+
         miSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         miSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/save.png"))); // NOI18N
         miSave.setText("Save to MovieList File");
@@ -187,6 +190,17 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
         meFile.add(miSave);
+        meFile.add(spSepp);
+
+        miFetchFromTMDB.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        miFetchFromTMDB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/fetch.png"))); // NOI18N
+        miFetchFromTMDB.setText("Fetch From tMDb");
+        miFetchFromTMDB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onFetch(evt);
+            }
+        });
+        meFile.add(miFetchFromTMDB);
 
         mbBar.add(meFile);
 
@@ -203,8 +217,7 @@ public class MainUI extends javax.swing.JFrame {
         });
         meSettings.add(miPreferences);
 
-        miProxy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        miProxy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settings.png"))); // NOI18N
+        miProxy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/setproxy.png"))); // NOI18N
         miProxy.setText("Set Proxy");
         miProxy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -289,6 +302,11 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miProxyonSettings
 
+    private void onFetch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFetch
+        FetchWorker fw = new FetchWorker(this, movielist);
+        fw.execute();
+    }//GEN-LAST:event_onFetch
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearch;
     private javax.swing.JEditorPane epInfos;
@@ -300,6 +318,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenu meFile;
     private javax.swing.JMenu meSettings;
     private javax.swing.JMenuItem miCredits;
+    private javax.swing.JMenuItem miFetchFromTMDB;
     private javax.swing.JMenuItem miLoad;
     private javax.swing.JMenuItem miOpen;
     private javax.swing.JMenuItem miPreferences;
@@ -310,6 +329,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnRight;
     private javax.swing.JPanel pnSearchbar;
     private javax.swing.JScrollPane spList;
+    private javax.swing.JPopupMenu.Separator spSepp;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
@@ -322,7 +342,7 @@ public class MainUI extends javax.swing.JFrame {
             m.setResBundle(current);
 
             String html = m.toHTMLString();
-            html += m.getClosestMatch();
+            html += m.getMatch();
 
             epInfos.setText(html);
         } catch (Exception ex) {
@@ -351,6 +371,9 @@ public class MainUI extends javax.swing.JFrame {
             } else {
                 movielist.addAll(liste);
             }
+            
+            printInformation(0);
+            liMovies.setSelectedIndex(0);
         } else {
             movielist = liste;
         }
@@ -403,6 +426,8 @@ public class MainUI extends javax.swing.JFrame {
         miCredits.setText(resBundle.getString("main_menu_about_credits"));
         pnListe.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_left_titel")));
         pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
+        miProxy.setText(resBundle.getString("main_menu_settings_proxy"));
+        miFetchFromTMDB.setText(resBundle.getString("main_menu_file_fetch"));
         // END lang support
 
     }

@@ -1,7 +1,7 @@
 package at.movielist.beans;
 
 import at.movielist.bl.ConfigUtility;
-import at.movielist.dal.APItmdb;
+import at.movielist.tmdb.APItmdb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class Movie implements Serializable {
     private String name, path;
     private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
-    private ArrayList<TMDBMovie> possibleMatches;
+    private TMDBMovie DBmatch;
 
     public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
         this.name = name;
@@ -26,15 +26,14 @@ public class Movie implements Serializable {
         this.fileextension = fileextension;
         this.numberoffiles = numberoffiles;
         this.path = path;
-        possibleMatches = new ArrayList<>();
     }
 
-    public ArrayList<TMDBMovie> getPossibleMatches() {
-        return possibleMatches;
+    public TMDBMovie getDBMatch() {
+        return DBmatch;
     }
 
-    public void setPossibleMatches(ArrayList<TMDBMovie> possibleMatches) {
-        this.possibleMatches = possibleMatches;
+    public void setMatch(TMDBMovie match) {
+        this.DBmatch = match;
     }
 
     public void setResBundle(Locale loc) {
@@ -111,17 +110,13 @@ public class Movie implements Serializable {
         return sb.toString();
     }
 
-    public String getClosestMatch() throws IOException, Exception {
-        System.out.println("Num matches for '" + this.name + "':\t" + possibleMatches.size());
-        if (this.possibleMatches.isEmpty()) {
-            possibleMatches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), this.name);
-            if (possibleMatches.isEmpty()) {
-                return "<br><center><h1>" + resBundle.getString("main_information_TMDB_header") + "</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' ><h2>" + resBundle.getString("main_information_TMDB_nothingFound") + "</h2>";
-            } else {
-                return possibleMatches.get(0).toHTMLString();
-            }
+    public String getMatch() {
+        if (DBmatch == null) {
+            StringBuilder sb = new StringBuilder("<br><center><h1>");
+            sb.append(resBundle.getString("main_information_TMDB_header")).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' ><h2>").append(resBundle.getString("main_information_TMDB_nothingFound")).append("</h2>");
+            return  sb.toString();
         } else {
-            return this.possibleMatches.get(0).toHTMLString();
+            return DBmatch.toHTMLString();
         }
     }
 

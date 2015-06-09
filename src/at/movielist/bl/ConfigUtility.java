@@ -11,7 +11,7 @@ public class ConfigUtility {
 
     private String propLang;
     private String[] propPaths;
-    private boolean propAutoSafe;
+    private boolean propAutoSave, propSavePosters;
     private final Properties properties;
     private FileOutputStream outStream;
 
@@ -29,6 +29,11 @@ public class ConfigUtility {
             .append(File.separator)
             .append("movielist.properties").toString();
 
+    private final String pathToImages = new StringBuilder()
+            .append(userdocs)
+            .append(File.separator)
+            .append("posters").toString();
+
     private ConfigUtility() throws IOException {
         FileInputStream fi;
         try {
@@ -45,10 +50,11 @@ public class ConfigUtility {
         properties.load(fi);
     }
 
-    public void saveConfigToFile(String lang, boolean autoSafe, String[] pathToMovies) throws IOException {
+    public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies) throws IOException {
 
         properties.setProperty("Lang", lang.equals("") ? "en" : lang);
-        properties.setProperty("AutoSave", autoSafe ? "true" : "false");
+        properties.setProperty("AutoSave", autoSave ? "true" : "false");
+        properties.setProperty("SavePosters", savePosters ? "true" : "false");
 
         String allPaths = "";
         for (int i = 0; i < pathToMovies.length - 1; i++) {
@@ -64,12 +70,21 @@ public class ConfigUtility {
 
     public void loadConfig() throws IOException {
         this.propLang = properties.getProperty("Lang", "en");
-        this.propAutoSafe = Boolean.valueOf(properties.getProperty("AutoSave"));
+        this.propAutoSave = Boolean.valueOf(properties.getProperty("AutoSave"));
+        this.propSavePosters = Boolean.valueOf(properties.getProperty("SavePosters"));
 
+        
         try {
             this.propPaths = properties.getProperty("Paths").split(";");
         } catch (NullPointerException ex) {
             this.propPaths = new String[0];
+        }
+        
+        if (propSavePosters) {
+            File f = new File(this.pathToImages);
+            if (!f.exists() || !f.isDirectory()) {
+                f.mkdir();
+            }
         }
     }
 
@@ -92,8 +107,8 @@ public class ConfigUtility {
         return propPaths;
     }
 
-    public boolean isPropAutoSafe() {
-        return propAutoSafe;
+    public boolean isPropAutoSave() {
+        return propAutoSave;
     }
 
     public String getUserdocs() {
@@ -104,4 +119,11 @@ public class ConfigUtility {
         return pathToConfFile;
     }
 
+    public boolean isPropSavePosters() {
+        return propSavePosters;
+    }
+
+    public String getPathToImages() {
+        return pathToImages;
+    }
 }
