@@ -27,6 +27,10 @@ To Do:
 * Sourcecode documentation
 * <strike>Settings option</strike>
 * <strike>Logo creation</strike>
+* <strike>TMDB support</strike>
+* Dependencies
+* <strike>Search funktion</strike>
+* <strike>ProxyServer (http) to set</strike>
 
 Developer(s)
 ============
