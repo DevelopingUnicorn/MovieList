@@ -5,7 +5,6 @@ import at.movielist.dal.APItmdb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -16,7 +15,6 @@ public class Movie implements Serializable {
     private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
     private ArrayList<TMDBMovie> possibleMatches;
-    private Object m;
 
     public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
         this.name = name;
@@ -114,12 +112,13 @@ public class Movie implements Serializable {
     }
 
     public String getClosestMatch() throws IOException, Exception {
+        System.out.println("Num matches for '" + this.name + "':\t" + possibleMatches.size());
         if (this.possibleMatches.isEmpty()) {
-            ArrayList<TMDBMovie> list = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), this.name);
-            if (list.isEmpty()) {
+            possibleMatches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), this.name);
+            if (possibleMatches.isEmpty()) {
                 return "<br><center><h1>" + resBundle.getString("main_information_TMDB_header") + "</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' ><h2>" + resBundle.getString("main_information_TMDB_nothingFound") + "</h2>";
             } else {
-                return list.get(0).toHTMLString();
+                return possibleMatches.get(0).toHTMLString();
             }
         } else {
             return this.possibleMatches.get(0).toHTMLString();

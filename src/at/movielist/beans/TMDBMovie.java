@@ -5,6 +5,7 @@
  */
 package at.movielist.beans;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -14,7 +15,7 @@ import java.util.ResourceBundle;
  *
  * @author Manu
  */
-public class TMDBMovie {
+public class TMDBMovie implements Serializable {
 
     private final String overview, title;
     private final Double voteAverage, voteCount;
@@ -34,7 +35,7 @@ public class TMDBMovie {
 
     public String toHTMLString() {
         StringBuilder result = new StringBuilder();
-        
+
         result.append("<br><center><h1>").append(resBundle.getString("main_information_TMDB_header")).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_id")).append(":</strong></td><td width='50%' >").append(id).append("</td></tr>");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_overview")).append(":</strong></td><td width='50%' >").append(overview).append("</td></tr>");
