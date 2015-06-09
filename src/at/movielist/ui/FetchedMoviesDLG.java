@@ -3,6 +3,8 @@ package at.movielist.ui;
 import at.movielist.beans.TMDBMovie;
 import at.movielist.bl.ConfigUtility;
 import at.movielist.tmdb.APItmdb;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 
 public class FetchedMoviesDLG extends javax.swing.JDialog {
 
@@ -71,6 +74,22 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
             }
 
         });
+
+        Timer t = new Timer(5000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                } catch (Exception ex) {
+                    Logger.getLogger(FetchedMoviesDLG.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                dispose();
+            }
+        });
+        
+        t.setRepeats(false);
+        t.start();
     }
 
     @SuppressWarnings("unchecked")

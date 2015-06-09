@@ -32,11 +32,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.Caret;
 
 public class MainUI extends javax.swing.JFrame {
 
@@ -97,7 +99,7 @@ public class MainUI extends javax.swing.JFrame {
         spList = new javax.swing.JScrollPane();
         liMovies = new javax.swing.JList();
         pnRight = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        spEDitor = new javax.swing.JScrollPane();
         epInfos = new javax.swing.JEditorPane();
         mbBar = new javax.swing.JMenuBar();
         meFile = new javax.swing.JMenu();
@@ -150,9 +152,9 @@ public class MainUI extends javax.swing.JFrame {
         pnRight.setLayout(new java.awt.BorderLayout());
 
         epInfos.setEditable(false);
-        jScrollPane1.setViewportView(epInfos);
+        spEDitor.setViewportView(epInfos);
 
-        pnRight.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        pnRight.add(spEDitor, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(pnRight);
 
@@ -306,7 +308,6 @@ public class MainUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSearch;
     private javax.swing.JEditorPane epInfos;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
@@ -324,13 +325,12 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnListe;
     private javax.swing.JPanel pnRight;
     private javax.swing.JPanel pnSearchbar;
+    private javax.swing.JScrollPane spEDitor;
     private javax.swing.JScrollPane spList;
     private javax.swing.JPopupMenu.Separator spSepp;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
-    
-    
     private void printInformation(int selectedIndex) {
         try {
             Movie m = movielist.get(selectedIndex);
@@ -340,7 +340,7 @@ public class MainUI extends javax.swing.JFrame {
             String html = m.toHTMLString();
             html += m.getMatch();
 
-            epInfos.setText(html);
+            epInfos.setText(html);            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "An error occured when fetching the TMDB data", "Error", JOptionPane.ERROR_MESSAGE);
             Movie m = movielist.get(selectedIndex);
@@ -367,7 +367,7 @@ public class MainUI extends javax.swing.JFrame {
             } else {
                 movielist.addAll(liste);
             }
-            
+
             printInformation(0);
             liMovies.setSelectedIndex(0);
         } else {
