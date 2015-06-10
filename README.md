@@ -63,7 +63,7 @@ Version
  * Many performance Tweaks!
  * and more!
 * v1.3rev1 - <a href="https://goo.gl/40Whw2">Download</a>
-<br><strong>Note: Now another conf File is used delete the old version!</strong><br>
+<br><br><strong>Note: Now another conf File is used delete the old version!</strong><br><br>
  * Added tMDb support
  * Added multi directory search
  * Added ProxySettings
