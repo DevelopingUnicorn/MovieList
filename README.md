@@ -62,7 +62,7 @@ Version
  * Rewrote search Algorithm
  * Many performance Tweaks!
  * and more!
-* v1.3rev1 - <a href="https://goo.gl/40Whw2">Download</a>
+* v1.3rev1 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.3rev1/MovieList_1.3rev1.zip">Download</a>
 <br><strong>Note: Now another conf File is used delete the old version!</strong><br>
  * Added tMDb support
  * Added multi directory search
