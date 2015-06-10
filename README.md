@@ -58,7 +58,19 @@ Version
  * Performance tweaks
 
 <h5>~Releases~</h5>
-* v1.0rev1 - <a href="http://goo.gl/mTF6gL">Download v1.0rev1</a>
+* v1.0rev1
  * Rewrote search Algorithm
  * Many performance Tweaks!
  * and more!
+* v1.3rev1
+<strong>Note: Now another conf File is used delete the old version!</strong>
+ * Added tMDb support
+ * Added multi directory search
+ * Added ProxySettings
+ * Added AutoSave
+ * Added PosterDownload
+ * 
+ 
+Dependencies
+==============
+![tMDb](https://d3a8mw37cqal2z.cloudfront.net/images/logos/var_1_1_PoweredByTMDB_Blk_Logo_Antitled.png)
