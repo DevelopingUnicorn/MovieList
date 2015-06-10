@@ -62,7 +62,7 @@ Version
  * Rewrote search Algorithm
  * Many performance Tweaks!
  * and more!
-* v1.3rev1
+* v1.3rev1 - <a href="https://goo.gl/40Whw2">Download</a>
 <strong>Note: Now another conf File is used delete the old version!</strong>
  * Added tMDb support
  * Added multi directory search
