@@ -75,3 +75,5 @@ Dependencies
 ![tMDb](https://d3a8mw37cqal2z.cloudfront.net/images/logos/var_1_1_PoweredByTMDB_Blk_Logo_Antitled.png)
 
 This product uses MediaInfo library, Copyright (c) 2002-2014 <a href="mediaarea.net">MediaArea.net</a> SARL.
+
+Candy icons are designed and developed by Jonian Guveli <jonian.guveli@gmail.com> and Olibia Tsati <olibia.t@gmail.com>
