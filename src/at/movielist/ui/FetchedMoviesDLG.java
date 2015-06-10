@@ -87,7 +87,7 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
                 dispose();
             }
         });
-        
+
         t.setRepeats(false);
         t.start();
     }
@@ -132,8 +132,8 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
 
         pn.add(spListe, java.awt.BorderLayout.CENTER);
 
-        lbForMovie.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbForMovie.setForeground(new java.awt.Color(0, 204, 204));
+        lbForMovie.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lbForMovie.setForeground(new java.awt.Color(51, 153, 0));
         lbForMovie.setText("MovieName");
         pn.add(lbForMovie, java.awt.BorderLayout.PAGE_START);
 
@@ -144,6 +144,11 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
 
     private void onNext(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNext
         selMatch = liSelMovies.getSelectedIndex();
+
+        if (selMatch < 0) {
+            selMatch = 0;
+        }
+
         try {
             this.poster = APItmdb.getInstance().getPoster(matches.get(selMatch).getPoster_url());
         } catch (Exception ex) {

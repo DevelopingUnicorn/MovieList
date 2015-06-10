@@ -1,11 +1,6 @@
 package at.movielist.beans;
 
-import at.movielist.bl.ConfigUtility;
-import at.movielist.tmdb.APItmdb;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,7 +10,7 @@ public class Movie implements Serializable {
     private String name, path;
     private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
-    private TMDBMovie DBmatch;
+    transient private TMDBMovie DBmatch;
 
     public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
         this.name = name;

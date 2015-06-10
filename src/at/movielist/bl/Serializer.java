@@ -44,8 +44,9 @@ public class Serializer {
 
             for (Movie m : list) {
                 objOutStream.writeObject(m);
+                
             }
-
+            objOutStream.flush();
             objOutStream.close();
             outStream.close();
         } finally {
