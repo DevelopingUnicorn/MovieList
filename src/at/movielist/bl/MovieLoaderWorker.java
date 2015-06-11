@@ -83,6 +83,12 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         return liste;
     }
 
+    /**
+     * Walks through all paths and loads the movies0
+     *
+     * @return A list with the movies found with some information
+     * @throws Exception
+     */
     @Override
     protected LinkedList<Movie> doInBackground() throws Exception {
         for (String path : paths) {
@@ -116,6 +122,10 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         return liste;
     }
 
+    /**
+     * After finished it sets the list of movies and if AutoSave is set to true
+     * all the movies will be saved
+     */
     @Override
     protected void done() {
         mui.setList(liste, true);
@@ -136,6 +146,13 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         }
     }
 
+    /**
+     * Creates an Movie-Object with all the neccessary information
+     *
+     * @param fname the file name (of the movie)
+     * @param numberOfFiles how many files have been found
+     * @param f The files found
+     */
     private void createMovie(String fname, int numberOfFiles, File... f) {
         double filesize = 0.0;
         double kib = 0.0;
@@ -169,8 +186,8 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                     } else {
                         kib += Double.parseDouble(spl[0]);
                         if (kib >= 1024) {
-                            filesize+= 1/1024;
-                            kib-=1024;
+                            filesize += 1 / 1024;
+                            kib -= 1024;
                         }
                     }
                 }
@@ -189,6 +206,12 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         liste.add(new Movie(name, width, height, dar, duration, size, extension, numberOfFiles, f[0].getParent()));
     }
 
+    /**
+     * Checks if the File-Objects is actually a file and has an appropriate file
+     * extension
+     *
+     * @param f The File-Object
+     */
     public void isAFile(File f) {
         for (String ext : okFileExtensions) {
             if (f.getName().endsWith(ext)) {
@@ -197,6 +220,13 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         }
     }
 
+    /**
+     * Checks if the File-Object is a directory and loads the movie information
+     * from the first one found
+     *
+     * @param f The file
+     * @param fname the name of the file
+     */
     public void isADirectory(File f, String fname) {
         File[] videofilesInFolder = f.listFiles(videoAfolder);
 

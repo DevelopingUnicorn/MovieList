@@ -19,7 +19,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -49,14 +48,36 @@ public class APItmdb {
         return APItmdb.INSTANCE;
     }
 
+    /**
+     * Does a search inside the API from tMDb
+     *
+     * @param lang The language the result should be
+     * @param query The name of the movie
+     * @return An array of results
+     * @throws Exception
+     */
     public ArrayList<TMDBMovie> doSearch(String lang, String query) throws Exception {
         return formatJSON(makeTMDBRequest(lang, query));
     }
 
+    /**
+     * Sets the proxy settings (HTTP Proxy)
+     *
+     * @param address the host address
+     * @param port the proxy port
+     */
     public void setProxyUse(String address, int port) {
         proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
     }
 
+    /**
+     * sets the proxy to use an username and password as well
+     *
+     * @param address the proxy host address
+     * @param port the proxy port
+     * @param user the username to auth
+     * @param password the password to auth
+     */
     public void setProxyUseWithAuth(String address, int port, final String user, final char[] password) {
         proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(address, port));
 
@@ -68,11 +89,19 @@ public class APItmdb {
         });
     }
 
+    /**
+     * Reset proxy to default (no proxy)
+     */
     public void resetProxy() throws IOException {
         proxy = null;
         ConfigUtility.getInstance().saveConfigToFile("", "", "", 0, false);
     }
 
+    /**
+     * Fetch the IMG-URL used by tMDb and sets the variable
+     *
+     * @throws Exception
+     */
     private void setBaseURL() throws Exception {
         String result = makeHTTPRequest("http://api.themoviedb.org/3/configuration?api_key=dd3c14bcb799a290119b8e0628514721");
 
@@ -85,6 +114,14 @@ public class APItmdb {
         System.out.println("Base_URL:\t" + this.imgBaseURL);
     }
 
+    /**
+     * Gets an img to the given URL (which is provided as normal information to
+     * every movie)
+     *
+     * @param posterURL The URL to use
+     * @return
+     * @throws Exception
+     */
     public URL getPoster(String posterURL) throws Exception {
         if (this.imgBaseURL.equals("") || this.imgBaseURL == null) {
             setBaseURL();
@@ -94,6 +131,16 @@ public class APItmdb {
         return url;
     }
 
+    /**
+     * Formats the JSON from the tMDb
+     *
+     * @param apiString The JSON
+     * @return An array of results
+     * @throws ParseException
+     * @throws java.text.ParseException
+     * @throws IOException
+     * @throws Exception
+     */
     private static ArrayList<TMDBMovie> formatJSON(String apiString) throws ParseException, java.text.ParseException, IOException, Exception {
         ArrayList<TMDBMovie> list = new ArrayList<>();
 
@@ -126,18 +173,17 @@ public class APItmdb {
                             id,
                             poster_path
                     ));
-                }else
-                {
-                     list.add(new TMDBMovie(
-                        overview,
-                        original_title,
-                        title,
-                        vote_average,
-                        vote_count.doubleValue(),
-                        new SimpleDateFormat("yyyy-MM-dd").parse(release_date),
-                        id,
-                        poster_path
-                ));
+                } else {
+                    list.add(new TMDBMovie(
+                            overview,
+                            original_title,
+                            title,
+                            vote_average,
+                            vote_count.doubleValue(),
+                            new SimpleDateFormat("yyyy-MM-dd").parse(release_date),
+                            id,
+                            poster_path
+                    ));
                 }
             }
         }
@@ -145,6 +191,13 @@ public class APItmdb {
         return list;
     }
 
+    /**
+     * Get the HTTP result to the given URL
+     *
+     * @param url the Link to use
+     * @return The result (HTML response)
+     * @throws Exception
+     */
     private static String makeHTTPRequest(String url) throws Exception {
         BufferedReader reader = null;
 
@@ -189,6 +242,14 @@ public class APItmdb {
         }
     }
 
+    /**
+     * Uses the tMDb URL to make a request on movies
+     *
+     * @param lang the language the result should be
+     * @param query the movie name
+     * @return
+     * @throws Exception
+     */
     private static String makeTMDBRequest(String lang, String query) throws Exception {
         String usedURL = APItmdb.URL + "&language=" + lang + "&query=" + URLEncoder.encode(query, "UTF-8");
         return makeHTTPRequest(usedURL);

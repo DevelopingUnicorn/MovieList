@@ -16,6 +16,13 @@ public class Serializer {
     public Serializer() {
     }
 
+    /**
+     * Serializes the movie-array and saves it
+     *
+     * @param list The movies
+     * @param isAutoSafe If it is an autosave --> not asking where to save it to
+     * @throws IOException
+     */
     public void safeMovieList(LinkedList<Movie> list, boolean isAutoSafe) throws IOException {
         File mlfile = null;
         if (!isAutoSafe) {
@@ -25,7 +32,7 @@ public class Serializer {
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                     "MovieList File", "ml");
             fc.setFileFilter(filter);
-            
+
             fc.setSelectedFile(new File("movielist.ml"));
 
             int ret = fc.showSaveDialog(new JFrame());
@@ -36,7 +43,7 @@ public class Serializer {
         } else {
             mlfile = new File(ConfigUtility.getInstance().getUserdocs() + File.separator + "autosave.ml");
         }
-        
+
         FileOutputStream outStream = null;
         try {
             outStream = new FileOutputStream(mlfile);
@@ -44,7 +51,7 @@ public class Serializer {
 
             for (Movie m : list) {
                 objOutStream.writeObject(m);
-                
+
             }
             objOutStream.flush();
             objOutStream.close();

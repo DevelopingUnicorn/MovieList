@@ -188,7 +188,11 @@ public class SetupDLG extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * triggered when the OK btn has been pressed
+     *
+     * @param evt
+     */
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
         onFinish();
     }//GEN-LAST:event_onFinish
@@ -237,7 +241,11 @@ public class SetupDLG extends javax.swing.JDialog {
     private javax.swing.JList listPathsToMovies;
     private javax.swing.JPanel pnThings;
     // End of variables declaration//GEN-END:variables
-
+/**
+     * Upadtes the UI elements to use the given Language
+     *
+     * @param lang
+     */
     public void setLang(String lang) {
 
         switch (lang) {
@@ -264,6 +272,7 @@ public class SetupDLG extends javax.swing.JDialog {
     }
 
     /**
+     * Called when the OK btn has been clicked
      *
      * @return true if all went right; false on error
      */
@@ -302,6 +311,9 @@ public class SetupDLG extends javax.swing.JDialog {
         return true;
     }
 
+    /**
+     * Checks the ConfigFile if any exists
+     */
     private void checkConf() {
         File userdir = new File(userdocs);
         File conf = new File(pathToConfFile);
@@ -325,6 +337,11 @@ public class SetupDLG extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Starts the programm :)
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

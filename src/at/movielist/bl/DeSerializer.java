@@ -21,6 +21,9 @@ public class DeSerializer {
         this.mui = mui;
     }
 
+    /**
+     * Loads the movie-array from the file to RAM
+     */
     public void deSerialize() {
         LinkedList<Movie> list = new LinkedList<>();
 
@@ -53,7 +56,7 @@ public class DeSerializer {
                 } finally {
                     objectInputStream.close();
                     inputFileStream.close();
-                    
+
                     mui.setList(list, false);
                 }
             } catch (FileNotFoundException ex) {

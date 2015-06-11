@@ -152,7 +152,12 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Called when the "authenticate" checkbox has been clicked. Sets the
+     * variables.
+     *
+     * @param evt
+     */
     private void onAuthToggle(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAuthToggle
         if (cbAuth.isSelected()) {
             tfUser.setEditable(true);
@@ -162,7 +167,13 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
             pfPw.setEditable(false);
         }
     }//GEN-LAST:event_onAuthToggle
-
+    /**
+     * Calles when OK has been clicked. The settings will be saved and applied.
+     * If no Host has been defined the setttings will be set to default (no
+     * proxy).
+     *
+     * @param evt
+     */
     private void onOK(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOK
         if (tfServer.getText().equals("")) {
             try {

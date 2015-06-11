@@ -17,6 +17,11 @@ public class MovieLoader {
         this.loc = loc;
     }
 
+    /**
+     * Loads the movies and sets them in the UI(-obj)
+     *
+     * @param mui
+     */
     public void getMovies(MainUI mui) {
         mlw = new MovieLoaderWorker(this.pathtomov, dlg, mui, loc);
         mlw.execute();

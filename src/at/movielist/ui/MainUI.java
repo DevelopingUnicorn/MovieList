@@ -36,7 +36,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class MainUI extends javax.swing.JFrame {
-    
+
     private final MovieListModel mlm = new MovieListModel();
     private MovieLoader ml;
     private String[] pathsToMovies;
@@ -243,17 +243,31 @@ public class MainUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Load the movies from the specified paths. A progresbar will be displayed
+     * to indicate the progress.
+     *
+     * @param evt
+     */
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
         ProgressbarDLG pd = new ProgressbarDLG(this, false);
         ml = new MovieLoader(pathsToMovies, pd, resBundle.getLocale());
         loadMovies();
     }//GEN-LAST:event_onLoadMovies
-
+    /**
+     * Opens a JFileChooser to save the loaded movies and information to an .ml
+     * file
+     *
+     * @param evt
+     */
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
         safeMovies(false);
     }//GEN-LAST:event_onSave
-
+    /**
+     * Opens the .ml and load the information
+     *
+     * @param evt
+     */
     private void onOpenMLFile(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOpenMLFile
         DeSerializer ds = new DeSerializer(this);
         ds.deSerialize();
@@ -263,7 +277,11 @@ public class MainUI extends javax.swing.JFrame {
             this.lbThings.setText(things);
         }
     }//GEN-LAST:event_onOpenMLFile
-
+    /**
+     * Shows the settings dialog
+     *
+     * @param evt
+     */
     private void onSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSettings
         try {
             SettingsDLG sdlg = new SettingsDLG(this, true);
@@ -281,20 +299,36 @@ public class MainUI extends javax.swing.JFrame {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_onSettings
-
+    /**
+     * Shows the settings
+     *
+     * @param evt
+     */
     private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
         new CreditsDLG(this, true, resBundle.getLocale());
     }//GEN-LAST:event_onCredits
-
+    /**
+     * performs a search on the loaded movies
+     *
+     * @param evt
+     */
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
         searchMovie();
     }//GEN-LAST:event_btSearchActionPerformed
-
+    /**
+     * Openes the dialog for proxy settings
+     *
+     * @param evt
+     */
     private void miProxyonSettings(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProxyonSettings
         ProxySettingsDLG dlg = new ProxySettingsDLG(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miProxyonSettings
-
+    /**
+     * Fetches additional information from the API (tMDb)
+     *
+     * @param evt
+     */
     private void onFetch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFetch
         FetchWorker fw = new FetchWorker(this, movielist);
         fw.execute();
@@ -325,7 +359,13 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator spSepp;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
-
+/**
+     * Displays information in the EditorPane. It displays information about the
+     * movie (local) and from the tMDb. If no online data has been saved yet, it
+     * will be fetched.
+     *
+     * @param selectedIndex
+     */
     private void printInformation(int selectedIndex) {
         try {
             Movie m = movielist.get(selectedIndex);
@@ -335,7 +375,7 @@ public class MainUI extends javax.swing.JFrame {
             String html = m.toHTMLString();
             html += m.getMatch();
 
-            epInfos.setText(html);            
+            epInfos.setText(html);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "An error occured when fetching the TMDB data", "Error", JOptionPane.ERROR_MESSAGE);
             Movie m = movielist.get(selectedIndex);
@@ -346,10 +386,20 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Loads the movies.
+     */
     private void loadMovies() {
         ml.getMovies(this);
     }
 
+    /**
+     * Updates the list of movies
+     *
+     * @param liste The list to be displayed
+     * @param doAskForOverride true, if an confirm dialog should appear and ask
+     * before overriding
+     */
     public void setList(LinkedList<Movie> liste, boolean doAskForOverride) {
         if (movielist.size() > 0) {
             int reply = JOptionPane.YES_OPTION;
@@ -377,15 +427,28 @@ public class MainUI extends javax.swing.JFrame {
         liMovies.updateUI();
     }
 
+    /**
+     * Gets the label where additional information is displayed
+     *
+     * @return the JLabel
+     */
     public JLabel getLbThings() {
         return this.lbThings;
     }
 
+    /**
+     * Clears the list with the movies
+     */
     public void clearList() {
         mlm.clear();
         lbThings.setText("");
     }
 
+    /**
+     * Updates all UI elements with the new text from the language set
+     *
+     * @throws IOException
+     */
     public void setLang() throws IOException {
         // Lang support
         Locale currentLocal = Locale.ENGLISH;
@@ -423,6 +486,9 @@ public class MainUI extends javax.swing.JFrame {
 
     }
 
+    /**
+     * removes the selected movie from the list
+     */
     public void removeListEntry() {
         int[] toDel = liMovies.getSelectedIndices();
         int minus = 0;
@@ -446,6 +512,9 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * sets all the listeners needed
+     */
     private void setListener() {
         liMovies.registerKeyboardAction(new ActionListener() {
             @Override
@@ -490,6 +559,11 @@ public class MainUI extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Opens an InputDialog to input the new name for the selected movie
+     *
+     * @param index The selected Movie
+     */
     public void renameMovie(int index) {
         String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
         if (!(ren == null)) {
@@ -503,6 +577,11 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Saves the movies to an .ml file
+     *
+     * @param isAutoSafe
+     */
     public void safeMovies(boolean isAutoSafe) {
         Serializer s = new Serializer();
 
@@ -519,6 +598,9 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * performs an search inside the list with the movies
+     */
     private void searchMovie() {
         String searchstring = tfSearch.getText().toLowerCase();
         if (!searchstring.equals("")) {

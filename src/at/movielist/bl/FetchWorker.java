@@ -30,11 +30,16 @@ public class FetchWorker extends SwingWorker<String, String> {
         this.ml = ml;
     }
 
+    /**
+     * Fetches the posters and additional information from the API
+     *
+     * @return String-dummy
+     * @throws Exception
+     */
     @Override
     protected String doInBackground() throws Exception {
-
         try {
-            ArrayList<TMDBMovie> matches = new ArrayList<TMDBMovie>();
+            ArrayList<TMDBMovie> matches = new ArrayList<>();
 
             for (Movie m : ml) {
                 String movie = m.getName().replace(".", " ");
@@ -69,6 +74,10 @@ public class FetchWorker extends SwingWorker<String, String> {
         return "BLA";
     }
 
+    /**
+     * Informs the user wheter it was saved successfully
+     *
+     */
     @Override
     protected void done() {
         JOptionPane.showMessageDialog(null, "Finished le Fetch", "Finished!", JOptionPane.INFORMATION_MESSAGE);
@@ -84,6 +93,12 @@ public class FetchWorker extends SwingWorker<String, String> {
 
     }
 
+    /**
+     * saves the poster on the HardDrive
+     *
+     * @param poster The URL of the poster to be saved
+     * @param tm The movie to which it belongs
+     */
     private void savePoster(URL poster, TMDBMovie tm) {
         InputStream in = null;
         try {

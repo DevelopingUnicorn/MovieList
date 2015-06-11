@@ -171,13 +171,17 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Calles then the OK btn has been pressed
+     *
+     * @param evt
+     */
     private void onFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFinish
         onFinish();
     }//GEN-LAST:event_onFinish
 
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
-                JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
 
         FileFilter directoryFilter = new FileFilter() {
@@ -220,7 +224,11 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JList listPathsToMovies;
     private javax.swing.JPanel pnThings;
     // End of variables declaration//GEN-END:variables
-
+/**
+     * Upadtes the UI elements to use the given Language
+     *
+     * @param lang
+     */
     public void setLang(String lang) {
 
         switch (lang) {
@@ -247,6 +255,7 @@ public class SettingsDLG extends javax.swing.JDialog {
     }
 
     /**
+     * Called when the OK btn has been clicked
      *
      * @return true if all went right; false on error
      */

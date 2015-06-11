@@ -51,6 +51,24 @@ public class ConfigUtility {
         properties.load(fi);
     }
 
+    /**
+     * Saves all the config to the file
+     *
+     * @param lang Property; Language
+     * @param proxyUsername Property; Username to use with the HTTP Proxy
+     * @param proxyPassword Property; Password for HTTP Proxy
+     * @param proxyHost Property; Host for Proxy
+     * @param autoSave Property; Wheter the loaded movies should be
+     * automatically saved to an file
+     * @param proxyPort Property; Port for Proxy
+     * @param savePosters Propery; Wheter the posters should be saved
+     * automatically
+     * @param proxyUseAuthenticate Property; Wheter to use username and password
+     * to authenticate with the HTTP Proxy
+     * @param pathToMovies Property; All paths (divided by an ';') to the movies
+     * to be loaded
+     * @throws IOException
+     */
     public void saveConfigToFile(String lang, String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean autoSave, boolean savePosters, boolean proxyUseAuthenticate, String[] pathToMovies)
             throws IOException {
 
@@ -75,14 +93,38 @@ public class ConfigUtility {
         loadConfig();
     }
 
+    /**
+     * Saves the general config to the file
+     *
+     * @param lang
+     * @param autoSave
+     * @param savePosters
+     * @param pathToMovies
+     * @throws IOException
+     */
     public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies) throws IOException {
         saveConfigToFile(lang, "", "", "", 0, autoSave, savePosters, false, pathToMovies);
     }
-    
+
+    /**
+     * Saves all config regarding the proxy to the file
+     *
+     * @param proxyUsername
+     * @param proxyPassword
+     * @param proxyHost
+     * @param proxyPort
+     * @param proxyUseAuthenticate
+     * @throws IOException
+     */
     public void saveConfigToFile(String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean proxyUseAuthenticate) throws IOException {
         saveConfigToFile(propLang, proxyUsername, proxyPassword, proxyHost, proxyPort, propAutoSave, propSavePosters, proxyUseAuthenticate, propPaths);
     }
 
+    /**
+     * Loads the config and sets the variables
+     *
+     * @throws IOException
+     */
     public void loadConfig() throws IOException {
         this.propLang = properties.getProperty("Lang", "en");
         this.propProxyUsername = properties.getProperty("ProxyUsername", "");
@@ -134,6 +176,12 @@ public class ConfigUtility {
         return propProxyUseAuthenticate;
     }
 
+    /**
+     * Checks if the ConfigFile exists
+     *
+     * @return true if it exists, otherwise false
+     * @throws IOException
+     */
     public boolean isFileExisting() throws IOException {
         return !ConfigUtility.getInstance().properties.isEmpty();
     }

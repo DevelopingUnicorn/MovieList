@@ -141,7 +141,11 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Called when the 'Next' btn has been pressed.
+     *
+     * @param evt
+     */
     private void onNext(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onNext
         selMatch = liSelMovies.getSelectedIndex();
 
