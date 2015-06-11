@@ -2,6 +2,7 @@ package at.movielist.ui;
 
 import at.movielist.bl.ConfigUtility;
 import at.movielist.tmdb.APItmdb;
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -38,6 +39,16 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(FetchedMoviesDLG.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        try {
+            this.tfServer.setText(ConfigUtility.getInstance().getPropProxyHost());
+            this.tfPort.setText(ConfigUtility.getInstance().getPropProxyPort() + "");
+            this.tfUser.setText(ConfigUtility.getInstance().getPropProxyUsername());
+            this.pfPw.setText(ConfigUtility.getInstance().getPropProxyPassword());
+        } catch (IOException ex) {
+            Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +81,7 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
         btSet.setText("Set");
         btSet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSetActionPerformed(evt);
+                onOK(evt);
             }
         });
         getContentPane().add(btSet, java.awt.BorderLayout.PAGE_END);
@@ -152,57 +163,36 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_onAuthToggle
 
-    private void btSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSetActionPerformed
-        if (cbAuth.isSelected()) {
-            if (tfServer.getText().equals("")) {
-                try {
-                    APItmdb.getInstance().setProxyNull();
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } catch (IOException ex) {
-                    Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (tfPort.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
-            } else {
-
-                try {
-                    int port = Integer.parseInt(tfPort.getText());
-                    APItmdb.getInstance().setProxyUseWithAuth(tfServer.getText(), port, tfUser.getText(), pfPw.getPassword());
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } catch (IOException ex) {
-                    Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception pe) {
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portParseError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
-                }
+    private void onOK(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOK
+        if (tfServer.getText().equals("")) {
+            try {
+                APItmdb.getInstance().resetProxy();
+                JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (tfPort.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
         } else {
-            if (tfServer.getText().equals("")) {
-                try {
-                    APItmdb.getInstance().setProxyNull();
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } catch (IOException ex) {
-                    Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (tfPort.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
-            } else {
-                try {
-                    int port = Integer.parseInt(tfPort.getText());
+            try {
+                int port = Integer.parseInt(tfPort.getText());
+                if (cbAuth.isSelected()) {
+                    APItmdb.getInstance().setProxyUseWithAuth(tfServer.getText(), port, tfUser.getText(), pfPw.getPassword());
+                    ConfigUtility.getInstance().saveConfigToFile(tfUser.getText(), new String(pfPw.getPassword()), tfServer.getText(), Integer.parseInt(tfPort.getText()), cbAuth.isSelected());
+                } else {
                     APItmdb.getInstance().setProxyUse(tfServer.getText(), port);
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                } catch (IOException ex) {
-                    Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception pe) {
-                    JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portParseError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
+                    ConfigUtility.getInstance().saveConfigToFile("", "", tfServer.getText(), Integer.parseInt(tfPort.getText()), cbAuth.isSelected());
                 }
+                JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_message"), resBundle.getString("settings_proxy_messageTitle"), JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(ProxySettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NumberFormatException | HeadlessException pe) {
+                JOptionPane.showMessageDialog(null, resBundle.getString("settings_proxy_portParseError"), resBundle.getString("settings_proxy_portErrorTitle"), JOptionPane.ERROR_MESSAGE);
             }
         }
-
-    }//GEN-LAST:event_btSetActionPerformed
+    }//GEN-LAST:event_onOK
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSet;

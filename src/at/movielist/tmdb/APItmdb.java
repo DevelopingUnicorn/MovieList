@@ -6,6 +6,7 @@
 package at.movielist.tmdb;
 
 import at.movielist.beans.TMDBMovie;
+import at.movielist.bl.ConfigUtility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,8 +68,9 @@ public class APItmdb {
         });
     }
 
-    public void setProxyNull() {
+    public void resetProxy() throws IOException {
         proxy = null;
+        ConfigUtility.getInstance().saveConfigToFile("", "", "", 0, false);
     }
 
     private void setBaseURL() throws Exception {
@@ -148,7 +150,7 @@ public class APItmdb {
 
         try {
             URL usedURL = new URL(url);
-            HttpURLConnection connection = null;
+            HttpURLConnection connection;
 
             if (proxy != null) {
                 connection = (HttpURLConnection) usedURL.openConnection(proxy);

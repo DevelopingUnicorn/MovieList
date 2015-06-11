@@ -1,7 +1,6 @@
 package at.movielist.ui;
 
 import at.movielist.beans.Movie;
-import at.movielist.beans.TMDBMovie;
 import at.movielist.bl.ConfigUtility;
 import at.movielist.bl.DeSerializer;
 import at.movielist.bl.FetchWorker;
@@ -10,7 +9,6 @@ import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
-import at.movielist.tmdb.APItmdb;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -32,16 +29,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.Caret;
 
 public class MainUI extends javax.swing.JFrame {
-
+    
     private final MovieListModel mlm = new MovieListModel();
     private MovieLoader ml;
     private String[] pathsToMovies;

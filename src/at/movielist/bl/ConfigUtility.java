@@ -9,9 +9,10 @@ import java.util.Properties;
 
 public class ConfigUtility {
 
-    private String propLang;
+    private String propLang, propProxyUsername, propProxyPassword, propProxyHost;
     private String[] propPaths;
-    private boolean propAutoSave, propSavePosters;
+    private int propProxyPort;
+    private boolean propAutoSave, propSavePosters, propProxyUseAuthenticate;
     private final Properties properties;
     private FileOutputStream outStream;
 
@@ -50,11 +51,17 @@ public class ConfigUtility {
         properties.load(fi);
     }
 
-    public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies) throws IOException {
+    public void saveConfigToFile(String lang, String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean autoSave, boolean savePosters, boolean proxyUseAuthenticate, String[] pathToMovies)
+            throws IOException {
 
         properties.setProperty("Lang", lang.equals("") ? "en" : lang);
         properties.setProperty("AutoSave", autoSave ? "true" : "false");
         properties.setProperty("SavePosters", savePosters ? "true" : "false");
+        properties.setProperty("ProxyUsername", proxyUsername);
+        properties.setProperty("ProxyPassword", proxyPassword);
+        properties.setProperty("ProxyHost", proxyHost);
+        properties.setProperty("ProxyPort", proxyPort + "");
+        properties.setProperty("ProxyUseAuthenticate", proxyUseAuthenticate ? "true" : "false");
 
         String allPaths = "";
         for (int i = 0; i < pathToMovies.length - 1; i++) {
@@ -68,18 +75,30 @@ public class ConfigUtility {
         loadConfig();
     }
 
+    public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies) throws IOException {
+        saveConfigToFile(lang, "", "", "", 0, autoSave, savePosters, false, pathToMovies);
+    }
+    
+    public void saveConfigToFile(String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean proxyUseAuthenticate) throws IOException {
+        saveConfigToFile(propLang, proxyUsername, proxyPassword, proxyHost, proxyPort, propAutoSave, propSavePosters, proxyUseAuthenticate, propPaths);
+    }
+
     public void loadConfig() throws IOException {
         this.propLang = properties.getProperty("Lang", "en");
+        this.propProxyUsername = properties.getProperty("ProxyUsername", "");
+        this.propProxyPassword = properties.getProperty("ProxyPassword", "");
+        this.propProxyHost = properties.getProperty("ProxyHost", "");
+        this.propProxyPort = Integer.parseInt(properties.getProperty("ProxyPort", "0"));
         this.propAutoSave = Boolean.valueOf(properties.getProperty("AutoSave"));
         this.propSavePosters = Boolean.valueOf(properties.getProperty("SavePosters"));
+        this.propProxyUseAuthenticate = Boolean.valueOf(properties.getProperty("ProxyUseAuthenticate"));
 
-        
         try {
             this.propPaths = properties.getProperty("Paths").split(";");
         } catch (NullPointerException ex) {
             this.propPaths = new String[0];
         }
-        
+
         if (propSavePosters) {
             File f = new File(this.pathToImages);
             if (!f.exists() || !f.isDirectory()) {
@@ -93,6 +112,26 @@ public class ConfigUtility {
             ConfigUtility.INSTANCE = new ConfigUtility();
         }
         return ConfigUtility.INSTANCE;
+    }
+
+    public String getPropProxyUsername() {
+        return propProxyUsername;
+    }
+
+    public String getPropProxyPassword() {
+        return propProxyPassword;
+    }
+
+    public String getPropProxyHost() {
+        return propProxyHost;
+    }
+
+    public int getPropProxyPort() {
+        return propProxyPort;
+    }
+
+    public boolean isPropProxyUseAuthenticate() {
+        return propProxyUseAuthenticate;
     }
 
     public boolean isFileExisting() throws IOException {
