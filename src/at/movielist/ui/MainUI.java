@@ -421,8 +421,6 @@ public class MainUI extends javax.swing.JFrame {
 
         Collections.sort(movielist, new MovieCompare());
 
-        System.out.println("" + movielist.size());
-
         mlm.setList(movielist);
         liMovies.updateUI();
     }
@@ -453,8 +451,6 @@ public class MainUI extends javax.swing.JFrame {
         // Lang support
         Locale currentLocal = Locale.ENGLISH;
 
-        System.out.println(ConfigUtility.getInstance().getPropLang());
-
         switch (ConfigUtility.getInstance().getPropLang()) {
             case "de":
                 currentLocal = Locale.GERMAN;
@@ -463,8 +459,6 @@ public class MainUI extends javax.swing.JFrame {
                 currentLocal = new Locale("es");
                 break;
         }
-
-        System.out.println(currentLocal.toString());
 
         resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", currentLocal);
 
@@ -610,7 +604,6 @@ public class MainUI extends javax.swing.JFrame {
                 Movie m = (Movie) movielist.get(i);
                 if (m.getName().toLowerCase().contains(searchstring)) {
                     if (!searchList.contains(m)) {
-                        System.out.println("Contains:\t" + m.getName());
                         searchList.add(m);
                     }
                 }

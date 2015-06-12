@@ -23,7 +23,6 @@ public class ProgressbarDLG extends javax.swing.JDialog {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
                 movieworker.cancel(true);
-                System.out.println(movieworker.isCancelled()+"");
                 dispose();
             }
         });

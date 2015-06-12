@@ -331,7 +331,6 @@ public class SettingsDLG extends javax.swing.JDialog {
                     pathsToMovies.remove(index);
                     listPathsToMovies.setListData(pathsToMovies.toArray(new String[pathsToMovies.size()]));
                     listPathsToMovies.updateUI();
-                    System.out.println(index);
                 }
             }
         });
