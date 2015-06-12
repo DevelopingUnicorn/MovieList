@@ -89,7 +89,6 @@ public class MainUI extends javax.swing.JFrame {
         lbThings = new javax.swing.JLabel();
         pnSearchbar = new javax.swing.JPanel();
         tfSearch = new javax.swing.JTextField();
-        btSearch = new javax.swing.JButton();
         pnListe = new javax.swing.JPanel();
         spList = new javax.swing.JScrollPane();
         liMovies = new javax.swing.JList();
@@ -120,14 +119,6 @@ public class MainUI extends javax.swing.JFrame {
 
         pnSearchbar.setLayout(new java.awt.BorderLayout());
         pnSearchbar.add(tfSearch, java.awt.BorderLayout.CENTER);
-
-        btSearch.setText("Search");
-        btSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSearchActionPerformed(evt);
-            }
-        });
-        pnSearchbar.add(btSearch, java.awt.BorderLayout.EAST);
 
         pnLeft.add(pnSearchbar, java.awt.BorderLayout.NORTH);
 
@@ -307,15 +298,8 @@ public class MainUI extends javax.swing.JFrame {
     private void onCredits(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCredits
         new CreditsDLG(this, true, resBundle.getLocale());
     }//GEN-LAST:event_onCredits
-    /**
-     * performs a search on the loaded movies
-     *
-     * @param evt
-     */
-    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
-        searchMovie();
-    }//GEN-LAST:event_btSearchActionPerformed
-    /**
+
+   /**
      * Openes the dialog for proxy settings
      *
      * @param evt
@@ -335,7 +319,6 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onFetch
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btSearch;
     private javax.swing.JEditorPane epInfos;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
