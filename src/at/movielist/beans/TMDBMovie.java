@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,10 +28,11 @@ public class TMDBMovie implements Serializable {
     private final Long id;
     private final String poster_url;
     private String posterPathOnFilesystem = "";
+    private LinkedList<String> genres;
 
     transient private ResourceBundle resBundle;
 
-    public TMDBMovie(String overview, String original_title, String title, Double voteAverage, Double voteCount, Date releaseDate, Long id, String poster_url) {
+    public TMDBMovie(String overview, String original_title, String title, LinkedList<String> genres, Double voteAverage, Double voteCount, Date releaseDate, Long id, String poster_url) {
         this.overview = overview;
         this.original_title = original_title;
         this.title = title;
@@ -39,6 +41,7 @@ public class TMDBMovie implements Serializable {
         this.releaseDate = releaseDate;
         this.id = id;
         this.poster_url = poster_url;
+        this.genres = genres;
 
         resource();
     }
@@ -56,6 +59,14 @@ public class TMDBMovie implements Serializable {
         result.append("<table width='100%' style='font-size:12px' >");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_releaseDate")).append(":</strong></td><td width='50%' >").append(getReleaseDate()).append("</td></tr>");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_orititle")).append(":</strong></td><td width='50%' >").append(original_title).append("</td></tr>");
+        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_genre")).append(":</strong></td><td width='50%' >");
+        result.append("<ul>");
+
+        for (String gen : genres) {
+            result.append("<li>").append(gen).append("</li>");
+        }
+
+        result.append("</ul></td></tr>");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_voteAverage")).append(":</strong></td><td width='50%' >").append(voteAverage).append("</td></tr>");
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_voteCount")).append(":</strong></td><td width='50%' >").append(voteCount).append("</td></tr>");
 
