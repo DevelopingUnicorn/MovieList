@@ -89,6 +89,7 @@ public class MainUI extends javax.swing.JFrame {
         lbThings = new javax.swing.JLabel();
         pnSearchbar = new javax.swing.JPanel();
         tfSearch = new javax.swing.JTextField();
+        lbSearch = new javax.swing.JLabel();
         pnListe = new javax.swing.JPanel();
         spList = new javax.swing.JScrollPane();
         liMovies = new javax.swing.JList();
@@ -119,6 +120,10 @@ public class MainUI extends javax.swing.JFrame {
 
         pnSearchbar.setLayout(new java.awt.BorderLayout());
         pnSearchbar.add(tfSearch, java.awt.BorderLayout.CENTER);
+
+        lbSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lbSearch.setText("Search:");
+        pnSearchbar.add(lbSearch, java.awt.BorderLayout.LINE_START);
 
         pnLeft.add(pnSearchbar, java.awt.BorderLayout.NORTH);
 
@@ -320,6 +325,7 @@ public class MainUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane epInfos;
+    private javax.swing.JLabel lbSearch;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
