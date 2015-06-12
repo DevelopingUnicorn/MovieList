@@ -41,7 +41,6 @@ public class ConfigUtility {
             fi = new FileInputStream(pathToConfFile);
         } catch (FileNotFoundException ex) {
             // File does not exist ==> create it!
-            System.out.println("Create config file");
             File fileProp = new File(pathToConfFile);
             fileProp.createNewFile();
             fi = new FileInputStream(pathToConfFile);

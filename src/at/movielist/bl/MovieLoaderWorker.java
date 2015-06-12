@@ -139,7 +139,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         try {
             if (ConfigUtility.getInstance().isPropAutoSave()) {
                 mui.safeMovies(true);
-                System.out.println("SAVE");
             }
         } catch (IOException ex) {
             Logger.getLogger(MovieLoaderWorker.class.getName()).log(Level.SEVERE, null, ex);
