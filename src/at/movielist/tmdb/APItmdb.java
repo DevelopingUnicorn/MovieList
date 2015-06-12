@@ -19,7 +19,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,6 +36,7 @@ public class APItmdb {
     private static final String URL = "http://api.themoviedb.org/3/search/movie?api_key=dd3c14bcb799a290119b8e0628514721";
     private String imgBaseURL;
     private static Proxy proxy = null;
+    private static HashMap<Integer, String> genres = new HashMap<Integer, String>();
 
     private static APItmdb INSTANCE = null;
 
@@ -110,8 +113,6 @@ public class APItmdb {
         JSONObject obj = (JSONObject) parser.parse(result);
         JSONObject obj2 = (JSONObject) obj.get("images");
         this.imgBaseURL = (String) obj2.get("base_url");
-
-        System.out.println("Base_URL:\t" + this.imgBaseURL);
     }
 
     /**
@@ -130,6 +131,27 @@ public class APItmdb {
         URL url = new URL(this.imgBaseURL + "/w300" + posterURL);
         return url;
     }
+    
+    /**
+     * Gets the available Genres of TMDB and puts the in a HashMap
+     * with id as key and name as value
+     * 
+     * @throws Exception 
+     */
+    public static void getGenres() throws Exception {
+        String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721");
+
+        JSONParser parser = new JSONParser();
+        JSONObject obj = (JSONObject) parser.parse(result);
+
+        JSONArray msg = (JSONArray) obj.get("genres");
+        Iterator<JSONObject> iterator = msg.iterator();
+        while (iterator.hasNext()) {
+            JSONObject factObj = (JSONObject) iterator.next();
+            genres.put(Integer.parseInt(factObj.get("id").toString()), factObj.get("name").toString());
+        }
+
+    }
 
     /**
      * Formats the JSON from the tMDb
@@ -142,7 +164,12 @@ public class APItmdb {
      * @throws Exception
      */
     private static ArrayList<TMDBMovie> formatJSON(String apiString) throws ParseException, java.text.ParseException, IOException, Exception {
+        if (genres.isEmpty()) {
+            getGenres();
+        }
+
         ArrayList<TMDBMovie> list = new ArrayList<>();
+        LinkedList<String> genrenames = new LinkedList<>();
 
         JSONParser parser = new JSONParser();
 
@@ -162,11 +189,19 @@ public class APItmdb {
                 String title = (String) factObj.get("title");
                 String poster_path = (String) factObj.get("poster_path");
 
+                JSONArray jar = (JSONArray) factObj.get("genre_ids");
+
+                for (int i = 0; i < jar.size(); i++) {
+                    int genreid = Integer.parseInt(jar.get(i).toString());                   
+                    genrenames.add(genres.get(genreid));
+                }
+
                 if (release_date == null || release_date.equals("")) {
                     list.add(new TMDBMovie(
                             overview,
                             original_title,
                             title,
+                            genrenames,
                             vote_average,
                             vote_count.doubleValue(),
                             new SimpleDateFormat("yyyy-MM-dd").parse("1111-11-11"),
@@ -178,6 +213,7 @@ public class APItmdb {
                             overview,
                             original_title,
                             title,
+                            genrenames,
                             vote_average,
                             vote_count.doubleValue(),
                             new SimpleDateFormat("yyyy-MM-dd").parse(release_date),
