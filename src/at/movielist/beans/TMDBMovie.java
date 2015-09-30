@@ -46,35 +46,6 @@ public class TMDBMovie implements Serializable {
         resource();
     }
 
-    public String toHTMLString() {
-        StringBuilder result = new StringBuilder();
-
-        result.append("<br><center><h1>").append(resBundle.getString("main_information_TMDB_header")).append("</h1><hr noshade width='80%' >");
-        if (!this.posterPathOnFilesystem.equals("")) {
-            result.append("<img src='file:").append(this.posterPathOnFilesystem).append("' /><br>");
-
-        }
-        result.append("<strong style='color:#00bda5;font-size:14px'>").append(resBundle.getString("main_information_TMDB_overview")).append("</strong>");
-        result.append("<p width='100%' style='font-size:12px'>").append(overview).append("</p></center><br>");
-        result.append("<table width='100%' style='font-size:12px' >");
-        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_releaseDate")).append(":</strong></td><td width='50%' >").append(getReleaseDate()).append("</td></tr>");
-        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_orititle")).append(":</strong></td><td width='50%' >").append(original_title).append("</td></tr>");
-        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_genre")).append(":</strong></td><td width='50%' >");
-        result.append("<ul>");
-
-        for (String gen : genres) {
-            result.append("<li>").append(gen).append("</li>");
-        }
-
-        result.append("</ul></td></tr>");
-        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_voteAverage")).append(":</strong></td><td width='50%' >").append(voteAverage).append("</td></tr>");
-        result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_voteCount")).append(":</strong></td><td width='50%' >").append(voteCount).append("</td></tr>");
-
-        result.append("</table></center></body>");
-
-        return result.toString();
-    }
-
     public String getPoster_url() {
         return poster_url;
     }
@@ -118,6 +89,16 @@ public class TMDBMovie implements Serializable {
     public String getTitle() {
         return title;
     }
+
+    public String getPosterPathOnFilesystem() {
+        return posterPathOnFilesystem;
+    }
+
+    public LinkedList<String> getGenres() {
+        return genres;
+    }
+    
+    
 
     public void setPosterPathOnFilesystem(String posterPathOnFilesystem) {
         this.posterPathOnFilesystem = posterPathOnFilesystem;
