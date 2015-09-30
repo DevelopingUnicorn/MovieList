@@ -28,7 +28,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -43,6 +45,7 @@ public class MainUI extends javax.swing.JFrame {
     private LinkedList<Movie> movielist = new LinkedList<>();
     private final UtilityClass utilityclass = new UtilityClass();
     private final LinkedList<Image> iconlist = new LinkedList<>();
+    private JMenuItem mi;
 
     private ResourceBundle resBundle;
 
@@ -77,7 +80,15 @@ public class MainUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        JPopupMenu pm = new JPopupMenu();
+        mi = new JMenuItem(resBundle.getString("popup_menu_fetch"));
+        pm.add(mi);
+
         setListener();
+
+        liMovies.setComponentPopupMenu(pm);
+
         this.setVisible(true);
     }
 
@@ -257,7 +268,7 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
-        safeMovies(false);
+        saveMovies(false);
     }//GEN-LAST:event_onSave
     /**
      * Opens the .ml and load the information
@@ -304,7 +315,7 @@ public class MainUI extends javax.swing.JFrame {
         new CreditsDLG(this, true, resBundle.getLocale());
     }//GEN-LAST:event_onCredits
 
-   /**
+    /**
      * Openes the dialog for proxy settings
      *
      * @param evt
@@ -319,7 +330,8 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onFetch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFetch
-        FetchWorker fw = new FetchWorker(this, movielist);
+        ProgressbarDLG pd = new ProgressbarDLG(this, false);
+        FetchWorker fw = new FetchWorker(this, movielist, pd, resBundle);
         fw.execute();
     }//GEN-LAST:event_onFetch
 
@@ -412,6 +424,14 @@ public class MainUI extends javax.swing.JFrame {
 
         mlm.setList(movielist);
         liMovies.updateUI();
+
+        try {
+            if (ConfigUtility.getInstance().isPropAutoSave()) {
+                saveMovies(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(FetchWorker.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -540,6 +560,27 @@ public class MainUI extends javax.swing.JFrame {
                 searchMovie();
             }
         });
+
+        mi.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                int[] indis = liMovies.getSelectedIndices();
+
+                LinkedList<Movie> refetch = new LinkedList<>();
+
+                for (int i = 0; i < indis.length; i++) {
+                    Movie m = movielist.get(indis[i]);
+                    m.setMatch(false);
+                    refetch.add(m);
+                }
+
+                ProgressbarDLG pd = new ProgressbarDLG(MainUI.this, false);
+                FetchWorker fw = new FetchWorker(MainUI.this, movielist, pd, resBundle, refetch, true);
+                fw.execute();
+            }
+        }
+        );
     }
 
     /**
@@ -565,7 +606,7 @@ public class MainUI extends javax.swing.JFrame {
      *
      * @param isAutoSafe
      */
-    public void safeMovies(boolean isAutoSafe) {
+    public void saveMovies(boolean isAutoSafe) {
         Serializer s = new Serializer();
 
         if (movielist.size() > 0) {

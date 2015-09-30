@@ -8,7 +8,7 @@ import javax.swing.SwingWorker;
 
 public class ProgressbarDLG extends javax.swing.JDialog {
 
-    private SwingWorker movieworker;
+    private SwingWorker worker;
     private LinkedList<Image> iconlist = new LinkedList<Image>();
 
     public ProgressbarDLG(java.awt.Frame parent, boolean modal) {
@@ -22,7 +22,7 @@ public class ProgressbarDLG extends javax.swing.JDialog {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                movieworker.cancel(true);
+                worker.cancel(true);
                 dispose();
             }
         });
@@ -38,8 +38,8 @@ public class ProgressbarDLG extends javax.swing.JDialog {
         return this.lbxfromy;
     }
 
-    public void setMovieWorker(SwingWorker mw) {
-        this.movieworker = mw;
+    public void setWorker(SwingWorker w) {
+        this.worker = w;
     }
 
     @SuppressWarnings("unchecked")

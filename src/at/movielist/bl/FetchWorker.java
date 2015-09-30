@@ -5,6 +5,7 @@ import at.movielist.beans.TMDBMovie;
 import at.movielist.tmdb.APItmdb;
 import at.movielist.ui.FetchedMoviesDLG;
 import at.movielist.ui.MainUI;
+import at.movielist.ui.ProgressbarDLG;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,20 +15,50 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 public class FetchWorker extends SwingWorker<String, String> {
 
     private MainUI mui;
-    private LinkedList<Movie> ml;
+    private LinkedList<Movie> ml, refetch;
+    private JLabel lb;
+    private ProgressbarDLG dlg;
+    private JProgressBar loading;
+    private ResourceBundle res;
+    private boolean isRefetch = false;
 
-    public FetchWorker(MainUI mui, LinkedList<Movie> ml) {
+    public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res) {
         this.mui = mui;
         this.ml = ml;
+        this.res = res;
+
+        this.loading = d.getProgBar();
+        this.lb = d.getLabel();
+        this.dlg = d;
+
+        dlg.setVisible(true);
+    }
+
+    public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res, LinkedList<Movie> refetch, boolean isRefetch) {
+        this.mui = mui;
+        this.ml = ml;
+        this.res = res;
+        this.refetch = refetch;
+
+        this.loading = d.getProgBar();
+        this.lb = d.getLabel();
+        this.dlg = d;
+
+        this.isRefetch = isRefetch;
+
+        dlg.setVisible(true);
     }
 
     /**
@@ -37,40 +68,26 @@ public class FetchWorker extends SwingWorker<String, String> {
      * @throws Exception
      */
     @Override
-    protected String doInBackground() throws Exception {
+    protected String doInBackground() {
         try {
             ArrayList<TMDBMovie> matches = new ArrayList<>();
 
+            dlg.setWorker(this);
+
+            int length = ml.size();
+            double inc = 1000000 / length;
+
             for (Movie m : ml) {
-                String movie = m.getName().replace(".", " ");
-                matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), movie);
-                if (m.getDBMatch() == false) {
-                    if (matches.size() > 1) {
-                        FetchedMoviesDLG dlg = new FetchedMoviesDLG(new JFrame(), true, matches, m.getName());
-                        dlg.setVisible(true);
-                        int index = dlg.getSelMatch();
-                        URL poster = dlg.getPoster();
-
-                        m.setMatch(true);
-                        m.setName(matches.get(index).getTitle());
-
-                        if (ConfigUtility.getInstance().isPropSavePosters()) {
-                            savePoster(poster, matches.get(index));
+                if (!isCancelled()) {
+                    if (isRefetch) {
+                        if (refetch.contains(m)) {
+                            fetchMovie(m, matches, inc);
                         }
-
-                        this.setTMDBvars(m, matches.get(index));
-
-                    } else if (matches.size() == 1) {
-                        m.setMatch(true);
-                        m.setName(matches.get(0).getTitle());
-
-                        URL poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
-                        if (ConfigUtility.getInstance().isPropSavePosters()) {
-                            savePoster(poster, matches.get(0));
-                        }
-
-                        this.setTMDBvars(m, matches.get(0));
+                    }else{
+                        fetchMovie(m, matches, inc);
                     }
+                } else {
+                    break;
                 }
             }
 
@@ -87,17 +104,9 @@ public class FetchWorker extends SwingWorker<String, String> {
      */
     @Override
     protected void done() {
-        JOptionPane.showMessageDialog(null, "Finished le Fetch", "Finished!", JOptionPane.INFORMATION_MESSAGE);
+        dlg.dispose();
+        JOptionPane.showMessageDialog(null, res.getString("fetch_dlg_text"), res.getString("fetch_dlg_title"), JOptionPane.INFORMATION_MESSAGE);
         mui.setList(ml, false);
-
-        try {
-            if (ConfigUtility.getInstance().isPropAutoSave()) {
-                mui.safeMovies(true);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(FetchWorker.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     /**
@@ -147,5 +156,44 @@ public class FetchWorker extends SwingWorker<String, String> {
         m.setT_title(tm.getTitle());
         m.setT_voteAverage(tm.getVoteAverage());
         m.setT_voteCount(tm.getVoteCount());
+    }
+
+    private void fetchMovie(Movie m, ArrayList<TMDBMovie> matches, double inc) throws IOException, Exception {
+        String movie = m.getName().replace(".", " ");
+        matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), movie);
+        if (m.getDBMatch() == false) {
+            if (matches.size() > 1) {
+                FetchedMoviesDLG dlg = new FetchedMoviesDLG(new JFrame(), true, matches, m.getName());
+                dlg.setVisible(true);
+                int index = dlg.getSelMatch();
+                URL poster = dlg.getPoster();
+
+                m.setMatch(true);
+                m.setName(matches.get(index).getTitle());
+
+                if (ConfigUtility.getInstance().isPropSavePosters()) {
+                    savePoster(poster, matches.get(index));
+                }
+
+                this.setTMDBvars(m, matches.get(index));
+
+                loading.setValue(loading.getValue() + (int) inc);
+
+            } else if (matches.size() == 1) {
+                m.setMatch(true);
+                m.setName(matches.get(0).getTitle());
+
+                URL poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                if (ConfigUtility.getInstance().isPropSavePosters()) {
+                    savePoster(poster, matches.get(0));
+                }
+
+                this.setTMDBvars(m, matches.get(0));
+
+                loading.setValue(loading.getValue() + (int) inc);
+            } else {
+                loading.setValue(loading.getValue() + (int) inc);
+            }
+        }
     }
 }

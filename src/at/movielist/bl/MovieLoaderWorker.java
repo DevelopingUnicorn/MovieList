@@ -95,7 +95,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             File folder = new File(path);
             File[] dirListing = folder.listFiles();
 
-            dlg.setMovieWorker(this);
+            dlg.setWorker(this);
             int length = dirListing.length;
 
             String xfy = "";
@@ -136,13 +136,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         }
 
         dlg.dispose();
-        try {
-            if (ConfigUtility.getInstance().isPropAutoSave()) {
-                mui.safeMovies(true);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(MovieLoaderWorker.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**

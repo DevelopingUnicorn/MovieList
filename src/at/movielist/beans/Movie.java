@@ -162,7 +162,6 @@ public class Movie implements Serializable {
     }
 
     //END
-
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<br><center><h1>").append(name).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
@@ -196,9 +195,8 @@ public class Movie implements Serializable {
         if (!this.t_posterPathOnFilesystem.equals("")) {
             result.append("<img src='file:").append(this.t_posterPathOnFilesystem).append("' /><br>");
 
-        }else{
-            System.out.println("meh");
         }
+
         result.append("<strong style='color:#00bda5;font-size:14px'>").append(resBundle.getString("main_information_TMDB_overview")).append("</strong>");
         result.append("<p width='100%' style='font-size:12px'>").append(t_overview).append("</p></center><br>");
         result.append("<table width='100%' style='font-size:12px' >");
@@ -207,8 +205,12 @@ public class Movie implements Serializable {
         result.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_TMDB_genre")).append(":</strong></td><td width='50%' >");
         result.append("<ul>");
 
+        LinkedList<String> tmp = new LinkedList<>();
         for (String gen : t_genres) {
-            result.append("<li>").append(gen).append("</li>");
+            if (!tmp.contains(gen)) {
+                tmp.add(gen);
+                result.append("<li>").append(gen).append("</li>");
+            }
         }
 
         result.append("</ul></td></tr>");
