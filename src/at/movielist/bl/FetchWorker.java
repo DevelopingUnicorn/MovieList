@@ -44,25 +44,32 @@ public class FetchWorker extends SwingWorker<String, String> {
             for (Movie m : ml) {
                 String movie = m.getName().replace(".", " ");
                 matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), movie);
+                if (m.getDBMatch() == false) {
+                    if (matches.size() > 1) {
+                        FetchedMoviesDLG dlg = new FetchedMoviesDLG(new JFrame(), true, matches, m.getName());
+                        dlg.setVisible(true);
+                        int index = dlg.getSelMatch();
+                        URL poster = dlg.getPoster();
 
-                if (matches.size() > 1) {
-                    FetchedMoviesDLG dlg = new FetchedMoviesDLG(new JFrame(), true, matches, m.getName());
-                    dlg.setVisible(true);
-                    int index = dlg.getSelMatch();
-                    URL poster = dlg.getPoster();
-                    m.setMatch(matches.get(index));
-                    m.setName(matches.get(index).getTitle());
+                        m.setMatch(true);
+                        m.setName(matches.get(index).getTitle());
 
-                    if (ConfigUtility.getInstance().isPropSavePosters()) {
-                        savePoster(poster, matches.get(index));
-                    }
+                        if (ConfigUtility.getInstance().isPropSavePosters()) {
+                            savePoster(poster, matches.get(index));
+                        }
 
-                } else if (matches.size() == 1) {
-                    m.setMatch(matches.get(0));
-                    m.setName(matches.get(0).getTitle());
-                    URL poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
-                    if (ConfigUtility.getInstance().isPropSavePosters()) {
-                        savePoster(poster, matches.get(0));
+                        this.setTMDBvars(m, matches.get(index));
+
+                    } else if (matches.size() == 1) {
+                        m.setMatch(true);
+                        m.setName(matches.get(0).getTitle());
+
+                        URL poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                        if (ConfigUtility.getInstance().isPropSavePosters()) {
+                            savePoster(poster, matches.get(0));
+                        }
+
+                        this.setTMDBvars(m, matches.get(0));
                     }
                 }
             }
@@ -128,5 +135,17 @@ public class FetchWorker extends SwingWorker<String, String> {
                 Logger.getLogger(FetchWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    private void setTMDBvars(Movie m, TMDBMovie tm) {
+        m.setT_genres(tm.getGenres());
+        m.setT_id(tm.getId());
+        m.setT_original_title(tm.getOriginalTitle());
+        m.setT_overview(tm.getOverview());
+        m.setT_posterPathOnFilesystem(tm.getPosterPathOnFilesystem());
+        m.setT_releaseDate(tm.getReleaseDate());
+        m.setT_title(tm.getTitle());
+        m.setT_voteAverage(tm.getVoteAverage());
+        m.setT_voteCount(tm.getVoteCount());
     }
 }
