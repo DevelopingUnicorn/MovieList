@@ -63,7 +63,7 @@ Version
  * Added ProxySettings
  * Added AutoSave
  * Added PosterDownload
-* v1.3rev2 <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.3rev2/MovieList_Setup.exe">Download</a>
+* v1.3rev2 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.3rev2/MovieList_Setup.exe">Download</a>
  * Fixed tMDb Info save
  * Fixed tMDb Info fetch
 
