@@ -80,7 +80,12 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                    if (liSelMovies.getSelectedIndex() == -1) {
+                        poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
+                    } else {
+                        poster = APItmdb.getInstance().getPoster(matches.get(liSelMovies.getSelectedIndex()).getPoster_url());
+                    }
+
                 } catch (Exception ex) {
                     Logger.getLogger(FetchedMoviesDLG.class.getName()).log(Level.SEVERE, null, ex);
                 }
