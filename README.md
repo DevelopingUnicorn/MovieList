@@ -28,7 +28,7 @@ To Do:
 * <strike>Settings option</strike>
 * <strike>Logo creation</strike>
 * <strike>TMDB support</strike>
-* Dependencies
+* <strike>Dependencies</strike>
 * <strike>Search funktion</strike>
 * <strike>ProxyServer (http) to set</strike>
 
@@ -48,28 +48,25 @@ Version
 <h5>~Beta~</h5>
 <strong>Note: If comming from 1.2a or below -> delete config file</strong>
 * v1.0b
- * Biggest bug fixed! Now it works. 
 * v1.1b
- * New About Tag
- * Fully translated
 * v1.2b
- * Added delete function (press del on keyboard)
- * Bugfixes
- * Performance tweaks
 
 <h5>~Releases~</h5>
 * v1.0rev1
  * Rewrote search Algorithm
  * Many performance Tweaks!
  * and more!
-* v1.3rev1 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.3rev1/MovieList_1.3rev1.zip">Download</a>
+* v1.3rev1
 <br><strong>Note: Now another conf File is used delete the old version!</strong><br>
  * Added tMDb support
  * Added multi directory search
  * Added ProxySettings
  * Added AutoSave
  * Added PosterDownload
- 
+* v1.3rev2 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.3rev2/MovieList_Setup.exe">Download</a>
+ * Fixed tMDb Info save
+ * Fixed tMDb Info fetch
+
 Dependencies
 ==============
 ![tMDb](https://d3a8mw37cqal2z.cloudfront.net/images/logos/var_1_1_PoweredByTMDB_Blk_Logo_Antitled.png)
