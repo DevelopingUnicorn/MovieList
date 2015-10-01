@@ -24,7 +24,7 @@ To Do:
   * <strike>Spanish</strike>
   * Italian
 * <strike>Initial Relase</strike>
-* Sourcecode documentation
+* <strike>Sourcecode documentation<strike>
 * <strike>Settings option</strike>
 * <strike>Logo creation</strike>
 * <strike>TMDB support</strike>
