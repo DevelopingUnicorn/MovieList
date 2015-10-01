@@ -39,6 +39,12 @@ Developer(s)
 
 Version
 ========
+
+<h5>~Current~</h5>
+* v1.4 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.4/MovieList_Setup.exe">Download</a>
+ * Added Sorting feature
+ * Some tweaks
+
 <h5>~Alpha~</h5>
 * v1.0a
 * v1.1a
@@ -68,11 +74,6 @@ Version
  * Fixed tMDb Info fetch
 * v1.4 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.4/MovieList_Setup.exe">Download</a>
  * Added Sorting feature
-  * A - Z
-  * z - A
-  * Vote up
-  * Vote down
-  * Release Year
  * Some tweaks
 
 Dependencies
