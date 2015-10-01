@@ -141,6 +141,8 @@ public class MainUI extends javax.swing.JFrame {
         pnSearchbar.add(lbSearch, java.awt.BorderLayout.LINE_START);
 
         btFilter.setText("Advanced");
+        btFilter.setToolTipText("");
+        btFilter.setEnabled(false);
         btFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onAdvancedSearch(evt);
