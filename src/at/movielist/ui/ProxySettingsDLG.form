@@ -73,23 +73,26 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lbServer" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="tfServer" min="-2" pref="412" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="tfPort" pref="62" max="32767" attributes="0"/>
+                      <Component id="tfServer" min="-2" pref="412" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tfPort" pref="81" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfServer" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="lbServer" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="tfPort" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="tfServer" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbServer" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="tfPort" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
             </DimensionLayout>
