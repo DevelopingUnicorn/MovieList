@@ -156,6 +156,7 @@ public class FetchWorker extends SwingWorker<String, String> {
         m.setT_title(tm.getTitle());
         m.setT_voteAverage(tm.getVoteAverage());
         m.setT_voteCount(tm.getVoteCount());
+        m.setT_releaseYear(tm.getReleaseYear());
     }
 
     private void fetchMovie(Movie m, ArrayList<TMDBMovie> matches, double inc) throws IOException, Exception {

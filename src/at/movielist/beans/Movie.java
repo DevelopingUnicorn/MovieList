@@ -14,8 +14,8 @@ public class Movie implements Serializable {
     private boolean DBmatch = false;
 
     private String t_overview, t_original_title, t_title;
-    private Double t_voteAverage, t_voteCount;
-    private String t_releaseDate;
+    private Double t_voteAverage = 0.0, t_voteCount;
+    private String t_releaseDate, t_releaseYear = "1";
     private Long t_id;
     private String t_posterPathOnFilesystem;
     private LinkedList<String> t_genres;
@@ -161,7 +161,16 @@ public class Movie implements Serializable {
         this.t_genres = t_genres;
     }
 
+    public String getT_releaseYear() {
+        return t_releaseYear;
+    }
+
+    public void setT_releaseYear(String t_releaseYear) {
+        this.t_releaseYear = t_releaseYear;
+    }
+
     //END
+
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<br><center><h1>").append(name).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
