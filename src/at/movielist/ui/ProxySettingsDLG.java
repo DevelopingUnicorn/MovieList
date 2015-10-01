@@ -14,6 +14,12 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
 
     private ResourceBundle resBundle;
 
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param modal 
+     */
     public ProxySettingsDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -223,6 +229,11 @@ public class ProxySettingsDLG extends javax.swing.JDialog {
     private javax.swing.JTextField tfUser;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Language Support
+     * 
+     * @param lang 
+     */
     private void setLang(String lang) {
 
         switch (lang) {

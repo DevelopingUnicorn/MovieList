@@ -27,10 +27,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- *
- * @author Manu
- */
 public class APItmdb {
 
     private static final String URL = "http://api.themoviedb.org/3/search/movie?api_key=dd3c14bcb799a290119b8e0628514721";
@@ -40,10 +36,19 @@ public class APItmdb {
 
     private static APItmdb INSTANCE = null;
 
+    /**
+     * Private Constructor because of Singleton
+     */
     private APItmdb() {
         this.imgBaseURL = "";
     }
 
+    /**
+     * Returns an API Instance
+     * 
+     * @return
+     * @throws IOException 
+     */
     public static APItmdb getInstance() throws IOException {
         if (APItmdb.INSTANCE == null) {
             APItmdb.INSTANCE = new APItmdb();

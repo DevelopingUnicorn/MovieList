@@ -35,6 +35,11 @@ public class ConfigUtility {
             .append(File.separator)
             .append("posters").toString();
 
+    /**
+     * private Constructor => Singleton
+     *
+     * @throws IOException
+     */
     private ConfigUtility() throws IOException {
         FileInputStream fi;
         try {
@@ -148,6 +153,12 @@ public class ConfigUtility {
         }
     }
 
+    /**
+     * Returns CU Instance
+     *
+     * @return
+     * @throws IOException
+     */
     public static ConfigUtility getInstance() throws IOException {
         if (ConfigUtility.INSTANCE == null) {
             ConfigUtility.INSTANCE = new ConfigUtility();
@@ -155,6 +166,11 @@ public class ConfigUtility {
         return ConfigUtility.INSTANCE;
     }
 
+    /**
+     * Get Methods
+     *
+     * @return
+     */
     public String getPropProxyUsername() {
         return propProxyUsername;
     }
@@ -173,16 +189,6 @@ public class ConfigUtility {
 
     public boolean isPropProxyUseAuthenticate() {
         return propProxyUseAuthenticate;
-    }
-
-    /**
-     * Checks if the ConfigFile exists
-     *
-     * @return true if it exists, otherwise false
-     * @throws IOException
-     */
-    public boolean isFileExisting() throws IOException {
-        return !ConfigUtility.getInstance().properties.isEmpty();
     }
 
     public String getPropLang() {
@@ -211,5 +217,16 @@ public class ConfigUtility {
 
     public String getPathToImages() {
         return pathToImages;
+    }
+
+    //END
+    /**
+     * Checks if the ConfigFile exists
+     *
+     * @return true if it exists, otherwise false
+     * @throws IOException
+     */
+    public boolean isFileExisting() throws IOException {
+        return !ConfigUtility.getInstance().properties.isEmpty();
     }
 }

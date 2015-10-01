@@ -13,6 +13,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Serializer {
 
+    /**
+     * Constructor
+     */
     public Serializer() {
     }
 

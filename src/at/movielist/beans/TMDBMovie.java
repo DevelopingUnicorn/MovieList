@@ -16,10 +16,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Manu
- */
 public class TMDBMovie implements Serializable {
 
     private final String overview, original_title, title;
@@ -32,6 +28,19 @@ public class TMDBMovie implements Serializable {
 
     transient private ResourceBundle resBundle;
 
+    /**
+     * Constructor
+     * 
+     * @param overview
+     * @param original_title
+     * @param title
+     * @param genres
+     * @param voteAverage
+     * @param voteCount
+     * @param releaseDate
+     * @param id
+     * @param poster_url 
+     */
     public TMDBMovie(String overview, String original_title, String title, LinkedList<String> genres, Double voteAverage, Double voteCount, Date releaseDate, Long id, String poster_url) {
         this.overview = overview;
         this.original_title = original_title;
@@ -46,6 +55,11 @@ public class TMDBMovie implements Serializable {
         resource();
     }
 
+    /**
+     * Get & Set
+     * 
+     * @return 
+     */
     public String getPoster_url() {
         return poster_url;
     }
@@ -97,13 +111,21 @@ public class TMDBMovie implements Serializable {
     public LinkedList<String> getGenres() {
         return genres;
     }
-    
+    //END
     
 
+    /**
+     * Sets the Posterpath on filesystem
+     * 
+     * @param posterPathOnFilesystem 
+     */
     public void setPosterPathOnFilesystem(String posterPathOnFilesystem) {
         this.posterPathOnFilesystem = posterPathOnFilesystem;
     }
 
+    /**
+     * Language support
+     */
     private void resource() {
         try {
             // Lang support

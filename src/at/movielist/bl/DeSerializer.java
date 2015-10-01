@@ -17,6 +17,10 @@ public class DeSerializer {
 
     private final MainUI mui;
 
+    /**
+     * Constructor
+     * @param mui 
+     */
     public DeSerializer(MainUI mui) {
         this.mui = mui;
     }

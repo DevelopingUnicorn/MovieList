@@ -20,6 +20,19 @@ public class Movie implements Serializable {
     private String t_posterPathOnFilesystem;
     private LinkedList<String> t_genres;
 
+    /**
+     * Constructor
+     * 
+     * @param name
+     * @param width
+     * @param height
+     * @param aspectratio
+     * @param duration
+     * @param filesize
+     * @param fileextension
+     * @param numberoffiles
+     * @param path 
+     */
     public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
         this.name = name;
         this.width = width;
@@ -32,6 +45,10 @@ public class Movie implements Serializable {
         this.path = path;
     }
 
+    /**
+     * Get & Set
+     * @return 
+     */
     public boolean getDBMatch() {
         return DBmatch;
     }
@@ -169,8 +186,14 @@ public class Movie implements Serializable {
         this.t_releaseYear = t_releaseYear;
     }
 
+    //tMDb vars END
     //END
-
+    
+    /**
+     * Returns the HTML String for Movie Information
+     * 
+     * @return 
+     */
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
         sb.append("<br><center><h1>").append(name).append("</h1><hr noshade width='80%' ><table width='100%' style='font-size:12px' >");
@@ -197,6 +220,11 @@ public class Movie implements Serializable {
         return sb.toString();
     }
 
+    /**
+     * Returns the HTML String for the tMDB Information
+     * 
+     * @return 
+     */
     public String toTMDBString() {
         StringBuilder result = new StringBuilder();
 
@@ -231,6 +259,11 @@ public class Movie implements Serializable {
         return result.toString();
     }
 
+    /**
+     * Returns if Movie has a Match
+     * 
+     * @return 
+     */
     public String getMatch() {
         if (DBmatch == false) {
             StringBuilder sb = new StringBuilder("<br><center><h1>");
@@ -241,6 +274,11 @@ public class Movie implements Serializable {
         }
     }
 
+    /**
+     * Returns Name of a Movie when toString function is called
+     * 
+     * @return 
+     */
     @Override
     public String toString() {
         return this.getName();

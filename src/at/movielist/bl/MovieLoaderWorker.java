@@ -11,11 +11,8 @@ import javax.swing.SwingWorker;
 import at.lib.mediainfo.MediaInfo;
 import at.movielist.ui.MainUI;
 import at.movielist.ui.ProgressbarDLG;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
@@ -61,6 +58,14 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private static final String[] filesToIgnore
             = new String[]{"ds_store", ".nfo", ".mp3"};
 
+    /**
+     * Constructor
+     * 
+     * @param paths
+     * @param d
+     * @param mui
+     * @param loc 
+     */
     public MovieLoaderWorker(String[] paths, ProgressbarDLG d, MainUI mui, Locale loc) {
         this.paths = paths;
         this.loading = d.getProgBar();
@@ -75,10 +80,20 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
         dlg.setVisible(true);
     }
 
+    /**
+     * Sets the list
+     * 
+     * @param liste 
+     */
     public void setListe(LinkedList<Movie> liste) {
         this.liste = liste;
     }
 
+    /**
+     * Returns the List
+     * 
+     * @return 
+     */
     public LinkedList<Movie> getListe() {
         return liste;
     }

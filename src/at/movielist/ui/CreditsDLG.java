@@ -5,6 +5,15 @@ import java.util.ResourceBundle;
 
 public class CreditsDLG extends javax.swing.JDialog {
 
+    /**
+     * Constructor
+     * 
+     * This is the Credits Dialog
+     * 
+     * @param parent
+     * @param modal
+     * @param loc 
+     */
     public CreditsDLG(java.awt.Frame parent, boolean modal, Locale loc) {
         super(parent, modal);
         initComponents();

@@ -30,6 +30,13 @@ public class SettingsDLG extends javax.swing.JDialog {
     private LinkedList<Image> iconlist = new LinkedList<>();
     private ResourceBundle resBundle;
 
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param modal
+     * @throws IOException 
+     */
     public SettingsDLG(java.awt.Frame parent, boolean modal) throws IOException {
         super(parent, modal);
         initComponents();
@@ -180,6 +187,11 @@ public class SettingsDLG extends javax.swing.JDialog {
         onFinish();
     }//GEN-LAST:event_onFinish
 
+    /**
+     * Opens fileChooser for Movie folder
+     * 
+     * @param evt 
+     */
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
         JFileChooser fc = new JFileChooser();
         fc.setPreferredSize(new Dimension(700, 500));
@@ -293,6 +305,9 @@ public class SettingsDLG extends javax.swing.JDialog {
         return true;
     }
 
+    /**
+     * Sets all the needed Listeners
+     */
     private void setListeners() {
         cbLang.addActionListener(new ActionListener() {
             @Override
@@ -326,7 +341,6 @@ public class SettingsDLG extends javax.swing.JDialog {
             public void mouseClicked(MouseEvent evt) {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 2) {
-//                    int index = list.locationToIndex(evt.getPoint());
                     int index = list.getSelectedIndex();
                     pathsToMovies.remove(index);
                     listPathsToMovies.setListData(pathsToMovies.toArray(new String[pathsToMovies.size()]));

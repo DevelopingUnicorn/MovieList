@@ -49,6 +49,9 @@ public class MainUI extends javax.swing.JFrame {
 
     private ResourceBundle resBundle;
 
+    /**
+     * Constructor
+     */
     public MainUI() {
         initComponents();
 
@@ -359,6 +362,11 @@ public class MainUI extends javax.swing.JFrame {
         fw.execute();
     }//GEN-LAST:event_onFetch
 
+    /**
+     * Opens the Advanced SettingsDLG
+     *
+     * @param evt
+     */
     private void onAdvancedSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedSearch
         // TODO add your handling code here:
     }//GEN-LAST:event_onAdvancedSearch
@@ -392,7 +400,8 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator spSepp;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
-/**
+
+    /**
      * Displays information in the EditorPane. It displays information about the
      * movie (local) and from the tMDb. If no online data has been saved yet, it
      * will be fetched.
@@ -467,20 +476,46 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     /**
+     * Clears the list with the movies
+     */
+    public void clearList() {
+        mlm.clear();
+        lbThings.setText("");
+    }
+
+    /**
+     * removes the selected movie from the list
+     */
+    public void removeListEntry() {
+        int[] toDel = liMovies.getSelectedIndices();
+        int minus = 0;
+
+        for (int i : toDel) {
+            if (movielist.size() != 0) {
+                movielist.remove(i - minus);
+                minus++;
+            }
+        }
+
+        mlm.setList(movielist);
+        liMovies.updateUI();
+
+        if (movielist.size() > 0) {
+            String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
+            this.lbThings.setText(things);
+        } else if (movielist.size() == 0) {
+            this.lbThings.setText("");
+            this.epInfos.setText("");
+        }
+    }
+
+    /**
      * Gets the label where additional information is displayed
      *
      * @return the JLabel
      */
     public JLabel getLbThings() {
         return this.lbThings;
-    }
-
-    /**
-     * Clears the list with the movies
-     */
-    public void clearList() {
-        mlm.clear();
-        lbThings.setText("");
     }
 
     /**
@@ -520,7 +555,7 @@ public class MainUI extends javax.swing.JFrame {
         lbSort.setText(resBundle.getString("main_movie_sort_lable"));
         lbSearch.setText(resBundle.getString("main_search_lable"));
         btFilter.setText(resBundle.getString("main_button_filter"));
-        
+
         cbSort.removeAllItems();
         cbSort.addItem(resBundle.getString("main_movie_sort_atz"));
         cbSort.addItem(resBundle.getString("main_movie_sort_zta"));
@@ -529,32 +564,6 @@ public class MainUI extends javax.swing.JFrame {
         cbSort.addItem(resBundle.getString("main_movie_sort_release"));
         // END lang support
 
-    }
-
-    /**
-     * removes the selected movie from the list
-     */
-    public void removeListEntry() {
-        int[] toDel = liMovies.getSelectedIndices();
-        int minus = 0;
-
-        for (int i : toDel) {
-            if (movielist.size() != 0) {
-                movielist.remove(i - minus);
-                minus++;
-            }
-        }
-
-        mlm.setList(movielist);
-        liMovies.updateUI();
-
-        if (movielist.size() > 0) {
-            String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
-            this.lbThings.setText(things);
-        } else if (movielist.size() == 0) {
-            this.lbThings.setText("");
-            this.epInfos.setText("");
-        }
     }
 
     /**
@@ -700,10 +709,18 @@ public class MainUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Filters the Movies based on the AdvancedSearch DLG output
+     */
     public void filterMovies() {
 
     }
 
+    /**
+     * Returns how to sort the Movielist
+     * 
+     * @return 
+     */
     public int getSorting() {
         String s = cbSort.getSelectedItem().toString();
 
@@ -718,7 +735,7 @@ public class MainUI extends javax.swing.JFrame {
         } else if (s.equals(resBundle.getString("main_movie_sort_release"))) {
             return 4;
         }
-        
+
         return 0;
     }
 }

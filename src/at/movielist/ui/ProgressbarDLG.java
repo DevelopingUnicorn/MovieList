@@ -11,6 +11,12 @@ public class ProgressbarDLG extends javax.swing.JDialog {
     private SwingWorker worker;
     private LinkedList<Image> iconlist = new LinkedList<Image>();
 
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param modal 
+     */
     public ProgressbarDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -30,6 +36,11 @@ public class ProgressbarDLG extends javax.swing.JDialog {
         this.pbLoading.setStringPainted(true);
     }
 
+    /**
+     * Get & Set
+     * 
+     * @return 
+     */
     public JProgressBar getProgBar() {
         return this.pbLoading;
     }
@@ -41,6 +52,7 @@ public class ProgressbarDLG extends javax.swing.JDialog {
     public void setWorker(SwingWorker w) {
         this.worker = w;
     }
+    //END
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

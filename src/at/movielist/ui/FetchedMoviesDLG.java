@@ -24,6 +24,16 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
     private final ArrayList<TMDBMovie> matches;
     private ResourceBundle resBundle;
 
+    /**
+     * This class spawns the DLG when more than one tMDb match is found
+     * 
+     * Constructor
+     * 
+     * @param parent
+     * @param modal
+     * @param match
+     * @param moviename 
+     */
     public FetchedMoviesDLG(java.awt.Frame parent, boolean modal, final ArrayList<TMDBMovie> match, String moviename) {
         super(parent, modal);
         initComponents();
@@ -175,6 +185,11 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
     private javax.swing.JPanel pn;
     private javax.swing.JScrollPane spListe;
     // End of variables declaration//GEN-END:variables
+    
+    /**
+     * Get & Set
+     * @return 
+     */
     public int getSelMatch() {
         return selMatch;
     }
@@ -182,7 +197,13 @@ public class FetchedMoviesDLG extends javax.swing.JDialog {
     public URL getPoster() {
         return poster;
     }
+    //END
 
+    /**
+     * Language Support
+     * 
+     * @param lang 
+     */
     private void setLang(String lang) {
 
         switch (lang) {

@@ -8,10 +8,22 @@ public class MovieCompare implements Comparator {
 
     private int option = 0;
 
+    /**
+     * Constructor
+     * 
+     * @param op 
+     */
     public MovieCompare(int op) {
         this.option = op;
     }
 
+    /**
+     * Called whenever you have to sort the Movies
+     * 
+     * @param t
+     * @param t1
+     * @return 
+     */
     @Override
     public int compare(Object t, Object t1) {
 

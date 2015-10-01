@@ -45,6 +45,12 @@ public class SetupDLG extends javax.swing.JDialog {
             .append(File.separator)
             .append("posters").toString();
 
+    /**
+     * Constructor
+     * 
+     * @param parent
+     * @param modal 
+     */
     public SetupDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

@@ -11,6 +11,13 @@ public class MovieLoader {
     private final ProgressbarDLG dlg;
     private final Locale loc;
 
+    /**
+     * Constructor
+     * 
+     * @param pathsToMovies
+     * @param pb
+     * @param loc 
+     */
     public MovieLoader(String[] pathsToMovies, ProgressbarDLG pb, Locale loc) {
         this.pathtomov = pathsToMovies;
         this.dlg = pb;

@@ -34,6 +34,14 @@ public class FetchWorker extends SwingWorker<String, String> {
     private ResourceBundle res;
     private boolean isRefetch = false;
 
+    /**
+     * Constructor
+     * 
+     * @param mui
+     * @param ml
+     * @param d
+     * @param res ResourceBundle
+     */
     public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res) {
         this.mui = mui;
         this.ml = ml;
@@ -46,6 +54,16 @@ public class FetchWorker extends SwingWorker<String, String> {
         dlg.setVisible(true);
     }
 
+    /**
+     * Constructor for refetched 
+     * 
+     * @param mui
+     * @param ml
+     * @param d
+     * @param res ResourceBundle
+     * @param refetch List with Movies that will be reFetched
+     * @param isRefetch a boolean that says if it's a refetch
+     */
     public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res, LinkedList<Movie> refetch, boolean isRefetch) {
         this.mui = mui;
         this.ml = ml;
@@ -146,6 +164,12 @@ public class FetchWorker extends SwingWorker<String, String> {
         }
     }
 
+    /**
+     * Sets the tmdb variables into Movie Object
+     * 
+     * @param m current Movie
+     * @param tm TMDBMovie Object
+     */
     private void setTMDBvars(Movie m, TMDBMovie tm) {
         m.setT_genres(tm.getGenres());
         m.setT_id(tm.getId());
@@ -159,6 +183,15 @@ public class FetchWorker extends SwingWorker<String, String> {
         m.setT_releaseYear(tm.getReleaseYear());
     }
 
+    /**
+     * Generates the TMDBMovie Object and fetchs data
+     * 
+     * @param m current Movie
+     * @param matches the matches from tMDb
+     * @param inc incrment of the progress bar
+     * @throws IOException
+     * @throws Exception 
+     */
     private void fetchMovie(Movie m, ArrayList<TMDBMovie> matches, double inc) throws IOException, Exception {
         String movie = m.getName().replace(".", " ");
         matches = APItmdb.getInstance().doSearch(ConfigUtility.getInstance().getPropLang(), movie);
