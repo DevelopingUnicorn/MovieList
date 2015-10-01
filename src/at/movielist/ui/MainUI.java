@@ -101,9 +101,13 @@ public class MainUI extends javax.swing.JFrame {
         pnSearchbar = new javax.swing.JPanel();
         tfSearch = new javax.swing.JTextField();
         lbSearch = new javax.swing.JLabel();
+        btFilter = new javax.swing.JButton();
         pnListe = new javax.swing.JPanel();
         spList = new javax.swing.JScrollPane();
         liMovies = new javax.swing.JList();
+        pnSort = new javax.swing.JPanel();
+        cbSort = new javax.swing.JComboBox();
+        lbSort = new javax.swing.JLabel();
         pnRight = new javax.swing.JPanel();
         spEDitor = new javax.swing.JScrollPane();
         epInfos = new javax.swing.JEditorPane();
@@ -136,6 +140,14 @@ public class MainUI extends javax.swing.JFrame {
         lbSearch.setText("Search:");
         pnSearchbar.add(lbSearch, java.awt.BorderLayout.LINE_START);
 
+        btFilter.setText("Advanced");
+        btFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onAdvancedSearch(evt);
+            }
+        });
+        pnSearchbar.add(btFilter, java.awt.BorderLayout.LINE_END);
+
         pnLeft.add(pnSearchbar, java.awt.BorderLayout.NORTH);
 
         pnListe.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Movies", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
@@ -145,6 +157,16 @@ public class MainUI extends javax.swing.JFrame {
         spList.setViewportView(liMovies);
 
         pnListe.add(spList, java.awt.BorderLayout.CENTER);
+
+        pnSort.setLayout(new java.awt.BorderLayout());
+
+        cbSort.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pnSort.add(cbSort, java.awt.BorderLayout.CENTER);
+
+        lbSort.setText("Sort:");
+        pnSort.add(lbSort, java.awt.BorderLayout.LINE_START);
+
+        pnListe.add(pnSort, java.awt.BorderLayout.PAGE_START);
 
         pnLeft.add(pnListe, java.awt.BorderLayout.CENTER);
 
@@ -335,9 +357,16 @@ public class MainUI extends javax.swing.JFrame {
         fw.execute();
     }//GEN-LAST:event_onFetch
 
+    private void onAdvancedSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedSearch
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onAdvancedSearch
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btFilter;
+    private javax.swing.JComboBox cbSort;
     private javax.swing.JEditorPane epInfos;
     private javax.swing.JLabel lbSearch;
+    private javax.swing.JLabel lbSort;
     private javax.swing.JLabel lbThings;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
@@ -355,6 +384,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnListe;
     private javax.swing.JPanel pnRight;
     private javax.swing.JPanel pnSearchbar;
+    private javax.swing.JPanel pnSort;
     private javax.swing.JScrollPane spEDitor;
     private javax.swing.JScrollPane spList;
     private javax.swing.JPopupMenu.Separator spSepp;
@@ -420,7 +450,7 @@ public class MainUI extends javax.swing.JFrame {
             movielist = liste;
         }
 
-        Collections.sort(movielist, new MovieCompare());
+        Collections.sort(movielist, new MovieCompare(this.getSorting()));
 
         mlm.setList(movielist);
         liMovies.updateUI();
@@ -485,6 +515,16 @@ public class MainUI extends javax.swing.JFrame {
         pnRight.setBorder(BorderFactory.createTitledBorder(resBundle.getString("main_right_titel")));
         miProxy.setText(resBundle.getString("main_menu_settings_proxy"));
         miFetchFromTMDB.setText(resBundle.getString("main_menu_file_fetch"));
+        lbSort.setText(resBundle.getString("main_movie_sort_lable"));
+        lbSearch.setText(resBundle.getString("main_search_lable"));
+        btFilter.setText(resBundle.getString("main_button_filter"));
+        
+        cbSort.removeAllItems();
+        cbSort.addItem(resBundle.getString("main_movie_sort_atz"));
+        cbSort.addItem(resBundle.getString("main_movie_sort_zta"));
+        cbSort.addItem(resBundle.getString("main_movie_sort_voteup"));
+        cbSort.addItem(resBundle.getString("main_movie_sort_votedown"));
+        cbSort.addItem(resBundle.getString("main_movie_sort_release"));
         // END lang support
 
     }
@@ -581,6 +621,15 @@ public class MainUI extends javax.swing.JFrame {
             }
         }
         );
+
+        cbSort.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Collections.sort(movielist, new MovieCompare(getSorting()));
+                setList(movielist, false);
+            }
+        });
     }
 
     /**
@@ -639,13 +688,35 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
 
-            Collections.sort(searchList, new MovieCompare());
+            Collections.sort(searchList, new MovieCompare(this.getSorting()));
             mlm.setList(searchList);
             liMovies.updateUI();
         } else {
-            Collections.sort(movielist, new MovieCompare());
+            Collections.sort(movielist, new MovieCompare(this.getSorting()));
             mlm.setList(movielist);
             liMovies.updateUI();
         }
+    }
+
+    public void filterMovies() {
+
+    }
+
+    public int getSorting() {
+        String s = cbSort.getSelectedItem().toString();
+
+        if (s.equals(resBundle.getString("main_movie_sort_atz"))) {
+            return 0;
+        } else if (s.equals(resBundle.getString("main_movie_sort_zta"))) {
+            return 1;
+        } else if (s.equals(resBundle.getString("main_movie_sort_voteup"))) {
+            return 2;
+        } else if (s.equals(resBundle.getString("main_movie_sort_votedown"))) {
+            return 3;
+        } else if (s.equals(resBundle.getString("main_movie_sort_release"))) {
+            return 4;
+        }
+        
+        return 0;
     }
 }
