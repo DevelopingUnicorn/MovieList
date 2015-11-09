@@ -55,8 +55,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
 
     private static final String[] okFileExtensions
             = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
-    private static final String[] filesToIgnore
-            = new String[]{"ds_store", ".nfo", ".mp3"};
 
     /**
      * Constructor
@@ -210,7 +208,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             mi.close();
         }
 
-        liste.add(new Movie(name, width, height, dar, duration, size, extension, numberOfFiles, f[0].getParent()));
+        liste.add(new Movie(name, width, height, dar, duration, size, extension, numberOfFiles, f[0].getParent(), f[0].getAbsolutePath()));
     }
 
     /**

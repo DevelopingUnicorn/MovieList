@@ -9,12 +9,15 @@ import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -23,6 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -30,7 +34,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -46,6 +52,9 @@ public class MainUI extends javax.swing.JFrame {
     private final UtilityClass utilityclass = new UtilityClass();
     private final LinkedList<Image> iconlist = new LinkedList<>();
     private JMenuItem mi;
+    private JPanel renameinput = new JPanel();
+    private JTextField filename = new JTextField();
+    private JTextField foldername = new JTextField();
 
     private ResourceBundle resBundle;
 
@@ -91,6 +100,28 @@ public class MainUI extends javax.swing.JFrame {
         setListener();
 
         liMovies.setComponentPopupMenu(pm);
+
+        //Reneame field
+        BorderLayout b = new BorderLayout();
+        GridLayout g = new GridLayout(2, 1);
+
+        JPanel p1 = new JPanel();
+        p1.setLayout(g);
+
+        JPanel p2 = new JPanel();
+        p2.setLayout(g);
+
+        renameinput = new JPanel();
+        renameinput.setLayout(b);
+
+        p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
+        p2.add(filename);
+        p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
+        p2.add(foldername);
+
+        renameinput.add(p1, BorderLayout.WEST);
+        renameinput.add(p2, BorderLayout.CENTER);
+        //END
 
         this.setVisible(true);
     }
@@ -165,7 +196,7 @@ public class MainUI extends javax.swing.JFrame {
 
         pnSort.setLayout(new java.awt.BorderLayout());
 
-        cbSort.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbSort.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "" }));
         pnSort.add(cbSort, java.awt.BorderLayout.CENTER);
 
         lbSort.setText("Sort:");
@@ -503,6 +534,13 @@ public class MainUI extends javax.swing.JFrame {
         if (movielist.size() > 0) {
             String things = utilityclass.getSizeAndNumberOfFiles(movielist, resBundle.getLocale());
             this.lbThings.setText(things);
+
+            if (toDel[toDel.length - 1] == movielist.size()) {
+                liMovies.setSelectedIndex(movielist.size() - 1);
+            }
+
+            printInformation(liMovies.getSelectedIndex());
+
         } else if (movielist.size() == 0) {
             this.lbThings.setText("");
             this.epInfos.setText("");
@@ -637,8 +675,10 @@ public class MainUI extends javax.swing.JFrame {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                Collections.sort(movielist, new MovieCompare(getSorting()));
-                setList(movielist, false);
+                if (movielist.size() > 0) {
+                    Collections.sort(movielist, new MovieCompare(getSorting()));
+                    setList(movielist, false);
+                }
             }
         });
     }
@@ -649,16 +689,49 @@ public class MainUI extends javax.swing.JFrame {
      * @param index The selected Movie
      */
     public void renameMovie(int index) {
-        String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
-        if (!(ren == null)) {
-            if (!ren.equals("")) {
-                ((Movie) mlm.getElementAt(index)).setName(ren);
-                liMovies.updateUI();
-                printInformation(index);
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
+        //String ren = JOptionPane.showInputDialog(resBundle.getString("main_option_rename"), ((Movie) mlm.getElementAt(index)).getName());
+        Movie m = (Movie) mlm.getElementAt(index);
+        File mov = new File(m.getFilePath());
+        File folder = new File(m.getPath());
+
+        filename.setText(mov.getName());
+        foldername.setText(m.getName());
+
+        int result = JOptionPane.showConfirmDialog(null, renameinput,
+                resBundle.getString("main_option_rename"), JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String fin = filename.getText();
+            String fon = foldername.getText();
+
+            if (!fin.equals(mov.getName())) {
+                File f = new File(m.getPath() + File.separator + fin);
+
+                mov.renameTo(f);
+                m.setFilePath(f.getAbsolutePath());
             }
+
+            if (!fon.equals(m.getName())) {
+                File f = new File(new File(m.getPath()).getParent() + File.separator + fon);
+
+                folder.renameTo(f);
+                m.setPath(f.getAbsolutePath());
+                m.setName(f.getName());
+            }
+
+            printInformation(liMovies.getSelectedIndex());
         }
+
+//        if (!(ren == null)) {
+//            if (!ren.equals("")) {
+//                Movie m = (Movie) mlm.getElementAt(index);
+//                m.setName(ren);
+//                liMovies.updateUI();
+//                printInformation(index);
+//            } else {
+//                JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
+//            }
+//        }
     }
 
     /**
@@ -718,22 +791,24 @@ public class MainUI extends javax.swing.JFrame {
 
     /**
      * Returns how to sort the Movielist
-     * 
-     * @return 
+     *
+     * @return
      */
     public int getSorting() {
-        String s = cbSort.getSelectedItem().toString();
+        if (cbSort.getItemCount() > 0) {
+            String s = cbSort.getSelectedItem().toString();
 
-        if (s.equals(resBundle.getString("main_movie_sort_atz"))) {
-            return 0;
-        } else if (s.equals(resBundle.getString("main_movie_sort_zta"))) {
-            return 1;
-        } else if (s.equals(resBundle.getString("main_movie_sort_voteup"))) {
-            return 2;
-        } else if (s.equals(resBundle.getString("main_movie_sort_votedown"))) {
-            return 3;
-        } else if (s.equals(resBundle.getString("main_movie_sort_release"))) {
-            return 4;
+            if (s.equals(resBundle.getString("main_movie_sort_atz"))) {
+                return 0;
+            } else if (s.equals(resBundle.getString("main_movie_sort_zta"))) {
+                return 1;
+            } else if (s.equals(resBundle.getString("main_movie_sort_voteup"))) {
+                return 2;
+            } else if (s.equals(resBundle.getString("main_movie_sort_votedown"))) {
+                return 3;
+            } else if (s.equals(resBundle.getString("main_movie_sort_release"))) {
+                return 4;
+            }
         }
 
         return 0;

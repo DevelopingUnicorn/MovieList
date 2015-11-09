@@ -1,5 +1,6 @@
 package at.movielist.beans;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -8,7 +9,7 @@ import java.util.ResourceBundle;
 public class Movie implements Serializable {
 
     private final String width, height, aspectratio, duration, filesize, fileextension;
-    private String name, path;
+    private String name, path, filePath;
     private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
     private boolean DBmatch = false;
@@ -33,7 +34,7 @@ public class Movie implements Serializable {
      * @param numberoffiles
      * @param path 
      */
-    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path) {
+    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path, String filePath) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -43,6 +44,7 @@ public class Movie implements Serializable {
         this.fileextension = fileextension;
         this.numberoffiles = numberoffiles;
         this.path = path;
+        this.filePath = filePath;
     }
 
     /**
@@ -105,6 +107,14 @@ public class Movie implements Serializable {
         this.name = name;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+    
     //tMDb vars
     public String getT_overview() {
         return t_overview;
@@ -215,6 +225,7 @@ public class Movie implements Serializable {
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_filesize")).append(":</strong></td><td width='50%' >").append(filesize).append("</td></tr>");
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_numboffiles")).append(":</strong></td><td width='50%' >").append(numberoffiles).append("</td></tr>");
         sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_path")).append(":</strong></td><td width='50%' >").append(path).append("</td></tr>");
+        sb.append("<tr><td width='50%' ><strong style='color:#00bda5'>").append(resBundle.getString("main_information_filename")).append(":</strong></td><td width='50%' >").append(new File(filePath).getName()).append("</td></tr>");
         sb.append("</table></center>");
 
         return sb.toString();
