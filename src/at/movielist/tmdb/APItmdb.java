@@ -45,9 +45,9 @@ public class APItmdb {
 
     /**
      * Returns an API Instance
-     * 
+     *
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static APItmdb getInstance() throws IOException {
         if (APItmdb.INSTANCE == null) {
@@ -136,12 +136,12 @@ public class APItmdb {
         URL url = new URL(this.imgBaseURL + "/w300" + posterURL);
         return url;
     }
-    
+
     /**
-     * Gets the available Genres of TMDB and puts the in a HashMap
-     * with id as key and name as value
-     * 
-     * @throws Exception 
+     * Gets the available Genres of TMDB and puts the in a HashMap with id as
+     * key and name as value
+     *
+     * @throws Exception
      */
     public static void getGenres() throws Exception {
         String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721");
@@ -187,7 +187,14 @@ public class APItmdb {
                 JSONObject factObj = (JSONObject) iterator.next();
                 Long id = (Long) factObj.get("id");
                 String release_date = (String) factObj.get("release_date");
-                Double vote_average = (Double) factObj.get("vote_average");
+
+                Object va = factObj.get("vote_average");
+
+                Double vote_average = 0.0;
+                if (!va.toString().equals("0")) {
+                    vote_average = (Double) factObj.get("vote_average");
+                }
+
                 Long vote_count = (Long) factObj.get("vote_count");
                 String overview = (String) factObj.get("overview");
                 String original_title = (String) factObj.get("original_title");
@@ -197,7 +204,7 @@ public class APItmdb {
                 JSONArray jar = (JSONArray) factObj.get("genre_ids");
 
                 for (int i = 0; i < jar.size(); i++) {
-                    int genreid = Integer.parseInt(jar.get(i).toString());                   
+                    int genreid = Integer.parseInt(jar.get(i).toString());
                     genrenames.add(genres.get(genreid));
                 }
 
