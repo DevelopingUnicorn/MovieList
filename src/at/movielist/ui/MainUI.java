@@ -392,7 +392,7 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onAdvancedSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedSearch
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_onAdvancedSearch
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -694,7 +694,10 @@ public class MainUI extends javax.swing.JFrame {
         p1.removeAll();
         p2.removeAll();
 
-        if (!foldername.getText().equals(filename.getText())) {
+        String oldFin = filename.getText();
+        String oldFon = foldername.getText();
+
+        if (!oldFon.equals(oldFin)) {
             p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
             p2.add(filename);
             p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
@@ -726,7 +729,7 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
 
-            if (fon.equals("")) {
+            if (!fon.equals("")) {
                 if (!fon.equals(m.getName())) {
                     File f = new File(new File(m.getPath()).getParent() + File.separator + fon);
 
@@ -734,9 +737,9 @@ public class MainUI extends javax.swing.JFrame {
                     m.setPath(f.getAbsolutePath());
                     m.setName(f.getName());
                 }
-
-                printInformation(liMovies.getSelectedIndex());
             }
+            mlm.setList(movielist);
+            printInformation(liMovies.getSelectedIndex());
         }
     }
 
