@@ -55,6 +55,7 @@ public class MainUI extends javax.swing.JFrame {
     private JPanel renameinput = new JPanel();
     private JTextField filename = new JTextField();
     private JTextField foldername = new JTextField();
+    private JPanel p1, p2;
 
     private ResourceBundle resBundle;
 
@@ -105,22 +106,14 @@ public class MainUI extends javax.swing.JFrame {
         BorderLayout b = new BorderLayout();
         GridLayout g = new GridLayout(2, 1);
 
-        JPanel p1 = new JPanel();
+        p1 = new JPanel();
         p1.setLayout(g);
 
-        JPanel p2 = new JPanel();
+        p2 = new JPanel();
         p2.setLayout(g);
 
         renameinput = new JPanel();
         renameinput.setLayout(b);
-
-        p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
-        p2.add(filename);
-        p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
-        p2.add(foldername);
-
-        renameinput.add(p1, BorderLayout.WEST);
-        renameinput.add(p2, BorderLayout.CENTER);
         //END
 
         this.setVisible(true);
@@ -697,6 +690,26 @@ public class MainUI extends javax.swing.JFrame {
         filename.setText(mov.getName());
         foldername.setText(m.getName());
 
+        renameinput.removeAll();
+        p1.removeAll();
+        p2.removeAll();
+
+        if (!foldername.getText().equals(filename.getText())) {
+            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
+            p2.add(filename);
+            p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
+            p2.add(foldername);
+
+            renameinput.add(p1, BorderLayout.WEST);
+            renameinput.add(p2, BorderLayout.CENTER);
+        } else {
+            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
+            p2.add(filename);
+
+            renameinput.add(p1, BorderLayout.WEST);
+            renameinput.add(p2, BorderLayout.CENTER);
+        }
+
         int result = JOptionPane.showConfirmDialog(null, renameinput,
                 resBundle.getString("main_option_rename"), JOptionPane.OK_CANCEL_OPTION);
 
@@ -704,34 +717,27 @@ public class MainUI extends javax.swing.JFrame {
             String fin = filename.getText();
             String fon = foldername.getText();
 
-            if (!fin.equals(mov.getName())) {
-                File f = new File(m.getPath() + File.separator + fin);
+            if (!fin.equals("")) {
+                if (!fin.equals(mov.getName())) {
+                    File f = new File(m.getPath() + File.separator + fin);
 
-                mov.renameTo(f);
-                m.setFilePath(f.getAbsolutePath());
+                    mov.renameTo(f);
+                    m.setFilePath(f.getAbsolutePath());
+                }
             }
 
-            if (!fon.equals(m.getName())) {
-                File f = new File(new File(m.getPath()).getParent() + File.separator + fon);
+            if (fon.equals("")) {
+                if (!fon.equals(m.getName())) {
+                    File f = new File(new File(m.getPath()).getParent() + File.separator + fon);
 
-                folder.renameTo(f);
-                m.setPath(f.getAbsolutePath());
-                m.setName(f.getName());
+                    folder.renameTo(f);
+                    m.setPath(f.getAbsolutePath());
+                    m.setName(f.getName());
+                }
+
+                printInformation(liMovies.getSelectedIndex());
             }
-
-            printInformation(liMovies.getSelectedIndex());
         }
-
-//        if (!(ren == null)) {
-//            if (!ren.equals("")) {
-//                Movie m = (Movie) mlm.getElementAt(index);
-//                m.setName(ren);
-//                liMovies.updateUI();
-//                printInformation(index);
-//            } else {
-//                JOptionPane.showMessageDialog(new JFrame(), resBundle.getString("main_rename_Empty"), resBundle.getString("main_rename_EmptyTitle"), 0);
-//            }
-//        }
     }
 
     /**
