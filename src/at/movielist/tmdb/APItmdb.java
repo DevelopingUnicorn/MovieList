@@ -65,7 +65,7 @@ public class APItmdb {
      * @throws Exception
      */
     public ArrayList<TMDBMovie> doSearch(String lang, String query) throws Exception {
-        return formatJSON(makeTMDBRequest(lang, query));
+        return formatJSON(makeTMDBRequest(lang, query), lang);
     }
 
     /**
@@ -143,8 +143,8 @@ public class APItmdb {
      *
      * @throws Exception
      */
-    public static void getGenres() throws Exception {
-        String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721");
+    public static void getGenres(String lang) throws Exception {
+        String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721&language="+lang);
 
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(result);
@@ -168,9 +168,9 @@ public class APItmdb {
      * @throws IOException
      * @throws Exception
      */
-    private static ArrayList<TMDBMovie> formatJSON(String apiString) throws ParseException, java.text.ParseException, IOException, Exception {
+    private static ArrayList<TMDBMovie> formatJSON(String apiString, String lang) throws ParseException, java.text.ParseException, IOException, Exception {
         if (genres.isEmpty()) {
-            getGenres();
+            getGenres(lang);
         }
 
         ArrayList<TMDBMovie> list = new ArrayList<>();
@@ -189,7 +189,6 @@ public class APItmdb {
                 String release_date = (String) factObj.get("release_date");
 
                 Object va = factObj.get("vote_average");
-
                 Double vote_average = 0.0;
                 if (!va.toString().equals("0")) {
                     vote_average = (Double) factObj.get("vote_average");
@@ -302,4 +301,14 @@ public class APItmdb {
         String usedURL = APItmdb.URL + "&language=" + lang + "&query=" + URLEncoder.encode(query, "UTF-8");
         return makeHTTPRequest(usedURL);
     }
+
+    /**
+     * Returns the genre list for advanced search
+     * @return 
+     */
+    public static HashMap<Integer, String> returnGenres() {
+        return genres;
+    }
+    
+    
 }
