@@ -26,10 +26,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -169,7 +167,6 @@ public class MainUI extends javax.swing.JFrame {
 
         btFilter.setText("Advanced");
         btFilter.setToolTipText("");
-        btFilter.setEnabled(false);
         btFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onAdvancedSearch(evt);
@@ -392,7 +389,8 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onAdvancedSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAdvancedSearch
-
+        AdvancedSearchDLG ad = new AdvancedSearchDLG(this, false, resBundle);
+        ad.setVisible(true);
     }//GEN-LAST:event_onAdvancedSearch
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -604,7 +602,9 @@ public class MainUI extends javax.swing.JFrame {
         liMovies.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                renameMovie(liMovies.getSelectedIndex());
+                if (movielist.size() > 0) {
+                    renameMovie(liMovies.getSelectedIndex());
+                }
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), JComponent.WHEN_FOCUSED);
 
@@ -629,8 +629,11 @@ public class MainUI extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent evt) {
                 JList list = (JList) evt.getSource();
                 if (evt.getClickCount() == 2) {
-                    int index = list.locationToIndex(evt.getPoint());
-                    renameMovie(index);
+                    if (movielist.size() > 0) {
+                        int index = list.locationToIndex(evt.getPoint());
+                        renameMovie(index);
+                    }
+
                 }
             }
         });
@@ -784,6 +787,34 @@ public class MainUI extends javax.swing.JFrame {
             Collections.sort(searchList, new MovieCompare(this.getSorting()));
             mlm.setList(searchList);
             liMovies.updateUI();
+        } else {
+            Collections.sort(movielist, new MovieCompare(this.getSorting()));
+            mlm.setList(movielist);
+            liMovies.updateUI();
+        }
+    }
+
+    public void AdvancedSearch(String genre) {
+        LinkedList<Movie> searchList = new LinkedList<>();
+
+        if (!genre.equals(resBundle.getString("genre_all"))) {
+            for (Movie m : movielist) {
+                LinkedList<String> genres = m.getT_genres();
+
+                if (genres != null) {
+                    if (genres.size() > 0) {
+                        if (genres.contains(genre)) {
+                            searchList.add(m);
+                        }
+                    }
+                }
+            }
+
+            if (searchList.size() > 0) {
+                Collections.sort(searchList, new MovieCompare(this.getSorting()));
+                mlm.setList(searchList);
+                liMovies.updateUI();
+            }
         } else {
             Collections.sort(movielist, new MovieCompare(this.getSorting()));
             mlm.setList(movielist);
