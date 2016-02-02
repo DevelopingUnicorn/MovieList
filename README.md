@@ -41,9 +41,9 @@ Version
 ========
 
 <h5>~Current~</h5>
-* v1.4 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.4/MovieList_Setup.exe">Download</a>
- * Added Sorting feature
- * Some tweaks
+* v1.5 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.5/MovieList_Setup.exe">Download</a>
+ * Bugfixes
+ * Implementet Advanced Search
 
 <h5>~Alpha~</h5>
 * v1.0a
