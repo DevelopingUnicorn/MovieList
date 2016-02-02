@@ -72,10 +72,10 @@ Version
 * v1.3rev2 
  * Fixed tMDb Info save
  * Fixed tMDb Info fetch
-* v1.4 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.4/MovieList_Setup.exe">Download</a>
+* v1.4
  * Added Sorting feature
  * Some tweaks
-* v1.5 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.4/MovieList_Setup.exe">Download</a>
+* v1.5 - <a href="https://github.com/DevelopingUnicorn/MovieList/releases/download/v1.5/MovieList_Setup.exe">Download</a>
  * Bugfixes
  * Implementet Advanced Search
 
