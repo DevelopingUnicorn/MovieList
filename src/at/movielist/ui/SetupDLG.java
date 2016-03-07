@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 public class SetupDLG extends javax.swing.JDialog {
 
@@ -47,13 +48,20 @@ public class SetupDLG extends javax.swing.JDialog {
 
     /**
      * Constructor
-     * 
+     *
      * @param parent
-     * @param modal 
+     * @param modal
      */
     public SetupDLG(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        try {
+            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+            UIManager.put("RootPane.setButtonVisible", false);
+        } catch (Exception e) {
+            //TODO exception
+        }
 
         cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
 

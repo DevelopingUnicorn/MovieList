@@ -144,7 +144,7 @@ public class APItmdb {
      * @throws Exception
      */
     public static void getGenres(String lang) throws Exception {
-        String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721&language="+lang);
+        String result = makeHTTPRequest("http://api.themoviedb.org/3/genre/movie/list?api_key=dd3c14bcb799a290119b8e0628514721&language=" + lang);
 
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(result);
@@ -190,8 +190,9 @@ public class APItmdb {
 
                 Object va = factObj.get("vote_average");
                 Double vote_average = 0.0;
-                if (!va.toString().equals("0")) {
-                    vote_average = (Double) factObj.get("vote_average");
+
+                if (!(va instanceof Long)) {
+                    vote_average = (Double) va;
                 }
 
                 Long vote_count = (Long) factObj.get("vote_count");
@@ -304,11 +305,11 @@ public class APItmdb {
 
     /**
      * Returns the genre list for advanced search
-     * @return 
+     *
+     * @return
      */
     public static HashMap<Integer, String> returnGenres() {
         return genres;
     }
-    
-    
+
 }

@@ -10,6 +10,7 @@ import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -148,6 +151,7 @@ public class MainUI extends javax.swing.JFrame {
         miProxy = new javax.swing.JMenuItem();
         meAbout = new javax.swing.JMenu();
         miCredits = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridLayout(1, 2));
@@ -292,6 +296,14 @@ public class MainUI extends javax.swing.JFrame {
         });
         meAbout.add(miCredits);
 
+        jMenuItem1.setText("Report Bug");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        meAbout.add(jMenuItem1);
+
         mbBar.add(meAbout);
 
         setJMenuBar(mbBar);
@@ -393,10 +405,22 @@ public class MainUI extends javax.swing.JFrame {
         ad.setVisible(true);
     }//GEN-LAST:event_onAdvancedSearch
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            Desktop d = Desktop.getDesktop();
+            d.browse(new URI("https://github.com/DevelopingUnicorn/MovieList/issues/new"));
+        } catch (IOException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btFilter;
     private javax.swing.JComboBox cbSort;
     private javax.swing.JEditorPane epInfos;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lbSearch;
     private javax.swing.JLabel lbSort;
     private javax.swing.JLabel lbThings;
