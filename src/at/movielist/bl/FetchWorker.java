@@ -5,7 +5,6 @@ import at.movielist.beans.TMDBMovie;
 import at.movielist.tmdb.APItmdb;
 import at.movielist.ui.FetchedMoviesDLG;
 import at.movielist.ui.MainUI;
-import at.movielist.ui.ProgressbarDLG;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,34 +28,30 @@ public class FetchWorker extends SwingWorker<String, String> {
     private MainUI mui;
     private LinkedList<Movie> ml, refetch;
     private JLabel lb;
-    private ProgressbarDLG dlg;
     private JProgressBar loading;
     private ResourceBundle res;
     private boolean isRefetch = false;
 
     /**
      * Constructor
-     * 
+     *
      * @param mui
      * @param ml
      * @param d
      * @param res ResourceBundle
      */
-    public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res) {
+    public FetchWorker(MainUI mui, LinkedList<Movie> ml, JProgressBar pb, JLabel lab, ResourceBundle res) {
         this.mui = mui;
         this.ml = ml;
         this.res = res;
 
-        this.loading = d.getProgBar();
-        this.lb = d.getLabel();
-        this.dlg = d;
-
-        dlg.setVisible(true);
+        this.loading = pb;
+        this.lb = lab;
     }
 
     /**
-     * Constructor for refetched 
-     * 
+     * Constructor for refetched
+     *
      * @param mui
      * @param ml
      * @param d
@@ -64,19 +59,16 @@ public class FetchWorker extends SwingWorker<String, String> {
      * @param refetch List with Movies that will be reFetched
      * @param isRefetch a boolean that says if it's a refetch
      */
-    public FetchWorker(MainUI mui, LinkedList<Movie> ml, ProgressbarDLG d, ResourceBundle res, LinkedList<Movie> refetch, boolean isRefetch) {
+    public FetchWorker(MainUI mui, LinkedList<Movie> ml, JProgressBar pb, JLabel lab, ResourceBundle res, LinkedList<Movie> refetch, boolean isRefetch) {
         this.mui = mui;
         this.ml = ml;
         this.res = res;
         this.refetch = refetch;
 
-        this.loading = d.getProgBar();
-        this.lb = d.getLabel();
-        this.dlg = d;
+        this.loading = pb;
+        this.lb = lab;
 
         this.isRefetch = isRefetch;
-
-        dlg.setVisible(true);
     }
 
     /**
@@ -87,10 +79,9 @@ public class FetchWorker extends SwingWorker<String, String> {
      */
     @Override
     protected String doInBackground() {
+        loading.setVisible(true);
         try {
             ArrayList<TMDBMovie> matches = new ArrayList<>();
-
-            dlg.setWorker(this);
 
             int length = ml.size();
             double inc = 1000000 / length;
@@ -101,7 +92,7 @@ public class FetchWorker extends SwingWorker<String, String> {
                         if (refetch.contains(m)) {
                             fetchMovie(m, matches, inc);
                         }
-                    }else{
+                    } else {
                         fetchMovie(m, matches, inc);
                     }
                 } else {
@@ -113,6 +104,8 @@ public class FetchWorker extends SwingWorker<String, String> {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        loading.setVisible(false);
+
         return "BLA";
     }
 
@@ -122,7 +115,6 @@ public class FetchWorker extends SwingWorker<String, String> {
      */
     @Override
     protected void done() {
-        dlg.dispose();
         JOptionPane.showMessageDialog(null, res.getString("fetch_dlg_text"), res.getString("fetch_dlg_title"), JOptionPane.INFORMATION_MESSAGE);
         mui.setList(ml, false);
     }
@@ -166,7 +158,7 @@ public class FetchWorker extends SwingWorker<String, String> {
 
     /**
      * Sets the tmdb variables into Movie Object
-     * 
+     *
      * @param m current Movie
      * @param tm TMDBMovie Object
      */
@@ -185,12 +177,12 @@ public class FetchWorker extends SwingWorker<String, String> {
 
     /**
      * Generates the TMDBMovie Object and fetchs data
-     * 
+     *
      * @param m current Movie
      * @param matches the matches from tMDb
      * @param inc incrment of the progress bar
      * @throws IOException
-     * @throws Exception 
+     * @throws Exception
      */
     private void fetchMovie(Movie m, ArrayList<TMDBMovie> matches, double inc) throws IOException, Exception {
         String movie = m.getName().replace(".", " ");

@@ -10,7 +10,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import at.lib.mediainfo.MediaInfo;
 import at.movielist.ui.MainUI;
-import at.movielist.ui.ProgressbarDLG;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -20,7 +19,7 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
     private LinkedList<Movie> liste = new LinkedList<>();
     private JProgressBar loading;
     private JLabel lb;
-    private ProgressbarDLG dlg;
+    private JProgressBar pbLoad;
     private MainUI mui;
     private UtilityClass uc = new UtilityClass();
     private SimpleDateFormat durationFormat = new SimpleDateFormat("k'h' mm'mn'");
@@ -64,18 +63,17 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
      * @param mui
      * @param loc 
      */
-    public MovieLoaderWorker(String[] paths, ProgressbarDLG d, MainUI mui, Locale loc) {
+    public MovieLoaderWorker(String[] paths, JProgressBar pb, JLabel xoy, MainUI mui, Locale loc) {
         this.paths = paths;
-        this.loading = d.getProgBar();
-        this.lb = d.getLabel();
-        this.dlg = d;
+        this.loading = pb;
+        this.lb = xoy;
         this.mui = mui;
         this.resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
 
         prog1 = resBundle.getString("progress_string_1");
         prog2 = resBundle.getString("progress_string_2");
 
-        dlg.setVisible(true);
+//        pbLoad.setVisible(true);
     }
 
     /**
@@ -104,11 +102,11 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
      */
     @Override
     protected LinkedList<Movie> doInBackground() throws Exception {
+        loading.setVisible(true);
         for (String path : paths) {
             File folder = new File(path);
             File[] dirListing = folder.listFiles();
 
-            dlg.setWorker(this);
             int length = dirListing.length;
 
             String xfy = "";
@@ -132,6 +130,9 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
                 }
             }
         }
+        
+        lb.setText("");  
+        loading.setVisible(false);
         return liste;
     }
 
@@ -147,8 +148,6 @@ public class MovieLoaderWorker extends SwingWorker<LinkedList<Movie>, Movie> {
             String things = uc.getSizeAndNumberOfFiles(liste, resBundle.getLocale());
             mui.getLbThings().setText(things);
         }
-
-        dlg.dispose();
     }
 
     /**
