@@ -9,8 +9,10 @@ import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
+import static at.movielist.ui.SetupDLG.DEFAULT_FONT;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -39,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
@@ -66,6 +69,8 @@ public class MainUI extends javax.swing.JFrame {
     public MainUI() {
         initComponents();
 
+        UIManager.put("Editorpane.font", new Font("Arial", Font.PLAIN, 14));
+        
         try {
             ConfigUtility.getInstance().loadConfig();
         } catch (IOException ex) {
@@ -117,6 +122,8 @@ public class MainUI extends javax.swing.JFrame {
         renameinput.setLayout(b);
         //END
 
+        pbLoading.setStringPainted(true);
+        pbLoading.setVisible(false);
         this.setVisible(true);
     }
 
@@ -125,7 +132,10 @@ public class MainUI extends javax.swing.JFrame {
     private void initComponents() {
 
         pnLeft = new javax.swing.JPanel();
+        pnBottom = new javax.swing.JPanel();
         lbThings = new javax.swing.JLabel();
+        pbLoading = new javax.swing.JProgressBar();
+        lbXOY = new javax.swing.JLabel();
         pnSearchbar = new javax.swing.JPanel();
         tfSearch = new javax.swing.JTextField();
         lbSearch = new javax.swing.JLabel();
@@ -158,9 +168,17 @@ public class MainUI extends javax.swing.JFrame {
 
         pnLeft.setLayout(new java.awt.BorderLayout());
 
+        pnBottom.setLayout(new java.awt.BorderLayout());
+
         lbThings.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lbThings.setForeground(new java.awt.Color(0, 123, 123));
-        pnLeft.add(lbThings, java.awt.BorderLayout.PAGE_END);
+        pnBottom.add(lbThings, java.awt.BorderLayout.LINE_START);
+
+        pbLoading.setMaximum(1000000);
+        pnBottom.add(pbLoading, java.awt.BorderLayout.CENTER);
+        pnBottom.add(lbXOY, java.awt.BorderLayout.LINE_END);
+
+        pnLeft.add(pnBottom, java.awt.BorderLayout.SOUTH);
 
         pnSearchbar.setLayout(new java.awt.BorderLayout());
         pnSearchbar.add(tfSearch, java.awt.BorderLayout.CENTER);
@@ -206,6 +224,7 @@ public class MainUI extends javax.swing.JFrame {
         pnRight.setLayout(new java.awt.BorderLayout());
 
         epInfos.setEditable(false);
+        epInfos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         spEDitor.setViewportView(epInfos);
 
         pnRight.add(spEDitor, java.awt.BorderLayout.CENTER);
@@ -317,9 +336,10 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onLoadMovies(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLoadMovies
-        ProgressbarDLG pd = new ProgressbarDLG(this, false);
-        ml = new MovieLoader(pathsToMovies, pd, resBundle.getLocale());
+        //ProgressbarDLG pd = new ProgressbarDLG(this, false);
+        ml = new MovieLoader(pathsToMovies, pbLoading, lbXOY, resBundle.getLocale());
         loadMovies();
+        pbLoading.setValue(0);
     }//GEN-LAST:event_onLoadMovies
     /**
      * Opens a JFileChooser to save the loaded movies and information to an .ml
@@ -390,9 +410,9 @@ public class MainUI extends javax.swing.JFrame {
      * @param evt
      */
     private void onFetch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onFetch
-        ProgressbarDLG pd = new ProgressbarDLG(this, false);
-        FetchWorker fw = new FetchWorker(this, movielist, pd, resBundle);
+        FetchWorker fw = new FetchWorker(this, movielist, pbLoading, lbXOY, resBundle);
         fw.execute();
+        pbLoading.setValue(0);
     }//GEN-LAST:event_onFetch
 
     /**
@@ -424,6 +444,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel lbSearch;
     private javax.swing.JLabel lbSort;
     private javax.swing.JLabel lbThings;
+    private javax.swing.JLabel lbXOY;
     private javax.swing.JList liMovies;
     private javax.swing.JMenuBar mbBar;
     private javax.swing.JMenu meAbout;
@@ -436,6 +457,8 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem miPreferences;
     private javax.swing.JMenuItem miProxy;
     private javax.swing.JMenuItem miSave;
+    private javax.swing.JProgressBar pbLoading;
+    private javax.swing.JPanel pnBottom;
     private javax.swing.JPanel pnLeft;
     private javax.swing.JPanel pnListe;
     private javax.swing.JPanel pnRight;
@@ -684,8 +707,7 @@ public class MainUI extends javax.swing.JFrame {
                     refetch.add(m);
                 }
 
-                ProgressbarDLG pd = new ProgressbarDLG(MainUI.this, false);
-                FetchWorker fw = new FetchWorker(MainUI.this, movielist, pd, resBundle, refetch, true);
+                FetchWorker fw = new FetchWorker(MainUI.this, movielist, pbLoading, lbXOY, resBundle, refetch, true);
                 fw.execute();
             }
         }

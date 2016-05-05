@@ -2,6 +2,7 @@ package at.movielist.ui;
 
 import at.movielist.bl.ConfigUtility;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,8 +23,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 public class SetupDLG extends javax.swing.JDialog {
+
+    public static String[] DEFAULT_FONT = new String[]{
+        "ProgressBar.font", "List.font", "EditorPane.font", "ComboBox.font"
+    };
 
     private ArrayList<String> pathsToMovies = new ArrayList<String>();
     private LinkedList<Image> iconlist = new LinkedList<>();
@@ -57,8 +63,12 @@ public class SetupDLG extends javax.swing.JDialog {
         initComponents();
 
         try {
-            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-            UIManager.put("RootPane.setButtonVisible", false);
+            BeautyEyeLNFHelper.launchBeautyEyeLNF();
+            for (String s : DEFAULT_FONT) {
+                UIManager.put(s, new Font("Arial", Font.PLAIN, 14));
+            }
+
+            UIManager.put("RootPane.setupButtonVisible", false);
         } catch (Exception e) {
             //TODO exception
         }
@@ -123,6 +133,7 @@ public class SetupDLG extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnUe = new javax.swing.JPanel();
         lbTitel = new javax.swing.JLabel();
         btOk = new javax.swing.JButton();
         pnThings = new javax.swing.JPanel();
@@ -140,11 +151,15 @@ public class SetupDLG extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconImages(null);
 
+        pnUe.setLayout(new java.awt.BorderLayout());
+
         lbTitel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lbTitel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/at/movielist/resources/settingsBig.png"))); // NOI18N
         lbTitel.setText("Settings");
-        getContentPane().add(lbTitel, java.awt.BorderLayout.PAGE_START);
+        pnUe.add(lbTitel, java.awt.BorderLayout.PAGE_START);
+
+        getContentPane().add(pnUe, java.awt.BorderLayout.PAGE_START);
 
         btOk.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         btOk.setText("Change settings!");
@@ -254,6 +269,7 @@ public class SetupDLG extends javax.swing.JDialog {
     private javax.swing.JLabel lbUEPM;
     private javax.swing.JList listPathsToMovies;
     private javax.swing.JPanel pnThings;
+    private javax.swing.JPanel pnUe;
     // End of variables declaration//GEN-END:variables
 /**
      * Upadtes the UI elements to use the given Language
