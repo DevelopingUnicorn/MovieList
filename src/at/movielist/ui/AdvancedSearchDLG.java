@@ -30,7 +30,7 @@ public class AdvancedSearchDLG extends javax.swing.JDialog {
         mui = (MainUI) parent;
 
         this.setTitle("Advanced Search");
-        this.setSize(300, 100);
+        this.setSize(300, 150);
         this.setLocationRelativeTo(parent);
         this.setResizable(false);
 
