@@ -13,6 +13,7 @@ public class Movie implements Serializable {
     private final int numberoffiles;
     transient private ResourceBundle resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", Locale.ENGLISH);
     private boolean DBmatch = false;
+    private boolean isFile = false;
 
     private String t_overview, t_original_title, t_title;
     private Double t_voteAverage = 0.0, t_voteCount;
@@ -23,7 +24,7 @@ public class Movie implements Serializable {
 
     /**
      * Constructor
-     * 
+     *
      * @param name
      * @param width
      * @param height
@@ -32,9 +33,9 @@ public class Movie implements Serializable {
      * @param filesize
      * @param fileextension
      * @param numberoffiles
-     * @param path 
+     * @param path
      */
-    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path, String filePath) {
+    public Movie(String name, String width, String height, String aspectratio, String duration, String filesize, String fileextension, int numberoffiles, String path, String filePath, boolean isFile) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -45,11 +46,13 @@ public class Movie implements Serializable {
         this.numberoffiles = numberoffiles;
         this.path = path;
         this.filePath = filePath;
+        this.isFile = isFile;
     }
 
     /**
      * Get & Set
-     * @return 
+     *
+     * @return
      */
     public boolean getDBMatch() {
         return DBmatch;
@@ -61,6 +64,14 @@ public class Movie implements Serializable {
 
     public void setResBundle(Locale loc) {
         this.resBundle = ResourceBundle.getBundle("at.movielist.src.ResourceBundle", loc);
+    }
+
+    public boolean isIsFile() {
+        return isFile;
+    }
+
+    public void setIsFile(boolean isFile) {
+        this.isFile = isFile;
     }
 
     public String getName() {
@@ -114,7 +125,7 @@ public class Movie implements Serializable {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
-    
+
     //tMDb vars
     public String getT_overview() {
         return t_overview;
@@ -198,11 +209,10 @@ public class Movie implements Serializable {
 
     //tMDb vars END
     //END
-    
     /**
      * Returns the HTML String for Movie Information
-     * 
-     * @return 
+     *
+     * @return
      */
     public String toHTMLString() {
         StringBuilder sb = new StringBuilder();
@@ -233,8 +243,8 @@ public class Movie implements Serializable {
 
     /**
      * Returns the HTML String for the tMDB Information
-     * 
-     * @return 
+     *
+     * @return
      */
     public String toTMDBString() {
         StringBuilder result = new StringBuilder();
@@ -272,8 +282,8 @@ public class Movie implements Serializable {
 
     /**
      * Returns if Movie has a Match
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getMatch() {
         if (DBmatch == false) {
@@ -287,8 +297,8 @@ public class Movie implements Serializable {
 
     /**
      * Returns Name of a Movie when toString function is called
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {
