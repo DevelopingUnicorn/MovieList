@@ -12,7 +12,7 @@ public class ConfigUtility {
     private String propLang, propProxyUsername, propProxyPassword, propProxyHost;
     private String[] propPaths;
     private int propProxyPort;
-    private boolean propAutoSave, propSavePosters, propProxyUseAuthenticate;
+    private boolean propAutoSave, propSavePosters, propProxyUseAuthenticate, propRenameFolders;
     private final Properties properties;
     private FileOutputStream outStream;
 
@@ -73,12 +73,13 @@ public class ConfigUtility {
      * to be loaded
      * @throws IOException
      */
-    public void saveConfigToFile(String lang, String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean autoSave, boolean savePosters, boolean proxyUseAuthenticate, String[] pathToMovies)
+    public void saveConfigToFile(String lang, String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean autoSave, boolean savePosters, boolean proxyUseAuthenticate, String[] pathToMovies, boolean renameFolders)
             throws IOException {
 
         properties.setProperty("Lang", lang.equals("") ? "en" : lang);
         properties.setProperty("AutoSave", autoSave ? "true" : "false");
         properties.setProperty("SavePosters", savePosters ? "true" : "false");
+        properties.setProperty("RenameFoldersOnFetch", renameFolders ? "true" : "false");
         properties.setProperty("ProxyUsername", proxyUsername);
         properties.setProperty("ProxyPassword", proxyPassword);
         properties.setProperty("ProxyHost", proxyHost);
@@ -106,8 +107,8 @@ public class ConfigUtility {
      * @param pathToMovies
      * @throws IOException
      */
-    public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies) throws IOException {
-        saveConfigToFile(lang, "", "", "", 0, autoSave, savePosters, false, pathToMovies);
+    public void saveConfigToFile(String lang, boolean autoSave, boolean savePosters, String[] pathToMovies, boolean renameFolders) throws IOException {
+        saveConfigToFile(lang, "", "", "", 0, autoSave, savePosters, false, pathToMovies, renameFolders);
     }
 
     /**
@@ -121,7 +122,7 @@ public class ConfigUtility {
      * @throws IOException
      */
     public void saveConfigToFile(String proxyUsername, String proxyPassword, String proxyHost, int proxyPort, boolean proxyUseAuthenticate) throws IOException {
-        saveConfigToFile(propLang, proxyUsername, proxyPassword, proxyHost, proxyPort, propAutoSave, propSavePosters, proxyUseAuthenticate, propPaths);
+        saveConfigToFile(propLang, proxyUsername, proxyPassword, proxyHost, proxyPort, propAutoSave, propSavePosters, proxyUseAuthenticate, propPaths, propRenameFolders);
     }
 
     /**
@@ -138,6 +139,7 @@ public class ConfigUtility {
         this.propAutoSave = Boolean.valueOf(properties.getProperty("AutoSave"));
         this.propSavePosters = Boolean.valueOf(properties.getProperty("SavePosters"));
         this.propProxyUseAuthenticate = Boolean.valueOf(properties.getProperty("ProxyUseAuthenticate"));
+        this.propRenameFolders = Boolean.valueOf(properties.getProperty("RenameFoldersOnFetch"));
 
         try {
             this.propPaths = properties.getProperty("Paths").split(";");
@@ -217,6 +219,14 @@ public class ConfigUtility {
 
     public String getPathToImages() {
         return pathToImages;
+    }
+
+    public boolean isPropRenameFolders() {
+        return propRenameFolders;
+    }
+
+    public void setPropRenameFolders(boolean propRenameFolders) {
+        this.propRenameFolders = propRenameFolders;
     }
 
     //END
