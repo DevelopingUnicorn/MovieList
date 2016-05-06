@@ -194,32 +194,29 @@ public class FetchWorker extends SwingWorker<String, String> {
                 int index = dlg.getSelMatch();
                 URL poster = dlg.getPoster();
 
-                m.setMatch(true);
-                m.setName(matches.get(index).getTitle());
-
-                if (ConfigUtility.getInstance().isPropSavePosters()) {
-                    savePoster(poster, matches.get(index));
-                }
-
-                this.setTMDBvars(m, matches.get(index));
-
-                loading.setValue(loading.getValue() + (int) inc);
+                createMatch(matches, index, poster, m, inc);
 
             } else if (matches.size() == 1) {
-                m.setMatch(true);
-                m.setName(matches.get(0).getTitle());
-
                 URL poster = APItmdb.getInstance().getPoster(matches.get(0).getPoster_url());
-                if (ConfigUtility.getInstance().isPropSavePosters()) {
-                    savePoster(poster, matches.get(0));
-                }
-
-                this.setTMDBvars(m, matches.get(0));
-
-                loading.setValue(loading.getValue() + (int) inc);
+                createMatch(matches, 0, poster, m, inc);
             } else {
                 loading.setValue(loading.getValue() + (int) inc);
             }
         }
+    }
+
+    private void createMatch(ArrayList<TMDBMovie> matches, int index, URL poster, Movie m, double inc) throws IOException {
+        System.out.println(m.getFilePath());
+
+        m.setMatch(true);
+        m.setName(matches.get(index).getTitle());
+
+        if (ConfigUtility.getInstance().isPropSavePosters()) {
+            savePoster(poster, matches.get(index));
+        }
+
+        this.setTMDBvars(m, matches.get(index));
+
+        loading.setValue(loading.getValue() + (int) inc);
     }
 }
