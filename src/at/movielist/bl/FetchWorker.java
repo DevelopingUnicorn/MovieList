@@ -206,10 +206,23 @@ public class FetchWorker extends SwingWorker<String, String> {
     }
 
     private void createMatch(ArrayList<TMDBMovie> matches, int index, URL poster, Movie m, double inc) throws IOException {
-        System.out.println(m.getFilePath());
+        String newname = matches.get(index).getTitle();
+
+        if (ConfigUtility.getInstance().isPropRenameFolders()) {
+            if (m.isIsFile() == false) {
+                File folder = new File(m.getPath());
+
+                if (!newname.equals(folder.getName())) {
+                    File f = new File(new File(m.getPath()).getParent() + File.separator + newname);
+
+                    folder.renameTo(f);
+                    m.setPath(f.getAbsolutePath());
+                }
+            }
+        }
 
         m.setMatch(true);
-        m.setName(matches.get(index).getTitle());
+        m.setName(newname);
 
         if (ConfigUtility.getInstance().isPropSavePosters()) {
             savePoster(poster, matches.get(index));
