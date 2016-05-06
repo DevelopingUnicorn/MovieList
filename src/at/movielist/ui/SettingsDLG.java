@@ -32,10 +32,10 @@ public class SettingsDLG extends javax.swing.JDialog {
 
     /**
      * Constructor
-     * 
+     *
      * @param parent
      * @param modal
-     * @throws IOException 
+     * @throws IOException
      */
     public SettingsDLG(java.awt.Frame parent, boolean modal) throws IOException {
         super(parent, modal);
@@ -57,6 +57,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         cbLang.setModel(new DefaultComboBoxModel(new String[]{"English", "Deutsch", "Espaniol"}));
         cbAutoSave.setSelected(ConfigUtility.getInstance().isPropAutoSave());
         cbSavePosters.setSelected(ConfigUtility.getInstance().isPropSavePosters());
+        cbRenameFolders.setSelected(ConfigUtility.getInstance().isPropRenameFolders());
 
         switch (ConfigUtility.getInstance().getPropLang()) {
             case "de":
@@ -98,6 +99,10 @@ public class SettingsDLG extends javax.swing.JDialog {
         lbTitel = new javax.swing.JLabel();
         btOk = new javax.swing.JButton();
         pnThings = new javax.swing.JPanel();
+        pnOptions = new javax.swing.JPanel();
+        cbAutoSave = new javax.swing.JCheckBox();
+        cbSavePosters = new javax.swing.JCheckBox();
+        cbRenameFolders = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         lbCLUE = new javax.swing.JLabel();
         cbLang = new javax.swing.JComboBox();
@@ -105,9 +110,6 @@ public class SettingsDLG extends javax.swing.JDialog {
         btChoosePath = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listPathsToMovies = new javax.swing.JList();
-        jPanel2 = new javax.swing.JPanel();
-        cbAutoSave = new javax.swing.JCheckBox();
-        cbSavePosters = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setIconImages(null);
@@ -132,6 +134,22 @@ public class SettingsDLG extends javax.swing.JDialog {
         getContentPane().add(btOk, java.awt.BorderLayout.SOUTH);
 
         pnThings.setLayout(new java.awt.BorderLayout());
+
+        pnOptions.setLayout(new java.awt.GridLayout(3, 0));
+
+        cbAutoSave.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbAutoSave.setText("Auto save to loaded movies to a file?");
+        pnOptions.add(cbAutoSave);
+
+        cbSavePosters.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbSavePosters.setText("Download Posters for Movies?");
+        pnOptions.add(cbSavePosters);
+
+        cbRenameFolders.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbRenameFolders.setText("Rename Folders when fetching?");
+        pnOptions.add(cbRenameFolders);
+
+        pnThings.add(pnOptions, java.awt.BorderLayout.SOUTH);
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 0));
 
@@ -167,18 +185,6 @@ public class SettingsDLG extends javax.swing.JDialog {
 
         pnThings.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setLayout(new java.awt.GridLayout(2, 0));
-
-        cbAutoSave.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cbAutoSave.setText("Auto save to loaded movies to a file?");
-        jPanel2.add(cbAutoSave);
-
-        cbSavePosters.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cbSavePosters.setText("Save Posters to folder?");
-        jPanel2.add(cbSavePosters);
-
-        pnThings.add(jPanel2, java.awt.BorderLayout.SOUTH);
-
         getContentPane().add(pnThings, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -194,8 +200,8 @@ public class SettingsDLG extends javax.swing.JDialog {
 
     /**
      * Opens fileChooser for Movie folder
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void onChooseFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onChooseFolder
         JFileChooser fc = new JFileChooser();
@@ -231,14 +237,15 @@ public class SettingsDLG extends javax.swing.JDialog {
     private javax.swing.JButton btOk;
     private javax.swing.JCheckBox cbAutoSave;
     private javax.swing.JComboBox cbLang;
+    private javax.swing.JCheckBox cbRenameFolders;
     private javax.swing.JCheckBox cbSavePosters;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbCLUE;
     protected javax.swing.JLabel lbTitel;
     private javax.swing.JLabel lbUEPM;
     private javax.swing.JList listPathsToMovies;
+    private javax.swing.JPanel pnOptions;
     private javax.swing.JPanel pnThings;
     private javax.swing.JPanel pnUe;
     // End of variables declaration//GEN-END:variables
@@ -269,6 +276,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         btChoosePath.setText(resBundle.getString("setup_choosePath"));
         cbAutoSave.setText(resBundle.getString("settings_autoSave"));
         cbSavePosters.setText(resBundle.getString("settings_dlposters"));
+        cbRenameFolders.setText(resBundle.getString("settings_renamefolders"));
         // END lang support
     }
 
@@ -301,7 +309,7 @@ public class SettingsDLG extends javax.swing.JDialog {
         }
 
         try {
-            ConfigUtility.getInstance().saveConfigToFile(lang, cbAutoSave.isSelected(), cbSavePosters.isSelected(), pathsToMovies.toArray(new String[pathsToMovies.size()]));
+            ConfigUtility.getInstance().saveConfigToFile(lang, cbAutoSave.isSelected(), cbSavePosters.isSelected(), pathsToMovies.toArray(new String[pathsToMovies.size()]), cbRenameFolders.isSelected());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "An error occured! Maybe the config file is missing.", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(SettingsDLG.class.getName()).log(Level.SEVERE, null, ex);
