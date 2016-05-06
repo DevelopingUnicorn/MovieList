@@ -9,10 +9,8 @@ import at.movielist.bl.MovieListModel;
 import at.movielist.bl.MovieLoader;
 import at.movielist.bl.Serializer;
 import at.movielist.bl.UtilityClass;
-import static at.movielist.ui.SetupDLG.DEFAULT_FONT;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -41,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
@@ -63,14 +60,15 @@ public class MainUI extends javax.swing.JFrame {
 
     private ResourceBundle resBundle;
 
+    private static final String[] okFileExtensions
+            = new String[]{".mkv", ".avi", ".mp4", ".ogg", ".flv", ".3gp", ".iso", ".img", ".vob", ".ts", ".mpg", ".m2ts"};
+
     /**
      * Constructor
      */
     public MainUI() {
         initComponents();
 
-        UIManager.put("Editorpane.font", new Font("Arial", Font.PLAIN, 14));
-        
         try {
             ConfigUtility.getInstance().loadConfig();
         } catch (IOException ex) {
@@ -736,31 +734,21 @@ public class MainUI extends javax.swing.JFrame {
         File mov = new File(m.getFilePath());
         File folder = new File(m.getPath());
 
-        filename.setText(mov.getName());
-        foldername.setText(m.getName());
+        String movname = mov.getName();
+        String folname = folder.getName();
+        String extension = "";
 
-        renameinput.removeAll();
-        p1.removeAll();
-        p2.removeAll();
-
-        String oldFin = filename.getText();
-        String oldFon = foldername.getText();
-
-        if (!oldFon.equals(oldFin)) {
-            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
-            p2.add(filename);
-            p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
-            p2.add(foldername);
-
-            renameinput.add(p1, BorderLayout.WEST);
-            renameinput.add(p2, BorderLayout.CENTER);
-        } else {
-            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
-            p2.add(filename);
-
-            renameinput.add(p1, BorderLayout.WEST);
-            renameinput.add(p2, BorderLayout.CENTER);
+        for (String ext : okFileExtensions) {
+            if (movname.endsWith(ext)) {
+                movname = movname.replace(ext, "");
+                extension = ext;
+            }
         }
+
+        filename.setText(movname);
+        foldername.setText(folname);
+
+        createRenameDLG();
 
         int result = JOptionPane.showConfirmDialog(null, renameinput,
                 resBundle.getString("main_option_rename"), JOptionPane.OK_CANCEL_OPTION);
@@ -770,8 +758,8 @@ public class MainUI extends javax.swing.JFrame {
             String fon = foldername.getText();
 
             if (!fin.equals("")) {
-                if (!fin.equals(mov.getName())) {
-                    File f = new File(m.getPath() + File.separator + fin);
+                if (!fin.equals(movname)) {
+                    File f = new File(m.getPath() + File.separator + fin + extension);
 
                     mov.renameTo(f);
                     m.setFilePath(f.getAbsolutePath());
@@ -779,7 +767,7 @@ public class MainUI extends javax.swing.JFrame {
             }
 
             if (!fon.equals("")) {
-                if (!fon.equals(m.getName())) {
+                if (!fon.equals(folname)) {
                     File f = new File(new File(m.getPath()).getParent() + File.separator + fon);
 
                     folder.renameTo(f);
@@ -898,5 +886,30 @@ public class MainUI extends javax.swing.JFrame {
         }
 
         return 0;
+    }
+
+    private void createRenameDLG() {
+        renameinput.removeAll();
+        p1.removeAll();
+        p2.removeAll();
+
+        String oldFin = filename.getText();
+        String oldFon = foldername.getText();
+
+        if (!oldFon.equals(oldFin)) {
+            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
+            p2.add(filename);
+            p1.add(new JLabel(resBundle.getString("main_information_path") + ":"));
+            p2.add(foldername);
+
+            renameinput.add(p1, BorderLayout.WEST);
+            renameinput.add(p2, BorderLayout.CENTER);
+        } else {
+            p1.add(new JLabel(resBundle.getString("main_information_filename") + ":"));
+            p2.add(filename);
+
+            renameinput.add(p1, BorderLayout.WEST);
+            renameinput.add(p2, BorderLayout.CENTER);
+        }
     }
 }
